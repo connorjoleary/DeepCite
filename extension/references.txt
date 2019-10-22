@@ -1,1 +1,2 @@
 https://thoughtbot.com/blog/how-to-make-a-chrome-extension
+https://scotch.io/@dongido/how-to-build-a-google-chrome-extension
