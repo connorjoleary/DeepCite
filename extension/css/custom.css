@@ -1,6 +1,5 @@
 // custom.css - this will contain all our custom css styles.
 body {
-  font-family: "Times New Roman", Times, serif;
   font-size: 100%;
 }
 
@@ -28,7 +27,4 @@ body {
 #links{
  overflow:auto;
  padding: 0px;
-}
-h2 {
-  padding-top: 0px;
 }
