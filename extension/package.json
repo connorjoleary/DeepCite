@@ -1,5 +1,18 @@
 {
-	"scripts": {
-	  "test": "mocha"
-	}
+  "scripts": {
+    "test": "mocha"
+  },
+  "name": "deepcite",
+  "version": "1.0.0",
+  "description": "CS 506",
+  "main": "test/test.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "mocha": "^6.2.2"
+  },
+  "author": "",
+  "license": "ISC"
 }
