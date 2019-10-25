@@ -20,12 +20,12 @@ function sendToServer(data){
         type: "POST",
         url: url,
         success: dataReceived,
-
         contentType: "application/json",
         data: JSON.stringify(data)
     })
 }
 
 function dataReceived(data){
+    // update popup with results
     console.log("Received: ", data);
 }
