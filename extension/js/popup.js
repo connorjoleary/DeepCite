@@ -20,6 +20,7 @@ function sendToServer(data){
         type: "POST",
         url: url,
         success: dataReceived,
+
         contentType: "application/json",
         data: JSON.stringify(data)
     })

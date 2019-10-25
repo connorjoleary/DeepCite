@@ -1,0 +1,4 @@
+behaviors:
+- data sent to server should contain link and claim
+	- 
+- 
