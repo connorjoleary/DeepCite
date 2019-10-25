@@ -5,16 +5,16 @@ const url = "127.0.0.1:3000"
 // })
 
 
-// function sendToServer(data){
-// 	bkg.console.log("data sent to server");
-//     $.ajax({
-//         type: "POST",
-//         url: url,
-//         success: dataReceived,
-//         dataType: "json",
-//         data: data
-//     })
-// }
+function sendToServer(data){
+	bkg.console.log("data sent to server");
+    $.ajax({
+        type: "POST",
+        url: url,
+        success: dataReceived,
+        dataType: "json",
+        data: data
+    })
+}
 
 
 
@@ -31,6 +31,11 @@ function main() {
 // specific elements when it triggers.
 document.addEventListener('DOMContentLoaded', function () {
   // document.querySelector('button').addEventListener('click', clickHandler);
-  console.log("sdf");
+  console.log("js is linked");
   main();
 });
+
+// document.addEventListener('DOMContentLoaded', function () {
+//   document.querySelector('button').addEventListener('click', clickHandler);
+//   main();
+// });
