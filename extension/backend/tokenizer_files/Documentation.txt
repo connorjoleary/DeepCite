@@ -1,0 +1,99 @@
+tokenizer.py
+
+functions:
+
+    preprocessing(<type=spacy.Doc object> text):
+        Lemmatize non-stop words, removes punctuation, lowercase all non proper nouns
+
+        Parameters
+        ----------
+        text : spacy.Doc object
+            tokenized and classified paragraphs of text
+        Returns
+        -------
+        processed_text : str
+            text that has been cleaned accordingly
+
+
+    predict(claim, <type=List(str)> text):
+        Predicts which paragraph/setences is most similar to the given claim using
+        the loaded vector space
+
+        Parameters
+        ----------
+        claim : str
+            summarization of infomation - singular sentence recieved from web scrapper
+        text : List(str)
+            article infomation that has been obtained by the webscrapper and is split by paragraph
+        
+        Returns
+        -------
+        predicted : str
+            paragraph/sentence most similar to claim
+
+    __main__:
+    Unit testing
+    
+    tests functions for errors
+    tests accurracy with testing_set files
+    results are stored inside test-file.txt
+
+
+vector.py
+
+functions:
+
+    preprocessing(data):
+        removes whitespaces, newlines, and tokenizes based on spaces
+
+        Parameters
+        ----------
+        data : List(str)
+            dataset recieved from a dataset
+        
+        Returns
+        -------
+        List(List(str))
+            tokenized data for training
+        
+    
+    train_vector(file_model, sentences, update):
+        Trains and updates the model
+
+        Parameters
+        ----------
+        file_model : str
+            file path to Word2Vec.model file to load - file is required to be gensim Word2Vec type
+        sentences : List(str)
+            document used to train the model
+        update : boolean
+            determining whether the files should be updated
+        
+        Returns
+        -------
+        model : Word2Vec Obj
+            used to access vectors of words
+
+    create_model(f_name, dataset, min_count, size):
+        Creates a vector space for the given dataset
+        Saves two types of files:
+            1. generic Word2Vec .txt file that can be loaded from other NLP libraries
+            2. gensim Word2Vec .model file that can be trained and changed
+
+        Parameters
+        ----------
+        f_name : str
+            name of the dataset being used to create model
+        dataset : List(List(str))
+            data from dataset that has been preprocessed, used to train model
+        min_count : int
+            indicate the size a string must be to be considered a word
+        size : int
+            vector size
+
+
+    __main__:
+        Unit testing
+        
+        tests functions for errors
+        tests accurracy with king - man + woman 
