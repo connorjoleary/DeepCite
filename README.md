@@ -5,8 +5,9 @@ CS506 Project
 To get the testing framework set up, run `npm install mocha`
 Then run `npm test`
 
-## Backend Tokenizer
+## Backend 
+
+### library installs
 pip install spacy
 python -m spacy download en_core_web_sm
-# creating vectors for NLP
 pip install --upgrade gensim
