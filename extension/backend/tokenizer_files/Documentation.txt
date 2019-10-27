@@ -1,6 +1,18 @@
 tokenizer.py
 
-functions:
+class Paragraph:
+    extends object, used specifically for the PriorityQueue, where the paragraph with the
+    highest similarity has the highest priority 
+
+    Attributes
+    ----------
+    index : int
+        index within the paragraph/sentence the text is located
+    similarity : float
+        value of similarity the text has to the claim
+
+
+Methods:
 
     preprocessing(<type=spacy.Doc object> text):
         Lemmatize non-stop words, removes punctuation, lowercase all non proper nouns
@@ -13,6 +25,28 @@ functions:
         -------
         processed_text : str
             text that has been cleaned accordingly
+    
+    def print_queue(queue):
+        prints the content within the queue
+        Side Effect: queue is now empty
+
+        Parameters
+        ----------
+        queue : PriorityQueue()
+            queue that should be printed
+    
+    def sentence_parsing(text):
+        Splits a document into sentences
+
+        Parameters
+        ----------
+        text : List(str)
+            each text[x] is a paragraph
+        
+        Returns
+        -------
+        sentences : List(str)
+            each sentence[x] is a sentence in the given text
 
 
     predict(claim, <type=List(str)> text):

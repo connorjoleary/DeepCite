@@ -1,5 +1,6 @@
 import spacy
 from spacy.parts_of_speech import  PUNCT, PROPN
+from spacy.lang.en import English
 import queue as q
 import os
 
@@ -11,6 +12,8 @@ CWD_FOLDER = os.path.dirname(os.path.abspath(__file__))
 # en_core_web_lg
 # google news pre-trained network: https://code.google.com/archive/p/word2vec/ 
 nlp = spacy.load("en_core_web_sm")
+nlps = English()
+nlps.add_pipe(nlps.create_pipe('sentencizer'))
 # importing different vectors for similiarites - word2vec
 # training dataset
 # nlp = spacy.load('en_core_web_sm', vectors='<directory>') 
@@ -30,6 +33,10 @@ class Paragraph(object):
     def __repr__(self):
         return "index: " + str(self.index) + " similarity: " + str(self.similarity)
 
+# prints priority queue - mostly for testing purposes
+def print_queue(queue):
+    while not queue.empty():
+        print( queue.get() )
 
 # any preprocessing of data if necessary
 # remove punctuation - all lower case, lemmanization
@@ -46,7 +53,16 @@ def preprocessing(doc):
         clean_claim.append(add)
     return " ".join(x for x in clean_claim if x != "")
 
-
+# parses through sentences in a given paragraph
+def sentence_parsing(text):
+    sentences = []
+    for num, paragraph in enumerate(text):
+        doc3 = nlps(paragraph)
+        for sent in doc3.sents:
+            sentence = sent.text.strip().replace('\t', '').replace("\n", '')
+            if len(sentence) > 0:
+                sentences.append(sentence)
+    return sentences
 
 # claim will the the claim for comparison
 # text is the text of the article, preferably paragraph by paragraph
@@ -54,25 +70,33 @@ def predict(claim, text) :
 
     queue = q.PriorityQueue()
 
-    #print(claim)
     clean_claim = preprocessing(nlp(claim))
-    #print(clean_claim)
     doc1 = nlp(clean_claim)
 
+    # compares claim to individual paragraphs
     for num, paragraph in enumerate(text):
         clean_paragraph = preprocessing(nlp(paragraph))
         doc2 = nlp(clean_paragraph)
         queue.put(Paragraph(num, doc1.similarity(doc2)))
 
-    index = queue.get().index
-    predicted = text[index]
-    # soley for testing purposes
-    #test.append((claim, text[index]))
+    best_paragraph = queue.get()
 
-    # while not queue.empty():
-        # print( queue.get() )
-    # TODO: test for setence accuracy in paragraph(?)
-    return predicted
+    # compares to individual sentences
+    sentence_queue = q.PriorityQueue()
+    sentences = sentence_parsing(text)
+
+    for num, sentence in enumerate(sentences):
+        clean_sent = preprocessing(nlp(sentence))
+        doc3 = nlp(clean_sent)
+        sentence_queue.put(Paragraph(num, doc1.similarity(doc3)))
+    
+    best_sentence = sentence_queue.get()
+
+    predict = text[best_paragraph.index] if best_paragraph.similarity > best_sentence.similarity else sentences[best_sentence.index]
+    # test is solely for testing purposes, checks the return values
+    test.append((claim, predict))
+
+    return predict
 
 
 
