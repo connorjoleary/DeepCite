@@ -14,7 +14,7 @@ class Paragraph:
 
 Methods:
 
-    preprocessing(<type=spacy.Doc object> text):
+    preprocessing(text):
         Lemmatize non-stop words, removes punctuation, lowercase all non proper nouns
 
         Parameters
@@ -49,7 +49,7 @@ Methods:
             each sentence[x] is a sentence in the given text
 
 
-    predict(claim, <type=List(str)> text):
+    predict(claim, text):
         Predicts which paragraph/setences is most similar to the given claim using
         the loaded vector space
 

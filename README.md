@@ -11,15 +11,24 @@ CS506 Project
 ## Installation
 Installations and downloads required before running the application
 ### Downloads
-* (optional test data) Reddit World News Database: https://www.kaggle.com/rootuser/worldnews-on-reddit 
+* (optional test data) Reddit World News Database: https://www.kaggle.com/rootuser/worldnews-on-reddit
+* MySQL documentation: https://dev.mysql.com/doc/mysql-getting-started/en/ 
+* Recommended Database/Downloads:
+  * free remote mysql(100MB cap): https://remotemysql.com/
+  * Community Server: https://dev.mysql.com/downloads/mysql/ 
+  * Visual Studio database: https://dev.mysql.com/downloads/windows/visualstudio/ 
+  * MySQL WorkBench: https://dev.mysql.com/downloads/workbench/ 
+  * General mySQL installer: https://dev.mysql.com/downloads/installer/ 
   
   <small> Currently looking at Google News vector space </small>
 
-### Library installs
+### Installs
 * `pip install beautifulsoup4`
 * `pip install spacy`
 * `python -m spacy download en_core_web_sm` 
 * `pip install --upgrade gensim`
+* `pip install Flask`
+* `pip install Flask-MySQLdb`
 
 <small>Note: 'en_core_web_sm' installation is subject to change for higher accuracy</small>
 
