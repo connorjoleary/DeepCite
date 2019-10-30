@@ -18,10 +18,10 @@ $(document).ready(() => {
 function sendToServer(data){
     $.ajax({
         type: "POST",
-        url: url,
-        success: dataReceived,
-        contentType: "application/json",
-        data: JSON.stringify(data)
+        url: url, // where the post request gets sent to (backend server address)
+        success: dataReceived, // callback function on success
+        contentType: "application/json", // exprected data type of the returned data
+        data: JSON.stringify(data) // send the data json as a string
     })
 }
 
