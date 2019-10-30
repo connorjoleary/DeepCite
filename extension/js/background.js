@@ -1,3 +1,4 @@
+// adds DeepCite to right click context menu
 chrome.runtime.onInstalled.addListener(function () {
     chrome.contextMenus.create({
         title: 'DeepCite for "%s"',
@@ -7,5 +8,5 @@ chrome.runtime.onInstalled.addListener(function () {
 });
 
 function populateClaim() {
-
+//add in iteration 2
 }
