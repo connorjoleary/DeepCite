@@ -32,4 +32,3 @@ class Claim(nn.Module):
         return self.child
         
 
-    
