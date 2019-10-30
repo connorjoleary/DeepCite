@@ -7,15 +7,15 @@ $(document).ready(() => {
     $('#linxerForm').on('submit', (event) => {
         event.preventDefault();
         data = {
-                claim:event.target["0"].value, 
-                link:event.target["1"].value
-                };
+            claim: event.target["0"].value,
+            link: event.target["1"].value
+        };
         sendToServer(data); //perform some operations
     });
 })
 
 
-function sendToServer(data){
+function sendToServer(data) {
     $.ajax({
         type: "POST",
         url: url, // where the post request gets sent to (backend server address)
