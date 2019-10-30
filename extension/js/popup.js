@@ -20,7 +20,6 @@ function sendToServer(data){
         type: "POST",
         url: url,
         success: dataReceived,
-
         contentType: "application/json",
         data: JSON.stringify(data)
     })
@@ -28,4 +27,5 @@ function sendToServer(data){
 
 function dataReceived(data){
     console.log("Received: ", data);
+    chrome.browserAction.setPopup({popup: "test.html"});
 }
