@@ -28,5 +28,6 @@ function sendToServer(data){
 function dataReceived(data){
     // update popup with results
     console.log("Received: ", data);
-    chrome.browserAction.setPopup({popup: "test.html"});
+    window.location.href="test.html";
+    // chrome.browserAction.setPopup({popup: "test.html"});
 }
