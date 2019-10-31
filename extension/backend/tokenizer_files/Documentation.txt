@@ -49,7 +49,7 @@ Methods:
             each sentence[x] is a sentence in the given text
 
 
-    predict(claim, text):
+    predict(claim, text, k):
         Predicts which paragraph/setences is most similar to the given claim using
         the loaded vector space
 
@@ -59,11 +59,13 @@ Methods:
             summarization of infomation - singular sentence recieved from web scrapper
         text : List(str)
             article infomation that has been obtained by the webscrapper and is split by paragraph
+        k : int
+            how many matches to return
         
         Returns
         -------
         predicted : str
-            paragraph/sentence most similar to claim
+            k most similar paragraph/sentence to claim
 
     __main__:
     Unit testing
