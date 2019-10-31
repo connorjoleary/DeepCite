@@ -66,7 +66,8 @@ def sentence_parsing(text):
 
 # claim will the the claim for comparison
 # text is the text of the article, preferably paragraph by paragraph
-def predict(claim, text) :
+# returns best k similarities
+def predict(claim, text, k) :
 
     queue = q.PriorityQueue()
 
@@ -79,7 +80,7 @@ def predict(claim, text) :
         doc2 = nlp(clean_paragraph)
         queue.put(Paragraph(num, doc1.similarity(doc2)))
 
-    best_paragraph = queue.get()
+    
 
     # compares to individual sentences
     sentence_queue = q.PriorityQueue()
@@ -90,11 +91,18 @@ def predict(claim, text) :
         doc3 = nlp(clean_sent)
         sentence_queue.put(Paragraph(num, doc1.similarity(doc3)))
     
-    best_sentence = sentence_queue.get()
+    
 
-    predict = text[best_paragraph.index] if best_paragraph.similarity > best_sentence.similarity else sentences[best_sentence.index]
-    # test is solely for testing purposes, checks the return values
-    test.append((claim, predict))
+    predict = []
+    best_paragraph = queue.get()
+    best_sentence = sentence_queue.get()
+    for i in range(k):
+        if best_paragraph.similarity > best_sentence.similarity :
+            predict.append((claim, text[best_paragraph.index]))
+            best_paragraph = queue.get()
+        else:
+            predict.append((claim,text[best_sentence.index]))
+            best_sentence = sentence_queue.get()
 
     return predict
 
@@ -117,7 +125,7 @@ if "__main__":
         text = [paragraph for paragraph in f_text]
         f_text.close()
 
-        predict(claim, text)
+        test.append(predict(claim, text, 1))
         #print("\nNext set: \n")
 
     file_path = os.path.join(CWD_FOLDER, 'test-file.txt')

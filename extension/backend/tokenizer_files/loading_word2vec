@@ -28,6 +28,6 @@ wget https://s3-us-west-1.amazonaws.com/fasttext-vectors/word-vectors-v2/cc.la.3
 python -m spacy init-model en your_model --vectors-loc cc.la.300.vec.gz
 
 load model:
-nlp = spacy.oad('your_model')
+nlp = spacy.load('your_model')
 
 https://stackoverflow.com/questions/42094180/spacy-how-to-load-google-news-word2vec-vectors

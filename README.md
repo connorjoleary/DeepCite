@@ -24,6 +24,7 @@ Installations and downloads required before running the application
 
 ### Installs
 * `pip install beautifulsoup4`
+* `pip install requests`
 * `pip install spacy`
 * `python -m spacy download en_core_web_sm` 
 * `pip install --upgrade gensim`
@@ -41,7 +42,7 @@ Then run `npm test`
 ### Iteration 1
 - [x] Add extension
 - [x] Enter Data
-- [x] View Results
+- [ ] View Results
 - [x] Web Scraper
 - [x] Word Tokenizer
 - [ ] Setting up database
