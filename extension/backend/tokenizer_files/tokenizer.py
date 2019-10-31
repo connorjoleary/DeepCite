@@ -98,11 +98,19 @@ def predict(claim, text, k) :
     best_sentence = sentence_queue.get()
     for i in range(k):
         if best_paragraph.similarity > best_sentence.similarity :
-            predict.append((claim, text[best_paragraph.index]))
-            best_paragraph = queue.get()
+            predict.append((claim, text[best_paragraph.index], best_paragraph.similarity))
+            if queue.not_empty:
+                best_paragraph = queue.get()
+            else:
+                best_paragraph = Paragraph(0, -10)
         else:
-            predict.append((claim,text[best_sentence.index]))
-            best_sentence = sentence_queue.get()
+            predict.append((claim,sentences[best_sentence.index], best_sentence.similarity))
+            if queue.not_empty:
+                best_sentence = sentence_queue.get()
+            else:
+                best_sentence = Paragraph(0, -10)
+        if best_paragraph == -10 and best_sentence == -10:
+            break
 
     return predict
 

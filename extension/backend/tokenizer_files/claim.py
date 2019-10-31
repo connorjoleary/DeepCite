@@ -5,7 +5,8 @@ import sys
 import io
 
 class Claim:
-    def __init__(self, href, text, order):
+    def __init__(self, href, text, height):
+        maxheight = 0 # TODO: iteration 2 problem
         super(Claim, self).__init__()
         # hrefs : several reference links, which is a list of str
         # text : the text of the claim
@@ -14,11 +15,13 @@ class Claim:
         self.href = href
         self.text = text
         self.child = []
-        self.branch = order
+        self.height = height
+        self.cand, self.score = self.parse_child(maxheight)
+        
+        # self.branch = order
         # default value of score is 0
-        self.score = 0 
 
-    def parse_child(self):
+    def parse_child(self, maxheight):
         ref2text = {}
         response = requests.get(self.href)
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -27,17 +30,43 @@ class Claim:
             if len(unit.findAll('a')) > 0:
                 for ref in unit.findAll('a'):
                     ref2text[unit.text] = ref['href']
-        cand = tokenizer.predict(self.text, ref2text.keys, self.branch)
+            else:
+                ref2text [unit.text] = ""
+        #print(str(len(ref2text.keys())))
+        cand = tokenizer.predict(self.text, list(ref2text.keys()), 1)
+        texts = [] 
+        scores = []
         for text in cand:
-            self.child.append(Claim(ref2text[text], text, self.order))
-        return self.child
+            try:
+                if ref2text[text[1]] != "" and self.height < maxheight:
+                    print(ref2text[text[1]])
+                    self.child.append(Claim(ref2text[text[1]], text[1], (self.height + 1)))
+            except KeyError:
+                ref_key = ""
+                for key in ref2text.keys():
+                    if text[1] in key:
+                        ref_key = key
+                        break
+                if ref2text[ref_key] != "" and self.height < maxheight:
+                    self.child.append(Claim(ref2text[text[1]], text[1], (self.height +1)))
+                    print(ref2text[text[1]])
+
+            texts.append(text[1])
+            scores.append(text[2])
+        return texts, scores
+
+
+    def __repr__(self):
+        return "claim: " + self.text + " text: " + str(self.cand)
+
 
 if "__main__":
     
-    url = "http://math.ucr.edu/home/baez/physics/Relativity/GR/grav_speed.html"
-    text = "In the simple newtonian model, gravity propagates instantaneously: the force exerted by a massive object points directly toward that object's present position.  For example, even though the Sun is 500 light seconds from the Earth, newtonian gravity describes a force on Earth directed towards the Sun's position "
-    root = Claim(url, text, 5)
-    print(root.parse_child())
+    url = "https://en.wikipedia.org/wiki/Draco_(lawgiver)"
+    text = "Draconian laws are named after the 1st Greek legislator, Draco, who meted out severe punishment for very minor offenses. These included enforced slavery for any debtor whose status was lower than that of his creditor and the death sentence for stealing a cabbage."
+    root = Claim(url, text, 0)
+    #root.parse_child()
+    print(str(root.child))
 
 
 

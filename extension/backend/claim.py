@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
-import tokenizer
+#import tokenizer
 import sys
 import io
 
@@ -34,8 +34,9 @@ class Claim:
 
 if "__main__":
     
-    url = "http://math.ucr.edu/home/baez/physics/Relativity/GR/grav_speed.html"
-    text = "In the simple newtonian model, gravity propagates instantaneously: the force exerted by a massive object points directly toward that object's present position.  For example, even though the Sun is 500 light seconds from the Earth, newtonian gravity describes a force on Earth directed towards the Sun's position "
+    url = "https://en.wikipedia.org/wiki/Draco_(lawgiver)"
+    text = "Draconian laws are named after the 1st Greek legislator, Draco, who meted out severe punishment for very minor offenses. These included enforced slavery for any debtor whose status was lower than that of his creditor and the death sentence for stealing a cabbage."
+
     root = Claim(url, text, 5)
     print(root.parse_child())
 
