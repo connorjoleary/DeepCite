@@ -32,7 +32,7 @@ class Claim:
                     ref2text[unit.text] = ref['href']
             else:
                 ref2text [unit.text] = ""
-        #print(str(len(ref2text.keys())))
+        # print(str(len(ref2text.keys())))
         cand = tokenizer.predict(self.text, list(ref2text.keys()), 1)
         texts = [] 
         scores = []
@@ -60,13 +60,13 @@ class Claim:
         return "claim: " + self.text + " text: " + str(self.cand)
 
 
-if "__main__":
+""" if "__main__":
     
-    url = "https://en.wikipedia.org/wiki/Draco_(lawgiver)"
-    text = "Draconian laws are named after the 1st Greek legislator, Draco, who meted out severe punishment for very minor offenses. These included enforced slavery for any debtor whose status was lower than that of his creditor and the death sentence for stealing a cabbage."
+    url = "https://www.independent.co.uk/arts-entertainment/films/features/the-strained-making-of-apocalypse-now-1758689.html"
+    text = "real dead bodies were used on the set of “Apocalypse Now.” The man who supplied them turned out to be a grave robber and was arrested"
     root = Claim(url, text, 0)
     #root.parse_child()
-    print(str(root.child))
+    print(str(root)) """
 
 
 
