@@ -48,7 +48,12 @@ To get the testing framework set up, run `npm install mocha`
 Then run `npm test`
 
 ### Backend Testing
-Run main.py
+  * main testing: run main.py in backend/tokenizer_files/
+    *  **make sure testing-set/claims.txt and testing-set/links.txt are present**
+    * results are printed
+  * vector creation: run vector.py with Reddit World News database
+    * **make sure dataset/redditWorldNews.csv is present**
+    * results are stored in dataset/word2vec/redditWorldNews.txt and dataset/word2vector/redditWorldNews.model
 
 <small>Note: connection issues make occur when webscrapping, wait a minute then run again</small>
 
