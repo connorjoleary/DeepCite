@@ -11,16 +11,25 @@ CS506 Project
 ## Installation
 Installations and downloads required before running the application
 ### Downloads
-* (optional test data) Reddit World News Database: https://www.kaggle.com/rootuser/worldnews-on-reddit
-* MySQL documentation: https://dev.mysql.com/doc/mysql-getting-started/en/ 
-* Recommended Database/Downloads:
-  * free remote mysql(100MB cap): https://remotemysql.com/
-  * Community Server: https://dev.mysql.com/downloads/mysql/ 
-  * Visual Studio database: https://dev.mysql.com/downloads/windows/visualstudio/ 
-  * MySQL WorkBench: https://dev.mysql.com/downloads/workbench/ 
-  * General mySQL installer: https://dev.mysql.com/downloads/installer/ 
+<details>
+  <summary> Developer Downloads </summary>
+  <ul>
+  <li>* MySQL documentation: https://dev.mysql.com/doc/mysql-getting-started/en/ </li>
+   <li>* Recommended Database/Downloads:</li>
+   <ul><li>* free remote mysql(100MB cap): https://remotemysql.com/</li>
+   <li>* Community Server: https://dev.mysql.com/downloads/mysql/</li> 
+   <li>* Visual Studio database: https://dev.mysql.com/downloads/windows/visualstudio/ </li>
+   <li>* MySQL WorkBench: https://dev.mysql.com/downloads/workbench/ </li>
+   <li>* General mySQL installer: https://dev.mysql.com/downloads/installer/</li> 
+   </ul>
+ </ul>
   
-  <small> Currently looking at Google News vector space </small>
+  <small> Currently looking at Google News vector space https://code.google.com/archive/p/word2vec/ </small>
+  <small> Currently looking at Wikimedia https://dumps.wikimedia.org/ </small>
+  
+</details>
+* (optional test data) Reddit World News Database: https://www.kaggle.com/rootuser/worldnews-on-reddit
+
 
 ### Installs
 * `pip install beautifulsoup4`
@@ -37,6 +46,16 @@ Installations and downloads required before running the application
 ### Frontend Testing
 To get the testing framework set up, run `npm install mocha`
 Then run `npm test`
+
+### Backend Testing
+  * main testing: run main.py in backend/tokenizer_files/
+    *  **make sure testing-set/claims.txt and testing-set/links.txt are present**
+    * results are printed
+  * vector creation: run vector.py with Reddit World News database
+    * **make sure dataset/redditWorldNews.csv is present**
+    * results are stored in dataset/word2vec/redditWorldNews.txt and dataset/word2vector/redditWorldNews.model
+
+<small>Note: connection issues make occur when webscrapping, wait a minute then run again</small>
 
 ## Tasks
 ### Iteration 1

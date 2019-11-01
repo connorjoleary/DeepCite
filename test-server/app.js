@@ -13,8 +13,17 @@ app.get('/', (req,res) => {
 
 // sends the response as a json object containing the request's data
 app.post('/', (req,res) => {
-    res.json(req.body);
-    console.log(req.body);
+    // res.json(req.body);
+    console.log("Incoming: ", req.body);
+
+    let testresults = {
+        results:[
+            {source:req.body.claim, link:req.body.link},
+            {source:"test_source", link:"http://example.com/"}
+        ]
+    }
+
+    res.json(testresults);
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
