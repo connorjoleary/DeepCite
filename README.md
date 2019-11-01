@@ -47,6 +47,10 @@ Installations and downloads required before running the application
 To get the testing framework set up, run `npm install mocha`
 Then run `npm test`
 
+### Backend Testing
+Run main.py
+<small>Note: connection issues make occur when webscrapping, wait a minute then run again</small>
+
 ## Tasks
 ### Iteration 1
 - [x] Add extension
