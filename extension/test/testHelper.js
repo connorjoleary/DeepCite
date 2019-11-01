@@ -1,4 +1,5 @@
-import { jsdom } from 'jsdom';
+const jsdom = require("jsdom");
+const { document } = (new JSDOM(`...`)).window;
 
 // const doc = jsdom('<!doctype html><html><body></body></html>');
 // const win = doc.defaultView;
