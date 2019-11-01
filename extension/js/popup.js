@@ -2,8 +2,9 @@ let url = "http://localhost:3000"
 
 
 $(document).ready(() => {
-    //data = {claim:"abc", link:"asdf"}; //dummy data
-    //$("#btnsubmit").click(data, sendToServer);
+
+    //populate claim and link from storage
+
     $('#linxerForm').on('submit', (event) => {
         event.preventDefault();
         data = {
@@ -28,12 +29,25 @@ function sendToServer(data) {
 function dataReceived(data) {
     // update popup with results
     console.log("Received: ", data);
-    $("body").html(`<div class="container-fluid main">
-                    <h2 id="title">Data Recieved!</h2>
+    $("body").html(`<div id="results" class="container-fluid main">
+                    <h1 id="title">Data Recieved!</h1>
                     </div>`);
     //for each item in data returned:
-    $("body").append(`<div><p>${data.claim}</p></div>`);
-    
+    data.results.forEach(result => {
+        $("#results").append(`
+        <div class="result">
+            <p class="result-text">"${result.source}"</p>
+            <a href="${result.link}" class="card-link"><b>${result.link}</b></a>
+        </div>
+        `);
+    });
+
+    //makes anchor tags open in new tab
+    $('body').on('click', 'a', function(){
+        chrome.tabs.create({url: $(this).attr('href')});
+        return false;
+    });
+
     // window.location.href="test.html";
     // chrome.browserAction.setPopup({popup: "test.html"});
 }
