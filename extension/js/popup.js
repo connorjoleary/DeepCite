@@ -18,8 +18,8 @@ document.addEventListener('DOMContentLoaded', function () {
 $(document).ready(() => {
 
     chrome.storage.local.get(['claimField'], function(result) {
-      console.log('Value currently is ' + result.key);
-      document.getElementById("formClaimInput").value = result.key;
+      console.log('Value currently is ' + result.claimField);
+      document.getElementById("formClaimInput").value = result.claimField;
     });
 
     //populate claim and link from storage
