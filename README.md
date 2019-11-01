@@ -51,6 +51,7 @@ Installations and downloads required before running the application
 4. "Load unpacked" 
 5. Select DeepCite/extension folder
 6. Click DeepCite icon in upper-right corner of Chrome to use
+7. To emulate backend returning results, follow instructions in the readme within DeepCite/test-server
 
 ## Testing
 ### Frontend Testing
@@ -58,6 +59,10 @@ Installations and downloads required before running the application
 * For the following commands navigate to DeepCite/extension folder
   * Use command `npm install mocha` to install testing framework
   * Use command `npm test` to run tests
+
+
+* DeepCite/test-folder contains a basic web server meant for testing frontend functionality before we connect the frontend and backend together.
+  * Follow the readme in that folder for its instructions
 
 ### Backend Testing
   * main testing: run main.py in backend/tokenizer_files/
