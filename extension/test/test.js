@@ -1,4 +1,10 @@
 var assert = require('assert');
+const chrome = require('sinon-chrome');
+const jsdom = require("jsdom");
+const { JSDOM } = jsdom;
+// const document = (new JSDOM(``, { url: 'file:///Users/dilloncharlesoleary/Documents/School/SeniorYear/SoftwareEng/DeepCite/extension/popup.html' })).window.document;
+// const jsdom = require("jsdom");
+// const { JSDOM } = jsdom;
 // describe('Array', function() {
 //   describe('#indexOf()', function() {
 //     it('should return -1 when the value is not present', function() {
@@ -10,23 +16,31 @@ var assert = require('assert');
 //   });
 // });
 // onChange, the fields are stored in persistent storage
+// const document = new JSDOM(`<!DOCTYPE html><p id="formClaimInput">Hello world</p>`).window.document;
+// console.log(document.querySelector("p").textContent);
 describe('persistent storage', function() {
 	describe('claimField', function() {
 		it('should store it\'s contents on change', function() {
-			// focus on claim field
-			// press three keys
-			const claimTextbox = document.getElementById('formClaimInput');
-			claimTextbox.value = 'clmVal';
-			const obsVal = null;
-			chrome.storage.local.get(['claimField'], function(result) {
-	      obsVal = result.claimField;
-	    });
-			// assert contents of storage are the keys
-			assert.equal('clmVal', obsVal);
-			// clear storage
-			chrome.storage.local.set({'claimField': fieldVal}, function() {
-	      console.log('claimField is cleared');
-	    });
+			JSDOM.fromFile("popup.html").then(dom => {
+			  // console.log("serial dom: " + dom.serialize());
+			  const mock_document = dom.window.document;
+				// focus on claim field
+				// press three keys
+				const claimTextbox = mock_document.getElementById('formClaimInput').textContent;
+				claimTextbox.value = 'clmVal';
+				
+				console.log("Claim box: " + claimTextbox.value);
+				// chrome.storage.local.get(['claimField'], function(result) {
+		  //     let obsVal = result.claimField;
+		  //   });
+				// // assert contents of storage are the keys
+				// assert.equal('clmVal', obsVal);
+				// clear storage
+				// chrome.storage.local.set({'claimField': fieldVal}, function() {
+		  //     console.log('claimField is cleared');
+		  //   });
+
+			});
 		});
 	});
 	describe('linkField', function() {
