@@ -1,5 +1,6 @@
 var assert = require('assert');
 const chrome = require('sinon-chrome');
+const puppeteer = require('puppeteer');
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 // const document = (new JSDOM(``, { url: 'file:///Users/dilloncharlesoleary/Documents/School/SeniorYear/SoftwareEng/DeepCite/extension/popup.html' })).window.document;
@@ -20,16 +21,34 @@ const { JSDOM } = jsdom;
 // console.log(document.querySelector("p").textContent);
 describe('persistent storage', function() {
 	describe('claimField', function() {
-		it('should store it\'s contents on change', function() {
-			JSDOM.fromFile("popup.html").then(dom => {
+		it('should store it\'s contents on change', async function() {
+			const browser = await puppeteer.launch({
+				headless: false,
+				args: ['--window-size=1920,1080']
+			});
+			const page = await browser.newPage();
+			await page.goto(
+				'file://' + __dirname + '/../popup.html'
+			);
+			await page.focus('#formClaimInput');
+			await page.keyboard.type('clmVal');
+			const finalText = await page.$eval('#formClaimInput', el => el.textContent);
+			console.log(finalText);
+			// const newPage = await page.evaluate(() => {
+
+   //      return  document.getElementById("formClaimInput");
+
+   //    });
+   //    console.log(newPage);
+			// JSDOM.fromFile("popup.html").then(dom => {
 			  // console.log("serial dom: " + dom.serialize());
-			  const mock_document = dom.window.document;
+			  // const mock_document = dom.window.document;
 				// focus on claim field
 				// press three keys
-				const claimTextbox = mock_document.getElementById('formClaimInput').textContent;
-				claimTextbox.value = 'clmVal';
-				
-				console.log("Claim box: " + claimTextbox.value);
+				// const claimTextbox = mock_document.getElementById('formClaimInput').textContent;
+				// claimTextbox.value = 'clmVal';
+
+				// console.log("Claim box: " + claimTextbox.value);
 				// chrome.storage.local.get(['claimField'], function(result) {
 		  //     let obsVal = result.claimField;
 		  //   });
@@ -40,7 +59,7 @@ describe('persistent storage', function() {
 		  //     console.log('claimField is cleared');
 		  //   });
 
-			});
+			// });
 		});
 	});
 	describe('linkField', function() {

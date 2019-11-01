@@ -1,8 +1,8 @@
 behaviors:
 - onChange, the fields are stored in persistent storage
 - after the popup is open, text is added, and it is closed, the popup should contain that text again once being opened
-- data sent to server should contain link and claim
+* data sent to server should contain link and claim
 - on return, the page should change states
-- the data returned from the server should contain a list of link claim jumps
+* the data returned from the server should contain a list of link claim jumps
 - the new page should render with the claims and links
 - on click of new citation, page should return to landing page
