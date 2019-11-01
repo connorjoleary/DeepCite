@@ -25,7 +25,7 @@ Installations and downloads required before running the application
  </ul>
   
   <small> Currently looking at Google News vector space https://code.google.com/archive/p/word2vec/ </small>
-  <small> Currently looking at Wikimedia https://dumps.wikimedia.org/ </small>
+  <small> other word2vec options: https://github.com/3Top/word2vec-api#where-to-get-a-pretrained-models </small>
   
 </details>
 * (optional test data) Reddit World News Database: https://www.kaggle.com/rootuser/worldnews-on-reddit
