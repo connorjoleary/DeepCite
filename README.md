@@ -68,9 +68,7 @@ Installations and downloads required before running the application
 ### Backend Testing
   * main testing: run main.py in backend/tokenizer_files/
     *  **make sure testing-set/claims.txt and testing-set/links.txt are present**
-    * results are printed
-  * vector creation: run vector.py with Reddit World News database
-    * **make sure dataset/redditWorldNews.csv is present**
+    * results are printed, ignore spaCy's model's warning
     * results are stored in dataset/word2vec/redditWorldNews.txt and dataset/word2vector/redditWorldNews.model
 
 <small>Note: connection issues make occur when webscrapping, wait a minute then run again</small>
