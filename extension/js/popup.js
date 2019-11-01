@@ -11,7 +11,7 @@ function handleClaimChange(test) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-      document.querySelector('#formClaimInput').addEventListener('keyup', handleClaimChange);
+      document.querySelector('#formClaimInput').addEventListener('change', handleClaimChange);
 });
 
 
