@@ -32,6 +32,8 @@ Installations and downloads required before running the application
 
 
 ### Installs
+
+#### For backend:
 * `pip install beautifulsoup4`
 * `pip install requests`
 * `pip install spacy`
@@ -42,10 +44,20 @@ Installations and downloads required before running the application
 
 <small>Note: 'en_core_web_sm' installation is subject to change for higher accuracy</small>
 
+#### For frontend:
+1. Install Google Chrome
+2. In Chrome, navigate to `chrome://extensions/`
+3. Enable developer mode
+4. "Load unpacked" 
+5. Select DeepCite/extension folder
+6. Click DeepCite icon in upper-right corner of Chrome to use
+
 ## Testing
 ### Frontend Testing
-To get the testing framework set up, run `npm install mocha`
-Then run `npm test`
+* Download and install node.js from <a href="https://nodejs.org/en/"> their website </a>
+* For the following commands navigate to DeepCite/extension folder
+  * Use command `npm install mocha` to install testing framework
+  * Use command `npm test` to run tests
 
 ### Backend Testing
   * main testing: run main.py in backend/tokenizer_files/
