@@ -1,19 +1,29 @@
-let url = "http://localhost:3000"
+const url = "http://localhost:3000";
 
 
 function handleClaimChange(test) {
-    console.log(document.getElementById(test.srcElement.id).value);
+    const fieldVal = document.getElementById(test.srcElement.id).value;
+    // console.log(fieldVal);
+    chrome.storage.local.set({'claimField': fieldVal}, function() {
+      console.log('claimField is set to ' + fieldVal);
+    });
 
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-      document.querySelector('#formClaimInput').addEventListener('keydown', handleClaimChange);
+      document.querySelector('#formClaimInput').addEventListener('keyup', handleClaimChange);
 });
 
 
 $(document).ready(() => {
 
+    chrome.storage.local.get(['claimField'], function(result) {
+      console.log('Value currently is ' + result.key);
+      document.getElementById("formClaimInput").value = result.key;
+    });
+
     //populate claim and link from storage
+    // console.log("Persist store: " + );
 
     $('#linxerForm').on('submit', (event) => {
         event.preventDefault();
