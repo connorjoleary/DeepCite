@@ -41,6 +41,7 @@ Installations and downloads required before running the application
 * `pip install --upgrade gensim`
 * `pip install Flask`
 * `pip install Flask-MySQLdb`
+* `git lfs install` - for word2vector models that are not in use
 
 <small>Note: 'en_core_web_sm' installation is subject to change for higher accuracy</small>
 
