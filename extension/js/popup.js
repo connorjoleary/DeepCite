@@ -1,6 +1,16 @@
 let url = "http://localhost:3000"
 
 
+function handleClaimChange(test) {
+    console.log(document.getElementById(test.srcElement.id).value);
+
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+      document.querySelector('#formClaimInput').addEventListener('keydown', handleClaimChange);
+});
+
+
 $(document).ready(() => {
     //data = {claim:"abc", link:"asdf"}; //dummy data
     //$("#btnsubmit").click(data, sendToServer);

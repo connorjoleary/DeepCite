@@ -9,7 +9,8 @@
     "scripts": ["js/background.js"]
   },
   "permissions": [
-    "contextMenus"
+    "contextMenus",
+    "storage"
   ],
   "content_scripts": [
     {
