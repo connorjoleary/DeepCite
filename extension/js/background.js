@@ -5,8 +5,16 @@ chrome.runtime.onInstalled.addListener(function () {
         contexts: ['selection'],
         onclick: populateClaim
     });
+
+
+    chrome.storage.local.set({ 'claimField': "" }, function () {
+        console.log('Initialized claimField');
+    });
+    chrome.storage.local.set({ 'linkField': "" }, function () {
+        console.log('Initialized linkField');
+    });
 });
 
 function populateClaim() {
-//add in iteration 2
+    //add in iteration 2
 }
