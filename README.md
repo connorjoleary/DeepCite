@@ -49,6 +49,7 @@ Then run `npm test`
 
 ### Backend Testing
 Run main.py
+
 <small>Note: connection issues make occur when webscrapping, wait a minute then run again</small>
 
 ## Tasks
