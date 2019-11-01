@@ -4,8 +4,8 @@ const url = "http://localhost:3000";
 function handleClaimChange(test) {
     const fieldVal = document.getElementById(test.srcElement.id).value;
     // console.log(fieldVal);
-    chrome.storage.local.set({'claimField': fieldVal}, function() {
-      console.log('claimField is set to ' + fieldVal);
+    chrome.storage.local.set({ 'claimField': fieldVal }, function () {
+        console.log('claimField is set to ' + fieldVal);
     });
 
 }
@@ -13,28 +13,29 @@ function handleClaimChange(test) {
 function handleLinkChange(test) {
     const fieldVal = document.getElementById(test.srcElement.id).value;
     // console.log(fieldVal);
-    chrome.storage.local.set({'linkField': fieldVal}, function() {
-      console.log('linkField is set to ' + fieldVal);
+    chrome.storage.local.set({ 'linkField': fieldVal }, function () {
+        console.log('linkField is set to ' + fieldVal);
     });
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-      document.querySelector('#formClaimInput').addEventListener('keyup', handleClaimChange);
-      document.querySelector('#formLinkInput').addEventListener('keyup', handleLinkChange);
+    // ToDo: does not save on paste due to lack of keyboard event
+    document.querySelector('#formClaimInput').addEventListener('keyup', handleClaimChange);
+    document.querySelector('#formLinkInput').addEventListener('keyup', handleLinkChange);
 });
 
 
 $(document).ready(() => {
 
-    chrome.storage.local.get(['claimField'], function(result) {
+    chrome.storage.local.get(['claimField'], function (result) {
         console.log('Value currently is ' + result.claimField);
         document.getElementById("formClaimInput").value = result.claimField;
     });
-    chrome.storage.local.get(['linkField'], function(result) {
+    chrome.storage.local.get(['linkField'], function (result) {
         console.log('Value currently is ' + result.linkField);
         document.getElementById("formLinkInput").value = result.linkField;
     });
-    
+
     //populate claim and link from storage
     // console.log("Persist store: " + );
 
@@ -76,8 +77,8 @@ function dataReceived(data) {
     });
 
     //makes anchor tags open in new tab
-    $('body').on('click', 'a', function(){
-        chrome.tabs.create({url: $(this).attr('href')});
+    $('body').on('click', 'a', function () {
+        chrome.tabs.create({ url: $(this).attr('href') });
         return false;
     });
 
