@@ -29,7 +29,7 @@ class Claim:
             #print(self.parent)
             #print(self.parent.split('/'))
             preref = "https://" + self.parent.split('/')[2]
-            #print(preref)
+            print(preref)
             self.href = "".join([preref, self.href])
         response = requests.get(self.href)
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -69,12 +69,12 @@ class Claim:
         return child_text
 
     def cycledetection():
+        return 0
         
 
-    def __repr__(self):
-        return "claim: " + self.text + " text: " + str(self.childtext)
+   # def __repr__(self):
+   #     return "claim: " + self.text + " text: " + str(self.childtext)
         
-
 
 if "__main__":
     
