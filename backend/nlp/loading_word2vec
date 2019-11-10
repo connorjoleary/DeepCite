@@ -1,0 +1,33 @@
+https://stackoverflow.com/questions/50466643/in-spacy-how-to-use-your-own-word2vec-model-created-in-gensim
+
+
+train and save model in plain-text format:
+
+    from gensim.test.utils import common_texts, get_tmpfile
+    from gensim.models import Word2Vec
+
+    path = get_tmpfile("./data/word2vec.model")
+
+    model = Word2Vec(common_texts, size=100, window=5, min_count=1, workers=4)
+    model.wv.save_word2vec_format("./data/word2vec.txt")
+
+Gzip file:
+   gzip word2vec.txt
+produces word2vec.txt.gz file
+
+Run the following command: python -m spacy init-model en ./data/spacy.word2vec.model --vectors-loc word2vec.txt.gz
+
+Load vector using:
+    nlp = spacy.load('en', vectors='./data/spacy.word2vec.model/')
+
+
+
+
+Additionally:
+wget https://s3-us-west-1.amazonaws.com/fasttext-vectors/word-vectors-v2/cc.la.300.vec.gz
+python -m spacy init-model en your_model --vectors-loc cc.la.300.vec.gz
+
+load model:
+nlp = spacy.load('your_model')
+
+https://stackoverflow.com/questions/42094180/spacy-how-to-load-google-news-word2vec-vectors
