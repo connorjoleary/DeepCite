@@ -1,0 +1,22 @@
+{
+  "scripts": {
+    "test": "mocha --require test/testHelper.js"
+  },
+  "name": "deepcite",
+  "version": "1.0.0",
+  "description": "CS 506",
+  "main": "test/test.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "jsdom": "^15.2.0"
+  },
+  "devDependencies": {
+    "mocha": "^6.2.2",
+    "puppeteer": "^2.0.0",
+    "sinon-chrome": "^3.0.1"
+  },
+  "author": "",
+  "license": "ISC"
+}
