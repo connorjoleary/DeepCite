@@ -63,7 +63,7 @@ function dataReceived(data) {
     // update popup with results
     console.log("Received: ", data);
     $("body").html(`<div id="results" class="container-fluid main">
-                    <h1 id="title">Data Recieved!</h1>
+                    <h2 id="title">Citation List</h1>
                     </div>`);
     //for each item in data returned:
     data.results.forEach(result => {
