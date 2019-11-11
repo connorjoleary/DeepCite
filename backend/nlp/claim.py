@@ -60,6 +60,10 @@ class Claim:
         return "claim: " + self.text + " text: " + str(self.cand)
 
 
+    def get_full_claim(self):
+        return "\n\nClaim: {}\ntext: {}\nscore: {}\n".format(self.text, str(self.cand), str(self.score))
+
+
 """ if "__main__":
     
     url = "https://www.independent.co.uk/arts-entertainment/films/features/the-strained-making-of-apocalypse-now-1758689.html"
