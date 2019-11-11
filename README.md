@@ -82,5 +82,8 @@ Installations and downloads required before running the application
 - [x] Word Tokenizer
 - [ ] Setting up database
 
+## Additional Features
+Video transcription
+
 ## Authors
 Shourya Goel, Jiayi Hu, Vinay Janardhanam, Dillion O'Leary, Noah SickLick, and Catherine Yan

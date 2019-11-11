@@ -1,4 +1,5 @@
 import spacy
+from gensim.models import KeyedVectors
 from spacy.parts_of_speech import  PUNCT, PROPN
 from spacy.lang.en import English
 import queue as q
@@ -6,12 +7,17 @@ import os
 
 CWD_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
+#gn_path = r'word_vectors/GoogleNews-vectors-negative300.bin'
+#gn_model = KeyedVectors.load_word2vec_format(gn_path, binary=True)
+
 # loads english library into space
 # other libraries can be used for better accuracy
 # en_core_web_md
 # en_core_web_lg
 # google news pre-trained network: https://code.google.com/archive/p/word2vec/ 
-nlp = spacy.load("en_core_web_sm")
+nlp = spacy.load("en_core_web_lg")
+#nlp = spacy.blank('en')
+#nlp.vocab.vectors = spacy.vocab.Vectors(data=gn_model.vectors, keys=gn_model.index2word)
 nlps = English()
 nlps.add_pipe(nlps.create_pipe('sentencizer'))
 # importing different vectors for similiarites - word2vec
@@ -118,16 +124,16 @@ def predict(claim, text, k) :
 
 
 # for testing purposes
-""" if "__main__":
+if "__main__":
     
-    test_set_claims = os.path.join(CWD_FOLDER, 'testing_set', 'claims.txt')
+    test_set_claims = os.path.join(CWD_FOLDER, 'testing_set', 'CY-claims.txt')
     f_claim = open(test_set_claims, 'r', errors='replace')
 
     claims = [line for line in f_claim]
     f_claim.close()
 
     for num, claim in enumerate(claims):
-        test_set_links = os.path.join(CWD_FOLDER, 'testing_set', 'link')
+        test_set_links = os.path.join(CWD_FOLDER, 'testing_set', 'CY-link')
         f_text = open(test_set_links+ str(num) + ".txt", 'r', errors='replace')
 
         text = [paragraph for paragraph in f_text]
@@ -136,8 +142,8 @@ def predict(claim, text, k) :
         test.append(predict(claim, text, 1))
         #print("\nNext set: \n")
 
-    file_path = os.path.join(CWD_FOLDER, 'test-file.txt')
+    file_path = os.path.join(CWD_FOLDER, 'CY-test-file.txt')
     test_file = open(file_path, 'w+', errors='replace')
     for x in test:
         test_file.write(str(x) + '\n\n\n\n\n\n')
-    test_file.close() """
+    test_file.close()
