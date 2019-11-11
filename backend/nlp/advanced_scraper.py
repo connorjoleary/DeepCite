@@ -45,7 +45,7 @@ class Claim:
         # Cycle Detection
         if self.href in self.visited and self.parent != None:
             # Terminate the scraper and parse the parent node to the leaf list
-            self.leaf[self.parent.text[0]] = self.parent.score[0]
+            self.leaf[self.parent.cand[0]] = self.parent.score[0]
             return False
         
         return True
@@ -56,7 +56,7 @@ class Claim:
         ref2text = {}
         if not self.excep_handle():
             return 
-        
+        print(self.href)
         response = requests.get(self.href)
         self.visited.append(self.href)
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -73,36 +73,24 @@ class Claim:
                 for ref in unit.findAll('a'):
                     ref2text[unit.text] = ref['href']
             else:
-                ref2text [unit.text] = ""
+                ref2text[unit.text] = ""
         cand = tokenizer.predict(self.text, list(ref2text.keys()), 1)
+        #print(cand)
         texts = [] 
         scores = []
         for text in cand:
-            try:
-                if ref2text[text[1]] != "" and self.height < maxheight:
-                    texts.append(text[1])
-                    scores.append(text[2])
-            except KeyError:
-                ref_key = ""
-                for key in ref2text.keys():
-                    if text[1] in key:
-                        ref_key = key
-                        break
-                #print(ref2text[ref_key])
-                if ref2text[ref_key] != "" and self.height < maxheight:
-                    texts.append(text[1])
-                    scores.append(text[2])
-                elif self.height < maxheight:
-                    self.leaf[text[1]] = text[2]
-                    return
+            texts.append(text[1])
+            scores.append(text[2])
         print("text: {}".format(texts))
         print("scores: {}".format(scores))
-        self.text = texts
+        self.cand = texts
         self.score = scores
         for words in texts:
             try:
                 if ref2text[text[1]] != "" and self.height < maxheight:
                     self.child.append(Claim(ref2text[words], words, (self.height +1), self))
+                elif self.height < maxheight:
+                    self.leaf[self.text] = scores
             except KeyError:
                 ref_key = ""
                 for key in ref2text.keys():
@@ -110,18 +98,23 @@ class Claim:
                         ref_key = key
                         break
                 if ref2text[ref_key] != "" and self.height < maxheight:
+                    #print("Success")
                     self.child.append(Claim(ref2text[words], words, (self.height +1), self))
+                elif self.height < maxheight:
+                    self.leaf[self.text] = self.score
 
 
     def __repr__(self):
         for keys, values in self.leaf.items():
-            return "claim: " + self.text + "keys of leaves: " + keys + "values of leaves: " + values
+            return "claim: " + self.text + "keys of leaves: " + keys + "values of leaves: " + str(values)
 
 if "__main__":
     
-    url = "http://math.ucr.edu/home/baez/physics/Relativity/GR/grav_speed.html"
-    text = "Gravity moves at the Speed of Light and is not Instantaneous. If the Sun were to disappear, we would continue our elliptical orbit for an additional 8 minutes and 20 seconds, the same time it would take us to stop seeing the light (according to General Relativity)."
+    url = "https://en.wikipedia.org/wiki/Draco_(lawgiver)"
+    text = "Draconian laws are named after the 1st Greek legislator, Draco, who meted out severe punishment for very minor offenses. These included enforced slavery for any debtor whose status was lower than that of his creditor and the death sentence for stealing a cabbage."
     root = Claim(url, text, 0, None)
+    for keys, values in root.leaf.items():
+        print("claim: " + root.text + "keys of leaves: " + keys + "values of leaves: " + str(values))
 
 
 
