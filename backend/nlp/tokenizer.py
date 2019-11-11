@@ -118,7 +118,7 @@ def predict(claim, text, k) :
 
 
 # for testing purposes
-""" if "__main__":
+"""if "__main__":
     
     test_set_claims = os.path.join(CWD_FOLDER, 'testing_set', 'claims.txt')
     f_claim = open(test_set_claims, 'r', errors='replace')
