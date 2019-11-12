@@ -1,8 +1,10 @@
 from bs4 import BeautifulSoup
 import requests
 import tokenizer
+from wiki_scraper import wiki
 import sys
 import io
+import re
 
 class Claim:
     def __init__(self, href, text, height, parent, maxheight = 8):
@@ -36,11 +38,12 @@ class Claim:
 
         
         # fix broken link
-        if self.href[:5] != "https" and self.parent != None:
+        if self.href[:5] != "https" and self.parent != None and "https://en.wikipedia.org" in self.parent.href:
             preref = "https://" + self.parent.href.split('/')[2]
             #print(preref)
             self.href = "".join([preref, self.href])
-            
+            print(self.href)
+        
         
         # Cycle Detection
         if self.href in self.visited and self.parent != None:
@@ -54,9 +57,12 @@ class Claim:
     def parse_child(self, maxheight):
         # Do nothing if there is a cycle
         ref2text = {}
-        if not self.excep_handle():
-            return 
         print(self.href)
+        if self.parent != None and  "https://en.wikipedia.org" in self.parent.href:
+            self.href = wiki(self.href, self.parent.href)[0]
+        else:
+            if not self.excep_handle():
+                return 
         response = requests.get(self.href)
         self.visited.append(self.href)
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -88,8 +94,10 @@ class Claim:
         for words in texts:
             try:
                 if ref2text[text[1]] != "" and self.height < maxheight:
+                    print("Branch 1")
                     self.child.append(Claim(ref2text[words], words, (self.height +1), self))
                 elif self.height < maxheight:
+                    print("Branch 2")
                     self.leaf[self.text] = scores
             except KeyError:
                 ref_key = ""
@@ -98,9 +106,10 @@ class Claim:
                         ref_key = key
                         break
                 if ref2text[ref_key] != "" and self.height < maxheight:
-                    #print("Success")
+                    print("Branch 3")
                     self.child.append(Claim(ref2text[words], words, (self.height +1), self))
                 elif self.height < maxheight:
+                    print("Branch 4")
                     self.leaf[self.text] = self.score
 
 
@@ -110,8 +119,9 @@ class Claim:
 
 if "__main__":
     
-    url = "https://en.wikipedia.org/wiki/Draco_(lawgiver)"
-    text = "Draconian laws are named after the 1st Greek legislator, Draco, who meted out severe punishment for very minor offenses. These included enforced slavery for any debtor whose status was lower than that of his creditor and the death sentence for stealing a cabbage."
+    url = "https://en.wikipedia.org/wiki/Albert_G%C3%B6ring"
+    # #cite_note-Burke,_pp._205–214-3
+    text = "Albert G�ring, brother of Hermann G�ring. Unlike his brother, Albert was opposed to Nazism and helped many Jews and other persecuted minorities throughout the war. He was shunned in postwar Germany due to his name, and died without any public recognition for his humanitarian efforts."
     root = Claim(url, text, 0, None)
     for keys, values in root.leaf.items():
         print("claim: " + root.text + "keys of leaves: " + keys + "values of leaves: " + str(values))
