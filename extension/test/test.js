@@ -6,34 +6,34 @@ const { JSDOM } = jsdom;
 // const document = (new JSDOM(``, { url: 'file:///Users/dilloncharlesoleary/Documents/School/SeniorYear/SoftwareEng/DeepCite/extension/popup.html' })).window.document;
 // const jsdom = require("jsdom");
 // const { JSDOM } = jsdom;
-// describe('Array', function() {
-//   describe('#indexOf()', function() {
-//     it('should return -1 when the value is not present', function() {
-//       assert.equal([1, 2, 3].indexOf(4), -1);
-//     });
-//     it('should have value when present', () => {
-//     	assert.equal([1, 2, 3].indexOf(2), 2);
-//     });
-//   });
-// });
+describe('Array', function() {
+  describe('#indexOf()', function() {
+    it('should return -1 when the value is not present', function() {
+      assert.equal([1, 2, 3].indexOf(4), -1);
+    });
+    it('should have value when present', () => {
+    	assert.equal([1, 2, 3].indexOf(2), 2);
+    });
+  });
+});
 // onChange, the fields are stored in persistent storage
 // const document = new JSDOM(`<!DOCTYPE html><p id="formClaimInput">Hello world</p>`).window.document;
 // console.log(document.querySelector("p").textContent);
 describe('persistent storage', function() {
 	describe('claimField', function() {
 		it('should store it\'s contents on change', async function() {
-			const browser = await puppeteer.launch({
-				headless: false,
-				args: ['--window-size=1920,1080']
-			});
-			const page = await browser.newPage();
-			await page.goto(
-				'file://' + __dirname + '/../popup.html'
-			);
-			await page.focus('#formClaimInput');
-			await page.keyboard.type('clmVal');
-			const finalText = await page.$eval('#formClaimInput', el => el.textContent);
-			console.log(finalText);
+			// const browser = await puppeteer.launch({
+			// 	headless: false,
+			// 	args: ['--window-size=1920,1080']
+			// });
+			// const page = await browser.newPage();
+			// await page.goto(
+			// 	'file://' + __dirname + '/../popup.html'
+			// );
+			// await page.focus('#formClaimInput');
+			// await page.keyboard.type('clmVal');
+			// const finalText = await page.$eval('#formClaimInput', el => el.textContent);
+			// console.log(finalText);
 			// const newPage = await page.evaluate(() => {
 
    //      return  document.getElementById("formClaimInput");

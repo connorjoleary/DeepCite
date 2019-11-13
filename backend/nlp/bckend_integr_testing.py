@@ -19,9 +19,4 @@ for x in range(len(claims)):
     claim_Class.append(claim_new)
 
 for claim in claim_Class:
-    # print(claim)
     print(claim.get_full_claim())
-
-
-
-

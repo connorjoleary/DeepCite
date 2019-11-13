@@ -6,7 +6,7 @@ import os
 
 CWD_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
-# loads english library into space
+# loads english library into spacey
 # other libraries can be used for better accuracy
 # en_core_web_md
 # en_core_web_lg
