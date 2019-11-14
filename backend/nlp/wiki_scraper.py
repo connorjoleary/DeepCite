@@ -11,7 +11,7 @@ def wiki(url, parent):
         findReferences = bsObj.find('ol', {'class': 'references'})
         href = BeautifulSoup(str(findReferences), "html.parser")
         links = [a["href"] for a in href.find_all("a", href=True)]
-        print(links)
+        #print(links)
         start = len(links)
         end = 0
         for i,link in enumerate(links):
@@ -21,7 +21,7 @@ def wiki(url, parent):
                 end = i
                 break
         corrlinks = links[start + 1 : end]
-        print(corrlinks)
+        #print(corrlinks)
         for corrlink in corrlinks:
             if corrlink[:6] == "/wiki/":
                 corrlink = "https://en.wikipedia.org" + corrlink

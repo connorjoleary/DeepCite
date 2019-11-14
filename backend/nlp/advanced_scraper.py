@@ -38,7 +38,7 @@ class Claim:
 
         
         # fix broken link
-        if self.href[:5] != "https" and self.parent != None and "https://en.wikipedia.org" in self.parent.href:
+        if self.href[:5] != "https" and self.parent != None and self.href[:1] == "/":
             preref = "https://" + self.parent.href.split('/')[2]
             #print(preref)
             self.href = "".join([preref, self.href])
@@ -59,7 +59,14 @@ class Claim:
         ref2text = {}
         print(self.href)
         if self.parent != None and  "https://en.wikipedia.org" in self.parent.href:
-            self.href = wiki(self.href, self.parent.href)[0]
+            if len(wiki(self.href, self.parent.href)) == 0:
+                print(self.parent.cand[0])
+                print(self.parent.score[0])
+                self.leaf[self.parent.cand[0]] = self.parent.score[0]
+                self.parent.leaf = self.leaf
+                return
+            else:
+                self.href = wiki(self.href, self.parent.href)[0]
         else:
             if not self.excep_handle():
                 return 
@@ -71,7 +78,8 @@ class Claim:
          # Exception that the child of one claim has no valid sentences, then add its parent to the leaf list.
         if len(text_raw) < 5:
             # Terminate the scraper and parse the parent node to the leaf list
-            self.leaf[self.parent.text] = self.parent.score
+            self.leaf[self.parent.cand[0]] = self.parent.score[0]
+            self.parent.leaf = self.leaf
             return 
 
         for unit in text_raw:
@@ -81,14 +89,13 @@ class Claim:
             else:
                 ref2text[unit.text] = ""
         cand = tokenizer.predict(self.text, list(ref2text.keys()), 1)
-        #print(cand)
         texts = [] 
         scores = []
         for text in cand:
             texts.append(text[1])
             scores.append(text[2])
-        print("text: {}".format(texts))
-        print("scores: {}".format(scores))
+        #print("text: {}".format(texts))
+        #print("scores: {}".format(scores))
         self.cand = texts
         self.score = scores
         for words in texts:
@@ -99,6 +106,8 @@ class Claim:
                 elif self.height < maxheight:
                     print("Branch 2")
                     self.leaf[self.text] = scores
+                    if self.parent != None:
+                        self.parent.leaf = self.leaf
             except KeyError:
                 ref_key = ""
                 for key in ref2text.keys():
@@ -111,6 +120,8 @@ class Claim:
                 elif self.height < maxheight:
                     print("Branch 4")
                     self.leaf[self.text] = self.score
+                    if self.parent != None:
+                        self.parent.leaf = self.leaf
 
 
     def __repr__(self):
