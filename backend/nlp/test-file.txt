@@ -1,34 +1,4 @@
-[('Gravity moves at the Speed of Light and is not Instantaneous. If the Sun were to disappear, we would continue our elliptical orbit for an additional 8 minutes and 20 seconds, the same time it would take us to stop seeing the light (according to General Relativity).\n', 'The rate of this damping can be computed, and one finds that it depends sensitively on the speed of gravity.  The fact that gravitational damping is measured at all is a strong indication that the propagation speed of gravity is not infinite.  If the calculational framework of general relativity is accepted, the damping can be used to calculate the speed, and the actual measurement confirms that the speed of gravity is equal to the speed of light to within 1%.  (Measurements of at least one other binary pulsar system, PSR B1534+12, confirm this result, although so far with less precision.)\n', 0.8387112425937225)]
-
-
-
-
-
-[('Draconian laws are named after the 1st Greek legislator, Draco, who meted out severe punishment for very minor offenses. These included enforced slavery for any debtor whose status was lower than that of his creditor and the death sentence for stealing a cabbage.\n', 'The laws were particularly harsh. For example, any debtor whose status was lower than that of his creditor was forced into slavery.[9] The punishment was more lenient for those owing a debt to a member of a lower class. The death penalty was the punishment for even minor offences, such as stealing a cabbage.[10] Concerning the liberal use of the death penalty in the Draconic code, Plutarch states: "It is said that Drakon himself, when asked why he had fixed the punishment of death for most offences, answered that he considered these lesser crimes to deserve it, and he had no greater punishment for more important ones".[11]\n', 0.9110616367735801)]
-
-
-
-
-
-[('Thomas Alva Edison did not invent the light bulb; electric light sources were being experimented since early 1800s and an English Physicist Sir Joseph Swan had a working prototype of electric incandescent light bulb more than a decade earlier than Edison.\n', 'In 1850 an English physicist named Joseph Wilson Swan created a “light bulb�? by enclosing carbonized paper filaments in an evacuated glass bulb. And by 1860 he had a working prototype, but the lack of a good vacuum and an adequate supply of electricity resulted in a bulb whose lifetime was much too short to be considered an effective prodcer of light. However, in the 1870’s better vacuum pumps became available and Swan continued experiments on light bulbs. In 1878, Swan developed a longer lasting light bulb using a treated cotton thread that also removed the problem of early bulb blackening.\n', 0.8773283890742656)]
-
-
-
-
-
-[('Albert G�ring, brother of Hermann G�ring. Unlike his brother, Albert was opposed to Nazism and helped many Jews and other persecuted minorities throughout the war. He was shunned in postwar Germany due to his name, and died without any public recognition for his humanitarian efforts.\n', 'In contrast to his brother, however, Albert was opposed to Nazism and helped Jews and others who were persecuted in Nazi Germany.[2] He was shunned in postwar Germany because of his family name, and he died without any public recognition for his humanitarian efforts.[3]', 0.949663331314553)]
-
-
-
-
-
-[('it took Pixar almost 3 years of research to perfect Merida�s curly hair for their 2012 film Brave. They spent two months working on a scene where Merida removes her hood and the full volume of her hair is finally revealed.\n', '"It took us almost three years to get the final look for her hair and we spent two months working on the scene where Merida removes her hood and you see the full volume of her hair," said Chung. "', 0.8946443588175157)]
-
-
-
-
-
-[('real dead bodies were used on the set of “Apocalypse Now.�? The man who supplied them turned out to be a grave robber and was arrested', 'They\'d got the stiffs from a guy who supplied bodies to medical schools for autopsies. It turned out he was a grave robber. "The police showed up on our set and took all of our passports," says Frederickson. "They didn\'t know we hadn\'t killed these people because the bodies were unidentified. I was pretty damn worried for a few days. But they got to the truth and put the guy in jail."\n', 0.8656179695229853)]
+[('Serial killers are good people who are misjudged by society, They are notorious for having fun and loving to kill.', '“It is crucial to note that we are not trying to suggest that individuals with ASD or previous head trauma are more likely to be serial killers or commit serious crime,” said lead researcher, Dr. Clare Allely, from the Institute of Wellbeing at the university, in a press release. “Rather, we are suggesting that there may be a subgroup of individuals within these groups who may be more likely to commit serious crimes when exposed to certain psychosocial stressors.”\n', 0.7695321461197555)]
 
 
 

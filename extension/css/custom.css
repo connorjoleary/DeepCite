@@ -1,10 +1,11 @@
 // custom.css - this will contain all our custom css styles.
 body {
   font-size: 100%;
+  font-weight: italic;
 }
 
 .main {
-  font-family: "Times New Roman", Times, serif;
+  font-family: 'Anton', sans-serif;
   overflow: hidden;
   width: 350px;
   max-height: 600px;
@@ -12,7 +13,12 @@ body {
   margin: 0px;
   padding: 15px;
   padding-top: 0px;
-  background: linear-gradient(to bottom right, #ccffff 31%, #99ccff 108%);
+  background: #E6E6E6;
+  font-weight: strong;
+  background: rgb(255,255,255);
+  background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(11,33,71,1) 0%);
+  color: white;
+
 }
 
 #no-padding{
@@ -39,4 +45,5 @@ body {
 
 .result-text{
   font-style: italic;
+  font-weight: bold;
 }
