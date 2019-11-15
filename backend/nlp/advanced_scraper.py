@@ -6,6 +6,14 @@ import sys
 import io
 import re
 
+
+class Node:
+    def __init__(self, url, text, isroot, score):
+        self.text = text
+        self.url = url
+        self.score = score
+        self.isroot = isroot
+
 class Claim:
     def __init__(self, href, text, height, parent, maxheight = 8):
          # TODO: iteration 2 problem
@@ -25,12 +33,11 @@ class Claim:
         self.visited = []
         self.parse_child(maxheight)
         self.realscore = 0
+        self.jumps = []
         # Add field cand and score to the parent so that children can work correctly
         # self.branch = order
         # default value of score is 0
     
-    
-
     def excep_handle(self):
         if self.parent != None:
             self.visited = self.parent.visited
@@ -52,11 +59,16 @@ class Claim:
             return False
         
         return True
-
+     
     
     def parse_child(self, maxheight):
         # Do nothing if there is a cycle
         ref2text = {}
+        if self.href == "":
+            self.parent.leaf = self.leaf
+            self.leaf[self.text] = self.parent.score
+            self.score = self.parent.score
+            return
         print(self.href)
         if self.parent != None and  "https://en.wikipedia.org" in self.parent.href:
             if len(wiki(self.href, self.parent.href)) == 0:
@@ -84,6 +96,7 @@ class Claim:
 
         for unit in text_raw:
             if len(unit.findAll('a')) > 0:
+                print(unit)
                 for ref in unit.findAll('a'):
                     ref2text[unit.text] = ref['href']
             else:
@@ -105,40 +118,62 @@ class Claim:
                     self.child.append(Claim(ref2text[words], words, (self.height +1), self))
                 elif self.height < maxheight:
                     print("Branch 2")
-                    self.leaf[self.text] = scores
-                    if self.parent != None:
-                        self.parent.leaf = self.leaf
+                    self.child.append(Claim("", words, (self.height +1), self))
+                        
             except KeyError:
                 ref_key = ""
+                #print(ref2text.keys())
                 for key in ref2text.keys():
-                    if text[1] in key:
+                    #print(key)
+                    if text[0] in key:
+                        #print("8")
                         ref_key = key
+                        #print(ref_key)
                         break
                 if ref2text[ref_key] != "" and self.height < maxheight:
                     print("Branch 3")
                     self.child.append(Claim(ref2text[words], words, (self.height +1), self))
                 elif self.height < maxheight:
                     print("Branch 4")
-                    self.leaf[self.text] = self.score
-                    if self.parent != None:
-                        self.parent.leaf = self.leaf
+                    self.child.append(Claim("", words, (self.height +1), self))
+                    
 
+    def get_jump(self):
+        if self.parent == None:
+            root = Node(self.href, self.text, True, self.score)
+
+        else:
+            root = Node(self.href, self.text, False, self.score)
+            # print(len(self.child))
+        #print(len(self.child))
+        if len(self.child) == 0:
+            # Jump terminate at this node
+            jumps.append((root, None))
+        
+        else:
+            for onechild in self.child:
+                onechild.get_jump()
+                # A jump start from a single node, ends at a list of children nodes
+                jumps.append((root, Node(onechild.href, onechild.text, False, onechild.score)))
+                
+                
 
     def __repr__(self):
         for keys, values in self.leaf.items():
             return "claim: " + self.text + "keys of leaves: " + keys + "values of leaves: " + str(values)
 
+jumps = []
+
 if "__main__":
     
-    url = "https://en.wikipedia.org/wiki/Albert_G%C3%B6ring"
+    url = "http://math.ucr.edu/home/baez/physics/Relativity/GR/grav_speed.html"
     # #cite_note-Burke,_pp._205–214-3
-    text = "Albert G�ring, brother of Hermann G�ring. Unlike his brother, Albert was opposed to Nazism and helped many Jews and other persecuted minorities throughout the war. He was shunned in postwar Germany due to his name, and died without any public recognition for his humanitarian efforts."
+    text = "Gravity moves at the Speed of Light and is not Instantaneous. If the Sun were to disappear, we would continue our elliptical orbit for an additional 8 minutes and 20 seconds, the same time it would take us to stop seeing the light (according to General Relativity)."
     root = Claim(url, text, 0, None)
-    for keys, values in root.leaf.items():
-        print("claim: " + root.text + "keys of leaves: " + keys + "values of leaves: " + str(values))
-
-
-
-
-        
+    #for keys, values in root.leaf.items():
+        #print("claim: " + root.text + "keys of leaves: " + keys + "values of leaves: " + str(values))
+    root.get_jump()
+    print(jumps)
+    #for (node1, node2) in jumps:
+    #    print("text1: " + node1.text + "text2: " + node2.text)
 
