@@ -8,7 +8,7 @@ import re
 import os
 CWD_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
-jumps = []
+#jumps = []
 class Node:
     def __init__(self, url, text, isroot, score):
         self.text = text
@@ -135,10 +135,9 @@ class Claim:
                     self.child.append(Claim("", words, (self.height +1), self))
                     
 
-    def get_jump(self):
+    def get_jump(self, jumps):
         if self.parent == None:
             root = Node(self.href, self.text, True, self.score)
-
         else:
             root = Node(self.href, self.text, False, self.score)
             # print(len(self.child))
@@ -149,46 +148,13 @@ class Claim:
         
         else:
             for onechild in self.child:
-                onechild.get_jump()
+                onechild.get_jump(jumps)
                 # A jump start from a single node, ends at a list of children nodes
                 jumps.append((root, Node(onechild.href, onechild.text, False, onechild.score)))
                 
 
 
-def main():
-    test_set_claims = os.path.join(CWD_FOLDER, 'testing_set', 'claims.txt')
-    f_claim = open(test_set_claims, 'r', errors='replace')
-    claims = [line for line in f_claim]
-    f_claim.close()
-
-    test_set_links = os.path.join(CWD_FOLDER, 'testing_set', 'links.txt')
-    f_links = open(test_set_links, 'r', errors='replace')
-    links = [line for line in f_links]
-    f_links.close()
-
-    claim_Class = []
-    for x in range(len(claims) - 1):
-        claim_new = Claim(links[x].strip(), claims[x].strip(), 0, None)
-        claim_Class.append(claim_new)
-
-    for claim in claim_Class:
-        claim.get_jump()
-        print(jumps)
 
 
-if "__main__":
-    main()
-    '''
-    main()
-    url = "http://math.ucr.edu/home/baez/physics/Relativity/GR/grav_speed.html"
-    # #cite_note-Burke,_pp._205–214-3
-    text = "Gravity moves at the Speed of Light and is not Instantaneous. If the Sun were to disappear, we would continue our elliptical orbit for an additional 8 minutes and 20 seconds, the same time it would take us to stop seeing the light (according to General Relativity)."
-    root = Claim(url, text, 0, None)
-    #for keys, values in root.leaf.items():
-        #print("claim: " + root.text + "keys of leaves: " + keys + "values of leaves: " + str(values))
-    root.get_jump()
-    print(jumps)
-    #for (node1, node2) in jumps:
-    #    print("text1: " + node1.text + "text2: " + node2.text)
-    '''
+
 
