@@ -71,7 +71,7 @@ Installations and downloads required before running the application
     * results are printed, ignore spaCy's model's warning
     * results are stored in dataset/word2vec/redditWorldNews.txt and dataset/word2vector/redditWorldNews.model
     
-  * main testing for web scraper: run advanced_scraper.py in backend/tokenize/nlp/
+  * main testing for web scraper: run tree.py in backend/tokenize/nlp/
     *  **make sure testing-set/claims.txt and testing-set/links.txt are present**
     * results are a list of node which is an interface to visualize the citation tree in frontend.
 
