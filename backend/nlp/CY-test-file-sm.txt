@@ -1,0 +1,60 @@
+[('Doro is a nickname for the German name Dorothee, so now I know how the heavy metal singer, Doro, former front-woman for Warlock, got her name\n', 'Her acoustic performance included also a duet with Blaze Bayley on the Iron Maiden song "Fear of the Dark".[74] In the same night, Doro was reunited again with her bandmates of Warlock to perform their old songs.[73]', 0.8508316282402163)]
+
+
+
+
+
+[('Michael Jackson couldn’t read or write music. He was also an incredible beatboxer.\n', 'Jackson couldn’t read or write music at all. Contrary to received wisdom, he could play instruments a bit – he’s credited as playing keyboard, synthesizer, guitar, drums and percussion on ‘HIStory’ – but none proficiently. He didn’t have any formal composition training, though one could say he was trained harder than any other performer by his father.\n', 0.8731731822712647)]
+
+
+
+
+
+[('that there are 2 million lakes in Russia! Wow!\n', "ot only is Russia home to the world's deepest lake, but it is estimated that more than 2 million lakes are located within Russia's borders.\n", 0.7664870160149366)]
+
+
+
+
+
+[('About the Mandela Effect, where a large group of people remember an event that never happened or a thing that never existed.\n', 'In June 2019, the famed New York Times crossword puzzle made it the theme, and defined it as, "a recent refinement of false memory that typically refers to pop culture or current event references."', 0.8005116988454817)]
+
+
+
+
+
+[('"uncured" bacon is misleading, because it is actually cured and still contains unhealthy nitrites\n', 'CR also asked respondents what best describes their feelings about the current “no nitrates added�? label using the fine print stating that only naturally occurring nitrates are used.', 0.6452339796632673)]
+
+
+
+
+
+[('Gaius Appuleius Diocles, Roman charioteer is often cited as the highest-paid athlete of all-time. That condition, however, arises from the fantastic assumption that, as his wealth would have been enough to fund the entire Roman Army for more than two months.\n', 'He is often cited as the highest-paid athlete of all-time.[1][2] That condition, however, arises from the fantastic assumption that, as his wealth would have been enough to fund the entire Roman Army for more than two months, the apt comparison is what it takes to pay the wages of the American armed forces for the same period,[2] despite the fact that modern Americans are far wealthier and numerous than their Roman counterparts.', 0.9419978461986594)]
+
+
+
+
+
+[('Modern Anatolians/Near Easterners are today genetically the closest to Ancient European farmers.\n', 'Ancient European Neolithic farmers were genetically closest to modern Neast-Eastern/ Anatolian populations.', 0.8301341216699298)]
+
+
+
+
+
+[('Modern Anatolians/Near Easterners are today genetically the closest to Ancient European farmers.\n', 'Seldin (2006) used over 5,000 autosomal SNPs. It showed "a consistent and reproducible distinction between ‘northern’ and ‘southern’ European population groups". Most individual participants with southern European ancestry (Italians, Greeks, Portuguese, Spaniards), and Ashkenazi Jews have >85% membership in the southern population; and most northern, western, central, and eastern Europeans (Swedes, English, Irish, Germans, and Ukrainians) have >90% in the northern population group. However, many of the participants in this study were actually American citizens who self-identified with different European ethnicities based on self-reported familial pedigree.[116]\n', 0.8649667326522915)]
+
+
+
+
+
+[('that when Lois Ellen Frank first proposed her 2003 James Beard Award–winning cookbook on Native American foods, publishers told her there was no such cuisine.\n', 'She talked to and collected recipes from the Hopi,[1] Ute, Pueblo, and other Southwestern tribes, and in 2002 Ten Speed Press published her cookbook Foods of the Southwest Indian Nations,[3][13] in collaboration with Walter Whitewater (Diné).[14] In 2003, the book won a James Beard Foundation Award, the first cookbook on Native American cuisine or by a Native American author so honored.[3][15][16][17] CNN called it "the first Native American cookbook to turn the heads of James Beard Foundation Award judges".[15]', 0.8802223894685773)]
+
+
+
+
+
+[('that when Lois Ellen Frank first proposed her 2003 James Beard Award–winning cookbook on Native American foods, publishers told her there was no such cuisine.', 'She won a 2003 James Beard Foundation Award for her cookbook Foods of the Southwest Indian Nations, the first cookbook of Native American cuisine so honored.', 0.8772218717525349)]
+
+
+
+
+

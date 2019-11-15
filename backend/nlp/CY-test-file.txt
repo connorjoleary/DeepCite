@@ -1,0 +1,60 @@
+[('Doro is a nickname for the German name Dorothee, so now I know how the heavy metal singer, Doro, former front-woman for Warlock, got her name\n', 'Dorothee Pesch (born 3 June 1964), popularly known as Doro Pesch or Doro, is a German heavy metal singer-songwriter, formerly front-woman of the heavy metal band Warlock. Dubbed the "Queen of Heavy Metal", Doro\'s contributions to music and culture along with her publicized personal life made her a global figure in metal culture for over three decades. The name Doro has also been associated with the touring band accompanying the singer, whose members have continuously changed in more than twenty years of uninterrupted activity, the most stable presences being those of bassist Nick Douglas and drummer Johnny Dee.\n', 0.914176088487257)]
+
+
+
+
+
+[('Michael Jackson couldn’t read or write music. He was also an incredible beatboxer.\n', 'Jackson couldn’t read or write music at all. Contrary to received wisdom, he could play instruments a bit – he’s credited as playing keyboard, synthesizer, guitar, drums and percussion on ‘HIStory’ – but none proficiently. He didn’t have any formal composition training, though one could say he was trained harder than any other performer by his father.\n', 0.8978108225534833)]
+
+
+
+
+
+[('that there are 2 million lakes in Russia! Wow!\n', "ot only is Russia home to the world's deepest lake, but it is estimated that more than 2 million lakes are located within Russia's borders.", 0.9065074081633243)]
+
+
+
+
+
+[('About the Mandela Effect, where a large group of people remember an event that never happened or a thing that never existed.\n', 'Broome has said that she "loves" the idea that the Mandela Effect, or others claiming they distinctly recall different events or details, could be proof that we\'re existing in alternate realities. We\'re not so sure that\'s the truth, but these comparisons between popular belief and reality is making our jaws hit the floor as we type. Check out 40 of the most gobsmacking "facts" below.', 0.9529197790628158)]
+
+
+
+
+
+[('"uncured" bacon is misleading, because it is actually cured and still contains unhealthy nitrites\n', '“Deli meats carrying these labels pose the same health risks as traditionally cured meats because the nitrate and nitrite levels are essentially the same.�?', 0.8544643771411081)]
+
+
+
+
+
+[('Gaius Appuleius Diocles, Roman charioteer is often cited as the highest-paid athlete of all-time. That condition, however, arises from the fantastic assumption that, as his wealth would have been enough to fund the entire Roman Army for more than two months.\n', 'He is often cited as the highest-paid athlete of all-time.[1][2] That condition, however, arises from the fantastic assumption that, as his wealth would have been enough to fund the entire Roman Army for more than two months, the apt comparison is what it takes to pay the wages of the American armed forces for the same period,[2] despite the fact that modern Americans are far wealthier and numerous than their Roman counterparts.', 0.9862534479931965)]
+
+
+
+
+
+[('Modern Anatolians/Near Easterners are today genetically the closest to Ancient European farmers.\n', 'There is consensus that agricultural technology and the main breeds of animals and plants which are farmed entered Europe from somewhere in the area of the Fertile Crescent and specifically the Levant region from the Sinai to Southern Anatolia[50][51] (Less certainly, this agricultural revolution is sometimes argued to have in turn been partly triggered by movements of people and technology coming across the Sinai from Africa.)', 0.8671943254408104)]
+
+
+
+
+
+[('Modern Anatolians/Near Easterners are today genetically the closest to Ancient European farmers.\n', 'have been found to genetically resemble neighbouring Greek and South Slavic-speaking peoples rather than modern Italians, proving that they were genetically speaking, mainly through I2a2 M-423 and E1b1b1, V-13 Haplogroups native to this area.[78][79]', 0.8884697064909303)]
+
+
+
+
+
+[('that when Lois Ellen Frank first proposed her 2003 James Beard Award–winning cookbook on Native American foods, publishers told her there was no such cuisine.\n', 'She talked to and collected recipes from the Hopi,[1] Ute, Pueblo, and other Southwestern tribes, and in 2002 Ten Speed Press published her cookbook Foods of the Southwest Indian Nations,[3][13] in collaboration with Walter Whitewater (Diné).[14] In 2003, the book won a James Beard Foundation Award, the first cookbook on Native American cuisine or by a Native American author so honored.[3][15][16][17] CNN called it "the first Native American cookbook to turn the heads of James Beard Foundation Award judges".[15]\n', 0.9274705211093307)]
+
+
+
+
+
+[('that when Lois Ellen Frank first proposed her 2003 James Beard Award–winning cookbook on Native American foods, publishers told her there was no such cuisine.', 'She talked to and collected recipes from the Hopi,[1] Ute, Pueblo, and other Southwestern tribes, and in 2002 Ten Speed Press published her cookbook Foods of the Southwest Indian Nations,[3][13] in collaboration with Walter Whitewater (Diné).[14] In 2003, the book won a James Beard Foundation Award, the first cookbook on Native American cuisine or by a Native American author so honored.[3][15][16][17] CNN called it "the first Native American cookbook to turn the heads of James Beard Foundation Award judges".[15]\n', 0.9274705291053186)]
+
+
+
+
+
