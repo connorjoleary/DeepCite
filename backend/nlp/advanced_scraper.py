@@ -5,8 +5,10 @@ from wiki_scraper import wiki
 import sys
 import io
 import re
+import os
+CWD_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
-
+jumps = []
 class Node:
     def __init__(self, url, text, isroot, score):
         self.text = text
@@ -29,7 +31,6 @@ class Claim:
         self.parent = parent
         self.child = []
         self.height = height
-        self.leaf = {}
         self.visited = []
         self.parse_child(maxheight)
         self.realscore = 0
@@ -55,7 +56,6 @@ class Claim:
         # Cycle Detection
         if self.href in self.visited and self.parent != None:
             # Terminate the scraper and parse the parent node to the leaf list
-            self.leaf[self.parent.cand[0]] = self.parent.score[0]
             return False
         
         return True
@@ -65,22 +65,20 @@ class Claim:
         # Do nothing if there is a cycle
         ref2text = {}
         if self.href == "":
-            self.parent.leaf = self.leaf
-            self.leaf[self.text] = self.parent.score
             self.score = self.parent.score
             return
         print(self.href)
         if self.parent != None and  "https://en.wikipedia.org" in self.parent.href:
             if len(wiki(self.href, self.parent.href)) == 0:
-                print(self.parent.cand[0])
-                print(self.parent.score[0])
-                self.leaf[self.parent.cand[0]] = self.parent.score[0]
-                self.parent.leaf = self.leaf
+                #print(self.parent.cand[0])
+                #print(self.parent.score[0])
+                self.score = self.parent.score
                 return
             else:
                 self.href = wiki(self.href, self.parent.href)[0]
         else:
             if not self.excep_handle():
+                self.score = self.parent.score
                 return 
         response = requests.get(self.href)
         self.visited.append(self.href)
@@ -90,8 +88,7 @@ class Claim:
          # Exception that the child of one claim has no valid sentences, then add its parent to the leaf list.
         if len(text_raw) < 5:
             # Terminate the scraper and parse the parent node to the leaf list
-            self.leaf[self.parent.cand[0]] = self.parent.score[0]
-            self.parent.leaf = self.leaf
+            
             return 
 
         for unit in text_raw:
@@ -156,16 +153,33 @@ class Claim:
                 # A jump start from a single node, ends at a list of children nodes
                 jumps.append((root, Node(onechild.href, onechild.text, False, onechild.score)))
                 
-                
 
-    def __repr__(self):
-        for keys, values in self.leaf.items():
-            return "claim: " + self.text + "keys of leaves: " + keys + "values of leaves: " + str(values)
 
-jumps = []
+def main():
+    test_set_claims = os.path.join(CWD_FOLDER, 'testing_set', 'claims.txt')
+    f_claim = open(test_set_claims, 'r', errors='replace')
+    claims = [line for line in f_claim]
+    f_claim.close()
+
+    test_set_links = os.path.join(CWD_FOLDER, 'testing_set', 'links.txt')
+    f_links = open(test_set_links, 'r', errors='replace')
+    links = [line for line in f_links]
+    f_links.close()
+
+    claim_Class = []
+    for x in range(len(claims) - 1):
+        claim_new = Claim(links[x].strip(), claims[x].strip(), 0, None)
+        claim_Class.append(claim_new)
+
+    for claim in claim_Class:
+        claim.get_jump()
+        print(jumps)
+
 
 if "__main__":
-    
+    main()
+    '''
+    main()
     url = "http://math.ucr.edu/home/baez/physics/Relativity/GR/grav_speed.html"
     # #cite_note-Burke,_pp._205–214-3
     text = "Gravity moves at the Speed of Light and is not Instantaneous. If the Sun were to disappear, we would continue our elliptical orbit for an additional 8 minutes and 20 seconds, the same time it would take us to stop seeing the light (according to General Relativity)."
@@ -176,4 +190,5 @@ if "__main__":
     print(jumps)
     #for (node1, node2) in jumps:
     #    print("text1: " + node1.text + "text2: " + node2.text)
+    '''
 
