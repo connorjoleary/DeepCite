@@ -2,8 +2,8 @@ from flask import Flask
 from flask import request
 # from nlp import Claim, Tree
 # from nlp.claim import Claim
-import nlp.tokenizer as tokenizer
-import nlp.claim
+from nlp.tree import Tree
+from nlp.advanced_scraper import Claim
 # from flask_mysqldb import MySQL
 
 # requires a hosting site for database
@@ -20,7 +20,7 @@ app = Flask(__name__)
 
 # instanization of mysql object
 # mysql = MySQL(app)
-help(nlp)
+
 root = Claim("link", "claim", 0, None)
 tree = Tree(root)
 @app.route('/')
