@@ -16,9 +16,10 @@ app.config['MYSQL_DB'] = ''
 # instanization of mysql object
 mysql = MySQL(app)
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 # sample section where infomation if placed into database
 def home():
+    #TODO: call webscraper
     # create cursor object
     # allows us to execute querries
     cursor = mysql.connection.cursor()
