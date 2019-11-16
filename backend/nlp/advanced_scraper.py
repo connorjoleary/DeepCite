@@ -5,6 +5,16 @@ from wiki_scraper import wiki
 import sys
 import io
 import re
+import os
+CWD_FOLDER = os.path.dirname(os.path.abspath(__file__))
+
+#jumps = []
+class Node:
+    def __init__(self, url, text, isroot, score):
+        self.text = text
+        self.url = url
+        self.score = score
+        self.isroot = isroot
 
 class Claim:
     def __init__(self, href, text, height, parent, maxheight = 8):
@@ -21,16 +31,14 @@ class Claim:
         self.parent = parent
         self.child = []
         self.height = height
-        self.leaf = {}
         self.visited = []
         self.parse_child(maxheight)
         self.realscore = 0
+        self.jumps = []
         # Add field cand and score to the parent so that children can work correctly
         # self.branch = order
         # default value of score is 0
     
-    
-
     def excep_handle(self):
         if self.parent != None:
             self.visited = self.parent.visited
@@ -48,27 +56,29 @@ class Claim:
         # Cycle Detection
         if self.href in self.visited and self.parent != None:
             # Terminate the scraper and parse the parent node to the leaf list
-            self.leaf[self.parent.cand[0]] = self.parent.score[0]
             return False
         
         return True
-
+     
     
     def parse_child(self, maxheight):
         # Do nothing if there is a cycle
         ref2text = {}
+        if self.href == "":
+            self.score = self.parent.score
+            return
         print(self.href)
         if self.parent != None and  "https://en.wikipedia.org" in self.parent.href:
             if len(wiki(self.href, self.parent.href)) == 0:
-                print(self.parent.cand[0])
-                print(self.parent.score[0])
-                self.leaf[self.parent.cand[0]] = self.parent.score[0]
-                self.parent.leaf = self.leaf
+                #print(self.parent.cand[0])
+                #print(self.parent.score[0])
+                self.score = self.parent.score
                 return
             else:
                 self.href = wiki(self.href, self.parent.href)[0]
         else:
             if not self.excep_handle():
+                self.score = self.parent.score
                 return 
         response = requests.get(self.href)
         self.visited.append(self.href)
@@ -78,12 +88,12 @@ class Claim:
          # Exception that the child of one claim has no valid sentences, then add its parent to the leaf list.
         if len(text_raw) < 5:
             # Terminate the scraper and parse the parent node to the leaf list
-            self.leaf[self.parent.cand[0]] = self.parent.score[0]
-            self.parent.leaf = self.leaf
+            
             return 
 
         for unit in text_raw:
             if len(unit.findAll('a')) > 0:
+                print(unit)
                 for ref in unit.findAll('a'):
                     ref2text[unit.text] = ref['href']
             else:
@@ -105,40 +115,46 @@ class Claim:
                     self.child.append(Claim(ref2text[words], words, (self.height +1), self))
                 elif self.height < maxheight:
                     print("Branch 2")
-                    self.leaf[self.text] = scores
-                    if self.parent != None:
-                        self.parent.leaf = self.leaf
+                    self.child.append(Claim("", words, (self.height +1), self))
+                        
             except KeyError:
                 ref_key = ""
+                #print(ref2text.keys())
                 for key in ref2text.keys():
-                    if text[1] in key:
+                    #print(key)
+                    if text[0] in key:
+                        #print("8")
                         ref_key = key
+                        #print(ref_key)
                         break
                 if ref2text[ref_key] != "" and self.height < maxheight:
                     print("Branch 3")
                     self.child.append(Claim(ref2text[words], words, (self.height +1), self))
                 elif self.height < maxheight:
                     print("Branch 4")
-                    self.leaf[self.text] = self.score
-                    if self.parent != None:
-                        self.parent.leaf = self.leaf
+                    self.child.append(Claim("", words, (self.height +1), self))
+                    
 
-
-    def __repr__(self):
-        for keys, values in self.leaf.items():
-            return "claim: " + self.text + "keys of leaves: " + keys + "values of leaves: " + str(values)
-
-if "__main__":
-    
-    url = "https://en.wikipedia.org/wiki/Albert_G%C3%B6ring"
-    # #cite_note-Burke,_pp._205–214-3
-    text = "Albert G�ring, brother of Hermann G�ring. Unlike his brother, Albert was opposed to Nazism and helped many Jews and other persecuted minorities throughout the war. He was shunned in postwar Germany due to his name, and died without any public recognition for his humanitarian efforts."
-    root = Claim(url, text, 0, None)
-    for keys, values in root.leaf.items():
-        print("claim: " + root.text + "keys of leaves: " + keys + "values of leaves: " + str(values))
-
-
-
-
+    def get_jump(self, jumps):
+        if self.parent == None:
+            root = Node(self.href, self.text, True, self.score)
+        else:
+            root = Node(self.href, self.text, False, self.score)
+            # print(len(self.child))
+        #print(len(self.child))
+        if len(self.child) == 0:
+            # Jump terminate at this node
+            jumps.append((root, None))
         
+        else:
+            for onechild in self.child:
+                onechild.get_jump(jumps)
+                # A jump start from a single node, ends at a list of children nodes
+                jumps.append((root, Node(onechild.href, onechild.text, False, onechild.score)))
+                
+
+
+
+
+
 
