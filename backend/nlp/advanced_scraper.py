@@ -17,13 +17,13 @@ class Node:
         self.isroot = isroot
 
 
-    # def to_claim_link_dict(self):
-    #     if self.text == None || self.url == None:
-    #         return
-    #     cl_dict = {}
-    #     cl_dict['source'] = self.text
-    #     cl_dict['link'] = self.url
-    #     return cl_dict
+    def to_claim_link_dict(self):
+        if self.text == None or self.url == None:
+            return
+        cl_dict = {}
+        cl_dict['source'] = self.text
+        cl_dict['link'] = self.url
+        return cl_dict
 
 class Claim:
     def __init__(self, href, text, height, parent, maxheight = 8):
@@ -44,6 +44,7 @@ class Claim:
         self.parse_child(maxheight)
         self.realscore = 0
         self.jumps = []
+        
         # Add field cand and score to the parent so that children can work correctly
         # self.branch = order
         # default value of score is 0

@@ -73,6 +73,10 @@ Installations and downloads required before running the application
     *  **make sure testing-set/claims.txt and testing-set/links.txt are present**
     * results are a list of node which is an interface to visualize the citation tree in frontend.
 
+  * for testing server
+    * download GoogleNews-vectors-negative300.bin.gz from https://code.google.com/archive/p/word2vec/ and place it in the word_vectors dirctory in the testing_set folder
+    go into backend/nlp and run python app.py
+
 <small>Note: connection issues make occur when webscrapping, wait a minute then run again</small>
 
 ## Tasks
