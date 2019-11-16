@@ -122,7 +122,7 @@ def predict(claim, text, k) :
 
 
 # for testing purposes
-if "__main__":
+""" if "__main__":
     
     test_set_claims = os.path.join(CWD_FOLDER, 'testing_set', 'claims.txt')
     f_claim = open(test_set_claims, 'r', errors='replace')
@@ -144,4 +144,4 @@ if "__main__":
     test_file = open(file_path, 'w+', errors='replace')
     for x in test:
         test_file.write(str(x) + '\n\n\n\n\n\n')
-    test_file.close()
+    test_file.close() """
