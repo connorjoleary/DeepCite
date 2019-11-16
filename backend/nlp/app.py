@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import request
+import json
 # from nlp import Claim, Tree
 # from nlp.claim import Claim
 from tree import Tree
@@ -37,18 +38,20 @@ def deep_cite():
     # content['link']
     claim = content['claim']
     link = content['link']
+    ret_json
 
     try:
         root = Claim(link, claim, 0, None)
         tree = Tree(root)
         print(tree.tofront())
+        ret_json = json.dumps(tree.tofront())
     except Exception as e:
          print("an excpetion occured" + str(e))
 
 
     # ret_list
-    # print content
-    return request
+    # print contents
+    return ret_json
 
 # @app.route('/users')
 # # sample code how infomation is retrieved from database

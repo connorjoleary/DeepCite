@@ -11,7 +11,11 @@ class Tree:
         root.get_jump(self.jumps)
 
     def tofront(self):
-        return self.jumps
+        nodes = []
+        for jump in self.jumps:
+            nodes.append(jump[0])
+        return nodes
+
 
 if __name__ == '__main__':
     from advanced_scraper import Claim

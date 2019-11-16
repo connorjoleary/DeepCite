@@ -16,6 +16,15 @@ class Node:
         self.score = score
         self.isroot = isroot
 
+
+    # def to_claim_link_dict(self):
+    #     if self.text == None || self.url == None:
+    #         return
+    #     cl_dict = {}
+    #     cl_dict['source'] = self.text
+    #     cl_dict['link'] = self.url
+    #     return cl_dict
+
 class Claim:
     def __init__(self, href, text, height, parent, maxheight = 8):
          # TODO: iteration 2 problem
@@ -39,8 +48,9 @@ class Claim:
         # self.branch = order
         # default value of score is 0
     
-    def __str__(self):
-        return "text: " + self.text + "href: " + self.href
+    # def __str__(self):
+    #     return "text: " + self.text + "href: " + self.hre
+
 
     def excep_handle(self):
         if self.parent != None:
