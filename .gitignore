@@ -1,2 +1,3 @@
 node_modules/
 backend/nlp/word_vectors/GoogleNews-vectors-negative300.bin
+backend/nlp/.coverage
