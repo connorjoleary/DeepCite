@@ -76,7 +76,6 @@ Installations and downloads required before running the application
 <small>Note: connection issues make occur when webscrapping, wait a minute then run again</small>
 
 ## Tasks
-### Iteration 1
 - [x] Add extension
 - [x] Enter Data
 - [ ] View Results
