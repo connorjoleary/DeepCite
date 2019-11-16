@@ -7,22 +7,16 @@ import os
 
 CWD_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
-#gn_path = r'word_vectors/GoogleNews-vectors-negative300.bin'
-#gn_model = KeyedVectors.load_word2vec_format(gn_path, binary=True)
+gn_path = r'word_vectors/GoogleNews-vectors-negative300.bin'
+gn_model = KeyedVectors.load_word2vec_format(gn_path, binary=True)
 
-# loads english library into space
-# other libraries can be used for better accuracy
-# en_core_web_md
-# en_core_web_lg
 # google news pre-trained network: https://code.google.com/archive/p/word2vec/ 
-nlp = spacy.load("en_core_web_lg")
-#nlp = spacy.blank('en')
-#nlp.vocab.vectors = spacy.vocab.Vectors(data=gn_model.vectors, keys=gn_model.index2word)
+#nlp = spacy.load("en_core_web_lg")
+nlp = spacy.blank('en')
+nlp.vocab.vectors = spacy.vocab.Vectors(data=gn_model.vectors, keys=gn_model.index2word)
 nlps = English()
 nlps.add_pipe(nlps.create_pipe('sentencizer'))
-# importing different vectors for similiarites - word2vec
-# training dataset
-# nlp = spacy.load('en_core_web_sm', vectors='<directory>') 
+
 
 # solely for testing purposes
 test = []

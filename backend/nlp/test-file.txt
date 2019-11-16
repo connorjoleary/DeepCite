@@ -1,35 +1,49 @@
-[('Gravity moves at the Speed of Light and is not Instantaneous. If the Sun were to disappear, we would continue our elliptical orbit for an additional 8 minutes and 20 seconds, the same time it would take us to stop seeing the light (according to General Relativity).\n', 'The rate of this damping can be computed, and one finds that it depends sensitively on the speed of gravity.  The fact that gravitational damping is measured at all is a strong indication that the propagation speed of gravity is not infinite.  If the calculational framework of general relativity is accepted, the damping can be used to calculate the speed, and the actual measurement confirms that the speed of gravity is equal to the speed of light to within 1%.  (Measurements of at least one other binary pulsar system, PSR B1534+12, confirm this result, although so far with less precision.)\n', 0.8387112425937225)]
+[('Doro is a nickname for the German name Dorothee, so now I know how the heavy metal singer, Doro, former front-woman for Warlock, got her name\n', 'Dorothee Pesch (born 3 June 1964), popularly known as Doro Pesch or Doro, is a German heavy metal singer-songwriter, formerly front-woman of the heavy metal band Warlock. Dubbed the "Queen of Heavy Metal", Doro\'s contributions to music and culture along with her publicized personal life made her a global figure in metal culture for over three decades. The name Doro has also been associated with the touring band accompanying the singer, whose members have continuously changed in more than twenty years of uninterrupted activity, the most stable presences being those of bassist Nick Douglas and drummer Johnny Dee.\n', 0.8248561396669774)]
 
 
 
 
-
-[('Draconian laws are named after the 1st Greek legislator, Draco, who meted out severe punishment for very minor offenses. These included enforced slavery for any debtor whose status was lower than that of his creditor and the death sentence for stealing a cabbage.\n', 'The laws were particularly harsh. For example, any debtor whose status was lower than that of his creditor was forced into slavery.[9] The punishment was more lenient for those owing a debt to a member of a lower class. The death penalty was the punishment for even minor offences, such as stealing a cabbage.[10] Concerning the liberal use of the death penalty in the Draconic code, Plutarch states: "It is said that Drakon himself, when asked why he had fixed the punishment of death for most offences, answered that he considered these lesser crimes to deserve it, and he had no greater punishment for more important ones".[11]\n', 0.9110616367735801)]
-
+[('Michael Jackson couldn’t read or write music. He was also an incredible beatboxer.\n', 'Jackson couldn’t read or write music at all.', 0.8663478610852152)]
 
 
 
 
-[('Thomas Alva Edison did not invent the light bulb; electric light sources were being experimented since early 1800s and an English Physicist Sir Joseph Swan had a working prototype of electric incandescent light bulb more than a decade earlier than Edison.\n', 'In 1850 an English physicist named Joseph Wilson Swan created a “light bulb�? by enclosing carbonized paper filaments in an evacuated glass bulb. And by 1860 he had a working prototype, but the lack of a good vacuum and an adequate supply of electricity resulted in a bulb whose lifetime was much too short to be considered an effective prodcer of light. However, in the 1870’s better vacuum pumps became available and Swan continued experiments on light bulbs. In 1878, Swan developed a longer lasting light bulb using a treated cotton thread that also removed the problem of early bulb blackening.\n', 0.8773283890742656)]
+[('that there are 2 million lakes in Russia! Wow!\n', "ot only is Russia home to the world's deepest lake, but it is estimated that more than 2 million lakes are located within Russia's borders.\n", 0.8525909838247772)]
 
 
 
 
-
-[('Albert G�ring, brother of Hermann G�ring. Unlike his brother, Albert was opposed to Nazism and helped many Jews and other persecuted minorities throughout the war. He was shunned in postwar Germany due to his name, and died without any public recognition for his humanitarian efforts.\n', 'In contrast to his brother, however, Albert was opposed to Nazism and helped Jews and others who were persecuted in Nazi Germany.[2] He was shunned in postwar Germany because of his family name, and he died without any public recognition for his humanitarian efforts.[3]', 0.949663331314553)]
-
+[('About the Mandela Effect, where a large group of people remember an event that never happened or a thing that never existed.\n', 'Broome has said that she "loves" the idea that the Mandela Effect, or others claiming they distinctly recall different events or details, could be proof that we\'re existing in alternate realities. We\'re not so sure that\'s the truth, but these comparisons between popular belief and reality is making our jaws hit the floor as we type. Check out 40 of the most gobsmacking "facts" below.', 0.8307839862634997)]
 
 
 
 
-[('it took Pixar almost 3 years of research to perfect Merida�s curly hair for their 2012 film Brave. They spent two months working on a scene where Merida removes her hood and the full volume of her hair is finally revealed.\n', '"It took us almost three years to get the final look for her hair and we spent two months working on the scene where Merida removes her hood and you see the full volume of her hair," said Chung. "', 0.8946443588175157)]
+[('"uncured" bacon is misleading, because it is actually cured and still contains unhealthy nitrites\n', 'While the nitrate and nitrite levels found in CR’s tests fall below government limits for meat, labeling such products as “No Nitrate or Nitrite Added*�? misleads consumers trying to avoid these substances.  The label on these meats also includes a statement “*Except those that are naturally occuring in [name of ingredient that is a source of nitrates or nitrites],�? but that language is usually buried in fine print and doesn’t explain that those compounds are chemically identical to synthetic ones.  \n', 0.7668403557835436)]
 
 
 
 
+[('Gaius Appuleius Diocles, Roman charioteer is often cited as the highest-paid athlete of all-time. That condition, however, arises from the fantastic assumption that, as his wealth would have been enough to fund the entire Roman Army for more than two months.\n', 'He is often cited as the highest-paid athlete of all-time.[1][2] That condition, however, arises from the fantastic assumption that, as his wealth would have been enough to fund the entire Roman Army for more than two months, the apt comparison is what it takes to pay the wages of the American armed forces for the same period,[2] despite the fact that modern Americans are far wealthier and numerous than their Roman counterparts.', 0.9537468266590675)]
 
-[('real dead bodies were used on the set of “Apocalypse Now.�? The man who supplied them turned out to be a grave robber and was arrested', 'They\'d got the stiffs from a guy who supplied bodies to medical schools for autopsies. It turned out he was a grave robber. "The police showed up on our set and took all of our passports," says Frederickson. "They didn\'t know we hadn\'t killed these people because the bodies were unidentified. I was pretty damn worried for a few days. But they got to the truth and put the guy in jail."\n', 0.8656179695229853)]
 
+
+
+[('Modern Anatolians/Near Easterners are today genetically the closest to Ancient European farmers.\n', 'Ancient European Neolithic farmers were genetically closest to modern Neast-Eastern/ Anatolian populations.', 0.8865218923669536)]
+
+
+
+
+[('Modern Anatolians/Near Easterners are today genetically the closest to Ancient European farmers.\n', 'Ancient European Neolithic farmers were genetically closest to modern Neast-Eastern/ Anatolian populations.', 0.8865218923669536)]
+
+
+
+
+[('that when Lois Ellen Frank first proposed her 2003 James Beard Award–winning cookbook on Native American foods, publishers told her there was no such cuisine.\n', 'She talked to and collected recipes from the Hopi,[1] Ute, Pueblo, and other Southwestern tribes, and in 2002 Ten Speed Press published her cookbook Foods of the Southwest Indian Nations,[3][13] in collaboration with Walter Whitewater (Diné).[14] In 2003, the book won a James Beard Foundation Award, the first cookbook on Native American cuisine or by a Native American author so honored.[3][15][16][17] CNN called it "the first Native American cookbook to turn the heads of James Beard Foundation Award judges".[15]\n', 0.8370780900699767)]
+
+
+
+
+[('that when Lois Ellen Frank first proposed her 2003 James Beard Award–winning cookbook on Native American foods, publishers told her there was no such cuisine.', 'She talked to and collected recipes from the Hopi,[1] Ute, Pueblo, and other Southwestern tribes, and in 2002 Ten Speed Press published her cookbook Foods of the Southwest Indian Nations,[3][13] in collaboration with Walter Whitewater (Diné).[14] In 2003, the book won a James Beard Foundation Award, the first cookbook on Native American cuisine or by a Native American author so honored.[3][15][16][17] CNN called it "the first Native American cookbook to turn the heads of James Beard Foundation Award judges".[15]\n', 0.8370780764848224)]
 
 
 
