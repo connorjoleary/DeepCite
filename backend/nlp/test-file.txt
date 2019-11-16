@@ -3,7 +3,9 @@
 
 
 
+
 [('Michael Jackson couldn’t read or write music. He was also an incredible beatboxer.\n', 'Jackson couldn’t read or write music at all.', 0.8663478610852152)]
+
 
 
 
@@ -13,12 +15,15 @@
 
 
 
+
 [('About the Mandela Effect, where a large group of people remember an event that never happened or a thing that never existed.\n', 'Broome has said that she "loves" the idea that the Mandela Effect, or others claiming they distinctly recall different events or details, could be proof that we\'re existing in alternate realities. We\'re not so sure that\'s the truth, but these comparisons between popular belief and reality is making our jaws hit the floor as we type. Check out 40 of the most gobsmacking "facts" below.', 0.8307839862634997)]
 
 
 
 
-[('"uncured" bacon is misleading, because it is actually cured and still contains unhealthy nitrites\n', 'While the nitrate and nitrite levels found in CR’s tests fall below government limits for meat, labeling such products as “No Nitrate or Nitrite Added*�? misleads consumers trying to avoid these substances.  The label on these meats also includes a statement “*Except those that are naturally occuring in [name of ingredient that is a source of nitrates or nitrites],�? but that language is usually buried in fine print and doesn’t explain that those compounds are chemically identical to synthetic ones.  \n', 0.7668403557835436)]
+
+[('"uncured" bacon is misleading, because it is actually cured and still contains unhealthy nitrites\n', 'While the nitrate and nitrite levels found in CR’s tests fall below government limits for meat, labeling such products as “No Nitrate or Nitrite Added*�? misleads consumers trying to avoid these substances.  The label on these meats also includes a statement “*Except those that are naturally occuring in [name of ingredient that is a source of nitrates or nitrites],�? but that language is usually buried in fine print and doesn’t explain that those compounds are chemically identical to synthetic ones.  \n', 0.7668403557835436)]
+
 
 
 
@@ -28,12 +33,15 @@
 
 
 
-[('Modern Anatolians/Near Easterners are today genetically the closest to Ancient European farmers.\n', 'Ancient European Neolithic farmers were genetically closest to modern Neast-Eastern/ Anatolian populations.', 0.8865218923669536)]
-
-
-
 
 [('Modern Anatolians/Near Easterners are today genetically the closest to Ancient European farmers.\n', 'Ancient European Neolithic farmers were genetically closest to modern Neast-Eastern/ Anatolian populations.', 0.8865218923669536)]
+
+
+
+
+
+[('Modern Anatolians/Near Easterners are today genetically the closest to Ancient European farmers.\n', 'Ancient European Neolithic farmers were genetically closest to modern Neast-Eastern/ Anatolian populations.', 0.8865218923669536)]
+
 
 
 
@@ -43,7 +51,45 @@
 
 
 
-[('that when Lois Ellen Frank first proposed her 2003 James Beard Award–winning cookbook on Native American foods, publishers told her there was no such cuisine.', 'She talked to and collected recipes from the Hopi,[1] Ute, Pueblo, and other Southwestern tribes, and in 2002 Ten Speed Press published her cookbook Foods of the Southwest Indian Nations,[3][13] in collaboration with Walter Whitewater (Diné).[14] In 2003, the book won a James Beard Foundation Award, the first cookbook on Native American cuisine or by a Native American author so honored.[3][15][16][17] CNN called it "the first Native American cookbook to turn the heads of James Beard Foundation Award judges".[15]\n', 0.8370780764848224)]
+
+[('that when Lois Ellen Frank first proposed her 2003 James Beard Award–winning cookbook on Native American foods, publishers told her there was no such cuisine.\n', 'She talked to and collected recipes from the Hopi,[1] Ute, Pueblo, and other Southwestern tribes, and in 2002 Ten Speed Press published her cookbook Foods of the Southwest Indian Nations,[3][13] in collaboration with Walter Whitewater (Diné).[14] In 2003, the book won a James Beard Foundation Award, the first cookbook on Native American cuisine or by a Native American author so honored.[3][15][16][17] CNN called it "the first Native American cookbook to turn the heads of James Beard Foundation Award judges".[15]\n', 0.8370780900699767)]
+
+
+
+
+
+[('Gravity moves at the Speed of Light and is not Instantaneous. If the Sun were to disappear, we would continue our elliptical orbit for an additional 8 minutes and 20 seconds, the same time it would take us to stop seeing the light (according to General Relativity).\n', 'In general relativity, roughly speaking, a mass moving at a constant acceleration does not radiate.  Here, the lowest order radiation is quadrupole radiation, and the radiated power depends on the third time derivative of the mass quadrupole moment.  (The full picture is slightly more complex, since one cannot have a single, isolated accelerating mass; whatever it is that causes the acceleration also has a gravitational field, and its field must be taken into account.)  For consistency, just as in the case of electromagnetism, a cancellation of the effect of retardation must occur, but it must now be even more complete—that is, it must hold to a higher power of v/c.  This is exactly what one finds when one solves the equations of motion in general relativity.\n', 0.8856363692052401)]
+
+
+
+
+
+[('Draconian laws are named after the 1st Greek legislator, Draco, who meted out severe punishment for very minor offenses. These included enforced slavery for any debtor whose status was lower than that of his creditor and the death sentence for stealing a cabbage.\n', 'The laws were particularly harsh. For example, any debtor whose status was lower than that of his creditor was forced into slavery.[9] The punishment was more lenient for those owing a debt to a member of a lower class. The death penalty was the punishment for even minor offences, such as stealing a cabbage.[10] Concerning the liberal use of the death penalty in the Draconic code, Plutarch states: "It is said that Drakon himself, when asked why he had fixed the punishment of death for most offences, answered that he considered these lesser crimes to deserve it, and he had no greater punishment for more important ones".[11]\n', 0.9015296356119513)]
+
+
+
+
+
+[('Thomas Alva Edison did not invent the light bulb; electric light sources were being experimented since early 1800s and an English Physicist Sir Joseph Swan had a working prototype of electric incandescent light bulb more than a decade earlier than Edison.\n', 'In 1850 an English physicist named Joseph Wilson Swan created a “light bulb�? by enclosing carbonized paper filaments in an evacuated glass bulb. And by 1860 he had a working prototype, but the lack of a good vacuum and an adequate supply of electricity resulted in a bulb whose lifetime was much too short to be considered an effective prodcer of light. However, in the 1870’s better vacuum pumps became available and Swan continued experiments on light bulbs. In 1878, Swan developed a longer lasting light bulb using a treated cotton thread that also removed the problem of early bulb blackening.\n', 0.8470435902736195)]
+
+
+
+
+
+[('Albert G�ring, brother of Hermann G�ring. Unlike his brother, Albert was opposed to Nazism and helped many Jews and other persecuted minorities throughout the war. He was shunned in postwar Germany due to his name, and died without any public recognition for his humanitarian efforts.\n', 'In contrast to his brother, however, Albert was opposed to Nazism and helped Jews and others who were persecuted in Nazi Germany.[2] He was shunned in postwar Germany because of his family name, and he died without any public recognition for his humanitarian efforts.[3]', 0.9715770611087705)]
+
+
+
+
+
+[('it took Pixar almost 3 years of research to perfect Merida�s curly hair for their 2012 film Brave. They spent two months working on a scene where Merida removes her hood and the full volume of her hair is finally revealed.\n', '"It took us almost three years to get the final look for her hair and we spent two months working on the scene where Merida removes her hood and you see the full volume of her hair," said Chung. "', 0.9246330802982343)]
+
+
+
+
+
+[('The article said the place where they found the body was in the garage and the body was covered in cobwebs!', 'Work now began on the sequences revolving around Marlon Brando as Colonel Kurtz, the Green Beret general who goes Awol and is hunted down by his own side. During shooting on the set of Kurtz\'s compound, a shocking discovery was made. One morning, Sheen\'s wife took the co-producer Gray Frederickson to the temple set, which was strewn with garbage and smelt terrible. "You\'ve got to clean this up," she demanded. "It\'s a health risk. I won\'t allow Marty to work here." So Frederickson went to see the production designer, Dean Tavoularis. "They\'re complaining about you, there are dead rats in there." Looking not very bothered, Tavoularis said, "That\'s intentional, it gives it real atmosphere." There was a prop guy standing close by who muttered, "Wait till he hears about the dead bodies." Frederickson cried, "What!"\n', 0.7872543749252132)]
+
 
 
 
