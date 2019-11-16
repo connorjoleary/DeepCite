@@ -1,13 +1,16 @@
 from flask import Flask
 from flask import request
-import nlp
+# from nlp import Claim, Tree
+# from nlp.claim import Claim
+import nlp.tokenizer as tokenizer
+import nlp.claim
 # from flask_mysqldb import MySQL
 
 # requires a hosting site for database
 
 app = Flask(__name__)
 
-# configure database
+# configure database∫
 # probably should use extern variables for this infomation
 # documentation https://flask-mysqldb.readthedocs.io/en/latest/
 # app.config['MYSQL_HOST'] = ''
@@ -18,6 +21,8 @@ app = Flask(__name__)
 # instanization of mysql object
 # mysql = MySQL(app)
 help(nlp)
+root = Claim("link", "claim", 0, None)
+tree = Tree(root)
 @app.route('/')
 # sample section where infomation if placed into database
 def home():
@@ -34,8 +39,8 @@ def deep_cite():
     claim = content['claim']
     link = content['link']
 
-    root = nlp.Claim(link, claim, 0, None)
-    tree = nlp.Tree(root)
+    root = nlp.claim.Claim(link, claim, 0, None)
+    tree = nlp.tree.Tree(root)
 
     print(tree.tofront())
 

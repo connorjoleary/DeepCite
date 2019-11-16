@@ -7,14 +7,10 @@ import os
 
 CWD_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
-<<<<<<< HEAD
-# loads english library into spacey
-=======
 #gn_path = r'word_vectors/GoogleNews-vectors-negative300.bin'
 #gn_model = KeyedVectors.load_word2vec_format(gn_path, binary=True)
 
 # loads english library into space
->>>>>>> 069366c35805ab1d1ebbbd8fa117f9ac96609d73
 # other libraries can be used for better accuracy
 # en_core_web_md
 # en_core_web_lg
