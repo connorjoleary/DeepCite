@@ -10,8 +10,12 @@ CWD_FOLDER = os.path.dirname(os.path.abspath(__file__))
 gn_path = r'word_vectors/GoogleNews-vectors-negative300.bin'
 gn_model = KeyedVectors.load_word2vec_format(gn_path, binary=True)
 
+#gn_path = r'word_vectors/GoogleNews-vectors-negative300.bin'
+#gn_model = KeyedVectors.load_word2vec_format(gn_path, binary=True)
+
+# loads english library into space
 # google news pre-trained network: https://code.google.com/archive/p/word2vec/ 
-#nlp = spacy.load("en_core_web_lg")
+
 nlp = spacy.blank('en')
 nlp.vocab.vectors = spacy.vocab.Vectors(data=gn_model.vectors, keys=gn_model.index2word)
 nlps = English()

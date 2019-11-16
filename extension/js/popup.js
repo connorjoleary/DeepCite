@@ -1,8 +1,8 @@
 const url = "http://localhost:3000";
 
 
-function handleClaimChange(test) {
-    const fieldVal = document.getElementById(test.srcElement.id).value;
+function handleClaimChange(e) {
+    const fieldVal = document.getElementById(e.srcElement.id).value;
     // console.log(fieldVal);
     chrome.storage.local.set({ 'claimField': fieldVal }, function () {
         console.log('claimField is set to ' + fieldVal);
@@ -10,8 +10,8 @@ function handleClaimChange(test) {
 
 }
 
-function handleLinkChange(test) {
-    const fieldVal = document.getElementById(test.srcElement.id).value;
+function handleLinkChange(e) {
+    const fieldVal = document.getElementById(e.srcElement.id).value;
     // console.log(fieldVal);
     chrome.storage.local.set({ 'linkField': fieldVal }, function () {
         console.log('linkField is set to ' + fieldVal);
