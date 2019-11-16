@@ -2,8 +2,9 @@ from flask import Flask
 from flask import request
 # from nlp import Claim, Tree
 # from nlp.claim import Claim
-from nlp.tree import Tree
-from nlp.advanced_scraper import Claim
+from tree import Tree
+help(Tree)
+from advanced_scraper import Claim
 # from flask_mysqldb import MySQL
 
 # requires a hosting site for database
@@ -21,8 +22,6 @@ app = Flask(__name__)
 # instanization of mysql object
 # mysql = MySQL(app)
 
-root = Claim("link", "claim", 0, None)
-tree = Tree(root)
 @app.route('/')
 # sample section where infomation if placed into database
 def home():
@@ -32,22 +31,24 @@ def home():
 @app.route('/api/v1/deep_cite', methods=['GET', 'POST'])
 def deep_cite():
     content = request.get_json()
-    print(request.get_json())
-    print ("claim!!: " + 
-        content['claim'])
-    content['link']
+    # print(request.get_json())
+    # print ("claim!!: " + 
+    #     content['claim'])
+    # content['link']
     claim = content['claim']
     link = content['link']
 
-    root = Claim(link, claim, 0, None)
-    tree = Tree(root)
-
-    print(tree.tofront())
+    try:
+        root = Claim(link, claim, 0, None)
+        tree = Tree(root)
+        print(tree.tofront())
+    except Exception as e:
+         print("an excpetion occured" + str(e))
 
 
     # ret_list
     # print content
-    return 'API request'
+    return request
 
 # @app.route('/users')
 # # sample code how infomation is retrieved from database

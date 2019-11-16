@@ -39,6 +39,9 @@ class Claim:
         # self.branch = order
         # default value of score is 0
     
+    def __str__(self):
+        return "text: " + self.text + "href: " + self.href
+
     def excep_handle(self):
         if self.parent != None:
             self.visited = self.parent.visited

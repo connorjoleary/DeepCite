@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
-from advanced_scraper import Claim
+# from advanced_scraper import Claim
 import os
 CWD_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
@@ -13,7 +13,8 @@ class Tree:
     def tofront(self):
         return self.jumps
 
-if '__main__':
+if __name__ == '__main__':
+    from advanced_scraper import Claim
     url = "http://math.ucr.edu/home/baez/physics/Relativity/GR/grav_speed.html"
     text = "Gravity moves at the Speed of Light and is not Instantaneous. If the Sun were to disappear, we would continue our elliptical orbit for an additional 8 minutes and 20 seconds, the same time it would take us to stop seeing the light (according to General Relativity)."
     root = Claim(url, text, 0, None)
