@@ -51,8 +51,33 @@ def test_accuracy():
     test_file.close()
 
 
+def test_structure():
+    test_set_claims = os.path.join(CWD_FOLDER, 'testing_set', 'simdiff.txt')
+    f_claim = open(test_set_claims, 'r', errors='replace')
+
+    claims = [line for line in f_claim]
+    f_claim.close()
+
+
+    test_set_links = os.path.join(CWD_FOLDER, 'testing_set', 'simdiffsents.txt')
+    f_text = open(test_set_links, 'r', errors='replace')
+
+    text = [line for line in f_text]
+    f_text.close()
+
+    predict = []
+    for x in range(len(claims)):
+        
+        predict.append(nlp.predict(claims[x], text[x], 1))
+
+    for x in range(len(claims)):
+        print(text[x])
+        print(predict[x])
+
+
 if "__main__":
     test_controller()
-    test_accuracy()
+    #test_accuracy()
+    #test_structure()
 
 
