@@ -1,34 +1,25 @@
-(Inside Science) -- Trying to curl hair into perfect spiral curls is difficult enough to do in real life but for the team of scientists and artists at Pixar the quest to create a wild mane of curls for Merida, the redheaded heroine of their latest film "Brave," may have sent them from innocent intrigue to full-blown obsession.
+In a petition submitted to the U. S. Department of Agriculture (USDA) today, the Center for Science in the Public Interest and Consumer Reports called on the agency to stop requiring the terms “Uncured” and “No Nitrate or Nitrite Added” on labels for meat processed with nitrates or nitrites from non-synthetic sources, such as celery powder. The groups urged the agency to revise its rule because the labels are misleading and may give consumers the false impression that these products are healthier.
 
-"I have become obsessed with curly hair," said Claudia Chung, simulation supervisor for "Brave." "It is truly fascinating; curly hair defies physics in the way it moves and behaves."
+New tests of deli meats by Consumer Reports show how misleading the labels can be.  CR tested 31 packaged deli meats – name brands and store brands – including chicken, ham, roast beef, salami, and turkey. CR’s tests showed that nitrates and nitrites, which have been linked to cancer, are found in processed meats labeled “Uncured” or “No Nitrates or Nitrites Added” at similar levels to those prepared with synthetic curing agents such as sodium nitrite.  
 
-Merida's explosion of fiery ringlets started as a series of springs on a computer. The Pixar team created many kinds of springs, including short, long, fat, thin, stretched, compressed, bouncy and stiff. In order to give Merida's hair volume, the springs were entered on the computer screen in layers. The layers varied the length, size and flexibility of each curl.
+“The ‘Uncured’ and ‘No Nitrate or Nitrite Added’ labels could make people think these meats are healthier, but our tests show they are not,” said Charlotte Vallaeys, senior policy analyst at Consumer Reports. “Deli meats carrying these labels pose the same health risks as traditionally cured meats because the nitrate and nitrite levels are essentially the same.”   
 
-"We used 1,500 hand-placed, sculpted individual curls," said Chung. "There is this weird paradox where a 'spring' of hair needs to remain stiff in order to hold its curl but it also has to remain soft in its movement."
+While the nitrate and nitrite levels found in CR’s tests fall below government limits for meat, labeling such products as “No Nitrate or Nitrite Added*” misleads consumers trying to avoid these substances.  The label on these meats also includes a statement “*Except those that are naturally occuring in [name of ingredient that is a source of nitrates or nitrites],” but that language is usually buried in fine print and doesn’t explain that those compounds are chemically identical to synthetic ones.  
 
-Once Merida's hair was in place, the next step was making it move naturally. Chung and her team of groomers used a new technique to represent the hair. Called a "core curve and points," the result bears a resemblance to a beaded necklace. The core curve is like the chain of the necklace and the points, which include the springs, are like the beads. When Merida moves her head, her curls move along the curve, keep their shape and flexibility while maintaining the look of her character. Even with a computer-generated head of hair, there were times during production when Chung really needed to see a live Merida hair model.
+“Federal rules need to be updated to avoid misleading consumers,” said Sarah Sorscher, deputy director of regulatory affairs at CSPI.  “The USDA should end the confusion and help consumers make healthier choices by requiring accurate labeling of meats processed with nitrate and nitrite, regardless of the source.”   
 
-"We had a wig and I think everyone on the team wore it at some point," said Chung.
+The groups are petitioning the USDA to revise its rules so that the “Uncured” and “No Nitrate or Nitrite Added” claims can only be made on meats prepared with no nitrates or nitrites from any source. Instead, the groups are urging the agency to require a disclosure stating “Nitrates or Nitrites Added,” with the source indicated in the ingredient list so consumers can take appropriate steps to protect their health.  They are also asking the USDA to take steps to minimize levels of residual nitrate, nitrite, and nitrosamines in meat processed with nitrates or nitrites, regardless of source.
 
-Steve Marschner, an award-winning computer scientist at Cornell University, in N.Y., who first proposed a widely used model that mimics the way light reflects on hair to improve the look of blonde hair, considers lighting red, curly hair a difficult problem.
+“Curing” meat involves the addition of salt, nitrate, and/or nitrite to fresh-cut meats, which enables preservation by removing moisture and gives meat its distinct color, texture, and flavor.  Synthetic nitrites have been used since at least the 1920s to speed up the curing process. However in the late 1960s and early 1970s, it became clear that nitrate and nitrite could result in the formation of nitrosamines, some of which have been shown to be carcinogenic in animal studies.
 
-"It is interesting because curly hair has strong effects on light," said Marschner.
+In the 1990s, companies began developing new ways to cure meats with celery or other natural nitrate/nitrite sources.  Federal labeling rules require the new processed meats to bear the term “Uncured” and the statement “No Nitrate or Nitrite Added,” simply because they do not use synthetic curing agents, like sodium nitrite.  
 
-Since hair isn't always picture perfect or dry or that matter, another challenge was to see what would happen to naturally curly hair when it got wet.
+Many health-conscious consumers are now seeking to purchase meats prepared without the use of nitrates and nitrites. Consumer Reports conducted a nationally representative telephone survey of 1,000 U.S. adults in April 2019.  This survey asked Americans who eat deli meats if they typically try to buy ones labeled as “no nitrates added.” Forty-six percent say they look for this label claim when purchasing deli meats.
 
-"There is a woman here who has naturally curly hair and we would hose her down," said Chung. "We never completely submerged it, but now I am really curious; I don't know what happens to curly hair when it is completely submerged underwater."
+CR also asked respondents what best describes their feelings about the current “no nitrates added” label using the fine print stating that only naturally occurring nitrates are used. Forty-two percent of Americans say they would be confused about if or what type of nitrates are added in deli meats with this label.   
 
-Chung and her team definitely have Merida mania.
+# # #
 
-"It took us almost three years to get the final look for her hair and we spent two months working on the scene where Merida removes her hood and you see the full volume of her hair," said Chung. "When I first saw the storyboards for 'Brave,' I drooled; I had no idea how I was going to do it, but I knew this was going to be so much fun."
+The Center for Science in the Public Interest is America’s food and health watchdog.
 
-That fun radiates from the screen and provides inspiration to others as well.
-
-"I have say with Pixar [movies] I have to watch them twice," said Marschner. "The first time I am focused on the story and the second time from a technical aspect; I often get ideas about what problems to work on next from watching movies."
-
-The time and attention to detail in Merida's hair is more than just about making her look realistic on screen.
-
-"Everything we do is done to reinforce the character," said Chung. "We created these great individual 'breakaway' curls that really add to her wild spirit."
-
-While a strong attraction is often the first sign of obsession, Chung and her team have definitely fallen head first in love with a fiery redhead on a mission to change her destiny. 
-
+Consumer Reports is an independent, nonprofit membership organization that works side by side with consumers to create a fairer, safer, and healthier world. For 80 years, CR has provided evidence-based product testing and ratings, rigorous research, hard-hitting investigative journalism, public education, and steadfast policy action on behalf of consumers’ interests.

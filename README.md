@@ -37,11 +37,9 @@ Installations and downloads required before running the application
 * `pip install beautifulsoup4`
 * `pip install requests`
 * `pip install spacy`
-* `python -m spacy download en_core_web_sm` 
 * `pip install --upgrade gensim`
-* `pip install Flask`
-* `pip install Flask-MySQLdb`
-* `git lfs install` - for word2vector models that are not in use
+* ~`pip install Flask`~
+* ~`pip install Flask-MySQLdb`~
 
 <small>Note: 'en_core_web_sm' installation is subject to change for higher accuracy</small>
 
@@ -66,21 +64,31 @@ Installations and downloads required before running the application
   * Follow the readme in that folder for its instructions
 
 ### Backend Testing
-  * main testing: run main.py in backend/tokenizer_files/
+  * main testing for nlp: run main.py in backend/nlp/
     *  **make sure testing-set/claims.txt and testing-set/links.txt are present**
     * results are printed, ignore spaCy's model's warning
     * results are stored in dataset/word2vec/redditWorldNews.txt and dataset/word2vector/redditWorldNews.model
+    
+  * main testing for web scraper: run tree.py in backend/tokenize/nlp/
+    *  **make sure testing-set/claims.txt and testing-set/links.txt are present**
+    * results are a list of node which is an interface to visualize the citation tree in frontend.
+
+  * for testing server
+    * download GoogleNews-vectors-negative300.bin.gz from https://code.google.com/archive/p/word2vec/ and place it in the word_vectors dirctory in the testing_set folder
+    go into backend/nlp and run python app.py
 
 <small>Note: connection issues make occur when webscrapping, wait a minute then run again</small>
 
 ## Tasks
-### Iteration 1
 - [x] Add extension
 - [x] Enter Data
 - [ ] View Results
 - [x] Web Scraper
 - [x] Word Tokenizer
 - [ ] Setting up database
+
+## Additional Features
+Video transcription
 
 ## Authors
 Shourya Goel, Jiayi Hu, Vinay Janardhanam, Dillion O'Leary, Noah SickLick, and Catherine Yan

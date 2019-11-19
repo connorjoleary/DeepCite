@@ -1,4 +1,5 @@
 import spacy
+from gensim.models import KeyedVectors
 from spacy.parts_of_speech import  PUNCT, PROPN
 from spacy.lang.en import English
 import queue as q
@@ -6,17 +7,16 @@ import os
 
 CWD_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
-# loads english library into space
-# other libraries can be used for better accuracy
-# en_core_web_md
-# en_core_web_lg
-# google news pre-trained network: https://code.google.com/archive/p/word2vec/ 
-nlp = spacy.load("en_core_web_sm")
+gn_path = r'word_vectors/GoogleNews-vectors-negative300.bin'
+gn_model = KeyedVectors.load_word2vec_format(gn_path, binary=True)
+nlp = spacy.blank('en')
+nlp.vocab.vectors = spacy.vocab.Vectors(data=gn_model.vectors, keys=gn_model.index2word)
+
+#nlp = spacy.load('en_core_web_sm')
+
 nlps = English()
 nlps.add_pipe(nlps.create_pipe('sentencizer'))
-# importing different vectors for similiarites - word2vec
-# training dataset
-# nlp = spacy.load('en_core_web_sm', vectors='<directory>') 
+
 
 # solely for testing purposes
 test = []
