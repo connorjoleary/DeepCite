@@ -39,6 +39,7 @@ def deep_cite():
     claim = content['claim']
     link = content['link']
     ret_json = None
+    full_pre_json = ""
 
     try:
         root = Claim(link, claim, 0, None)
