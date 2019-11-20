@@ -61,10 +61,11 @@ def deep_cite():
 
 
 def sanitize_claim(claim):
-    return
+    # this is for database if needed
+    return False
 
 def sanitize_link(link):
-    return
+    return False
 # @app.route('/users')
 # # sample code how infomation is retrieved from database
 # def users():
