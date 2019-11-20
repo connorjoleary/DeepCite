@@ -1,3 +1,6 @@
+<<<<<<< HEAD
+[('Serial killers are good people who are misjudged by society, They are notorious for having fun and loving to kill.', '“It is crucial to note that we are not trying to suggest that individuals with ASD or previous head trauma are more likely to be serial killers or commit serious crime,” said lead researcher, Dr. Clare Allely, from the Institute of Wellbeing at the university, in a press release. “Rather, we are suggesting that there may be a subgroup of individuals within these groups who may be more likely to commit serious crimes when exposed to certain psychosocial stressors.”\n', 0.7695321461197555)]
+=======
 [('Doro is a nickname for the German name Dorothee, so now I know how the heavy metal singer, Doro, former front-woman for Warlock, got her name\n', 'Dorothee Pesch (born 3 June 1964), popularly known as Doro Pesch or Doro, is a German heavy metal singer-songwriter, formerly front-woman of the heavy metal band Warlock. Dubbed the "Queen of Heavy Metal", Doro\'s contributions to music and culture along with her publicized personal life made her a global figure in metal culture for over three decades. The name Doro has also been associated with the touring band accompanying the singer, whose members have continuously changed in more than twenty years of uninterrupted activity, the most stable presences being those of bassist Nick Douglas and drummer Johnny Dee.\n', 0.8248561396669774)]
 
 
@@ -89,6 +92,7 @@
 
 
 [('The article said the place where they found the body was in the garage and the body was covered in cobwebs!', 'Work now began on the sequences revolving around Marlon Brando as Colonel Kurtz, the Green Beret general who goes Awol and is hunted down by his own side. During shooting on the set of Kurtz\'s compound, a shocking discovery was made. One morning, Sheen\'s wife took the co-producer Gray Frederickson to the temple set, which was strewn with garbage and smelt terrible. "You\'ve got to clean this up," she demanded. "It\'s a health risk. I won\'t allow Marty to work here." So Frederickson went to see the production designer, Dean Tavoularis. "They\'re complaining about you, there are dead rats in there." Looking not very bothered, Tavoularis said, "That\'s intentional, it gives it real atmosphere." There was a prop guy standing close by who muttered, "Wait till he hears about the dead bodies." Frederickson cried, "What!"\n', 0.7872543749252132)]
+>>>>>>> 39bdda1c1e770c4d6a31cb41b0d2c9c70153e976
 
 
 

@@ -3,7 +3,8 @@ import requests
 # from advanced_scraper import Claim
 import os
 CWD_FOLDER = os.path.dirname(os.path.abspath(__file__))
-
+# Call the Claim constructor in advanced_scraper to create the instance root. Parse the root into constructor Tree to initialize instance 
+# Tree. Call tree.tofront() to return a list of tree nodes used for visualization.
 class Tree:
     def __init__(self, root):
         self.root = root
