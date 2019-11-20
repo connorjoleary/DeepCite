@@ -38,6 +38,10 @@ def deep_cite():
     # content['link']
     claim = content['claim']
     link = content['link']
+    if sanitize_claim(claim):
+        return
+    if santitize_link(link):
+        return
     ret_json = None
     full_pre_json = ""
 
@@ -55,6 +59,11 @@ def deep_cite():
     # print contents
     return jsonify(full_pre_json)
 
+
+def sanitize_claim(claim):
+
+
+def sanitize_link(link):
 # @app.route('/users')
 # # sample code how infomation is retrieved from database
 # def users():
