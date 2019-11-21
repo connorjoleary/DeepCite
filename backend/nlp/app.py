@@ -36,11 +36,9 @@ def deep_cite():
     # print ("claim!!: " + 
     #     content['claim'])
     # content['link']
-    claim = content['claim']
+    claim = sanitized_claim(content['claim'])
     link = content['link']
-    if sanitize_claim(claim):
-        return
-    if santitize_link(link):
+    if sanititize_link(link):
         return
     ret_json = None
     full_pre_json = ""
@@ -61,8 +59,13 @@ def deep_cite():
 
 
 def sanitize_claim(claim):
-    # this is for database if needed
-    return False
+    sanitized = claim
+    badstrings = [';','$','&&','../','<','>','%3C','%3E','\'','--','1,2','\x00','`','(',')','file://','input://']
+    
+    for bad in badstrings:
+        if bad in sanitized:
+            sanitized = sanitized.replace(bad, '')
+    return sanitized
 
 def sanitize_link(link):
     return False
