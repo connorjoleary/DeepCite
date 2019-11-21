@@ -38,6 +38,10 @@ def deep_cite():
     # content['link']
     claim = content['claim']
     link = content['link']
+    if sanitize_claim(claim):
+        return
+    if santitize_link(link):
+        return
     ret_json = None
     full_pre_json = ""
 
@@ -48,13 +52,20 @@ def deep_cite():
         full_pre_json = {'results': tree.tofront()}
         # ret_json = json.dumps(full_pre_json)
     except Exception as e:
-         print("an excpetion occured" + str(e))
+        print("an excpetion occured" + str(e))
 
 
     # ret_list
     # print contents
     return jsonify(full_pre_json)
 
+
+def sanitize_claim(claim):
+    # this is for database if needed
+    return False
+
+def sanitize_link(link):
+    return False
 # @app.route('/users')
 # # sample code how infomation is retrieved from database
 # def users():
@@ -69,4 +80,4 @@ def deep_cite():
 #             print(user[0]) # user email
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0')
