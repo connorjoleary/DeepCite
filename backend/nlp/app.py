@@ -4,7 +4,6 @@ import json
 # from nlp import Claim, Tree
 # from nlp.claim import Claim
 from tree import Tree
-help(Tree)
 from advanced_scraper import Claim
 # from flask_mysqldb import MySQL
 
@@ -36,10 +35,11 @@ def deep_cite():
     # print ("claim!!: " + 
     #     content['claim'])
     # content['link']
-    claim = sanitized_claim(content['claim'])
+    # claim = sanitized_claim(content['claim'])
+    claim = content['claim']
     link = content['link']
-    if sanititize_link(link):
-        return
+    # if sanititize_link(link):
+        # return
     ret_json = None
     full_pre_json = ""
 
