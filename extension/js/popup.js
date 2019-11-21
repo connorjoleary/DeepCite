@@ -1,4 +1,4 @@
-const url = "http://localhost:5000/api/v1/deep_cite";
+const url = "http://3.17.173.207:5000/api/v1/deep_cite";
 // const url = "http://localhost:3000";
 
 
