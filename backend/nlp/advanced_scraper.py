@@ -96,7 +96,11 @@ class Claim:
             if not self.excep_handle():
                 self.score = self.parent.score
                 return 
-        response = requests.get(self.href)
+        try:
+            response = requests.get(self.href)
+        except Exception as e:
+            print("Exception: " + str(e))
+            return
 
         # if js is used to load HTML contents
         driver = webdriver.Chrome()
