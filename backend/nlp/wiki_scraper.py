@@ -15,17 +15,21 @@ def wiki(url, parent):
         start = len(links)
         end = 0
         for i,link in enumerate(links):
-            if link == url or url[: -2] in link:
+            if link == url:
                 start = i
             if i > start and link[:9] == "#cite_ref":
                 end = i
                 break
         corrlinks = links[start + 1 : end]
+        #print(str(start) + " " + str(end))
+        #print(url)
         #print(corrlinks)
+        returnlists = []
         for corrlink in corrlinks:
             if corrlink[:6] == "/wiki/":
                 corrlink = "https://en.wikipedia.org" + corrlink
-        return corrlinks
+                returnlists.append(corrlink)
+        return returnlists
     else:
         return ["https://en.wikipedia.org" + url]
 

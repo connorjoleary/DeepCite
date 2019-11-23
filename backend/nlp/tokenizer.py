@@ -12,7 +12,7 @@ CWD_FOLDER = os.path.dirname(os.path.abspath(__file__))
 # nlp = spacy.blank('en')
 # nlp.vocab.vectors = spacy.vocab.Vectors(data=gn_model.vectors, keys=gn_model.index2word)
 
-nlp = spacy.load('en_core_web_sm')
+nlp = spacy.load('en_core_web_lg')
 
 nlps = English()
 nlps.add_pipe(nlps.create_pipe('sentencizer'))
@@ -87,6 +87,8 @@ def predict(claim, text, k) :
     sentences = sentence_parsing(text)
 
     for num, sentence in enumerate(sentences):
+        print(" " + sentence)
+        input()
         clean_sent = preprocessing(nlp(sentence))
         doc3 = nlp(clean_sent)
         sentence_queue.put(Paragraph(num, doc1.similarity(doc3)))
