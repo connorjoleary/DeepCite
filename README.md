@@ -35,10 +35,11 @@ Installations and downloads required before running the application
 
 #### For backend:
 * `pip install beautifulsoup4`
+* `pip install selenium`
 * `pip install requests`
 * `pip install spacy`
 * `pip install --upgrade gensim`
-* ~`pip install Flask`~
+* `pip install Flask`
 * ~`pip install Flask-MySQLdb`~
 
 <small>Note: 'en_core_web_sm' installation is subject to change for higher accuracy</small>

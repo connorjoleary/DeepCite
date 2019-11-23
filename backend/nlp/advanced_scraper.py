@@ -1,7 +1,9 @@
 from bs4 import BeautifulSoup
+from selenium import webdriver
 import requests
 import tokenizer
 from wiki_scraper import wiki
+from tree import Tree
 import sys
 import io
 import re
@@ -95,10 +97,21 @@ class Claim:
                 self.score = self.parent.score
                 return 
         response = requests.get(self.href)
+
+        # if js is used to load HTML contents
+        driver = webdriver.Chrome()
+        driver.get(self.href)
+        js_soup = BeautifulSoup(driver.page_source, "html.parser")
+        article_text = js_soup.findAll('p')
+
+        # normal p tag find all
         self.visited.append(self.href)
         soup = BeautifulSoup(response.text, 'html.parser')
         text_raw = soup.findAll('p')
 
+        # checks if JS was used to load HTML content
+        if len(text_raw) < len(article_text):
+            text_raw = article_text
          # Exception that the child of one claim has no valid sentences, then add its parent to the leaf list.
         if len(text_raw) < 5:
             # Terminate the scraper and parse the parent node to the leaf list
@@ -109,7 +122,10 @@ class Claim:
             if len(unit.findAll('a')) > 0:
                 print(unit)
                 for ref in unit.findAll('a'):
-                    ref2text[unit.text] = ref['href']
+                    try:
+                        ref2text[unit.text] = ref['href']
+                    except KeyError:
+                        continue
             else:
                 ref2text[unit.text] = ""
         cand = tokenizer.predict(self.text, list(ref2text.keys()), 1)
@@ -166,9 +182,4 @@ class Claim:
                 # A jump start from a single node, ends at a list of children nodes
                 jumps.append((root, Node(onechild.href, onechild.text, False, onechild.score)))
                 
-
-
-
-
-
 
