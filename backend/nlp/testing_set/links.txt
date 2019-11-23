@@ -1,16 +1,11 @@
-https://www.reddit.com/r/todayilearned/comments/dudnwe/today_i_learned_that_doro_is_a_nickname_for_the/
-https://www.reddit.com/r/todayilearned/comments/du3jxj/til_michael_jackson_couldnt_read_or_write_music/
-https://www.reddit.com/r/todayilearned/comments/du8kam/today_i_learned_that_there_are_2_million_lakes_in/
-https://www.reddit.com/r/todayilearned/comments/duf7jc/til_about_the_mandela_effect_where_a_large_group/
-https://www.reddit.com/r/todayilearned/comments/du7ezx/til_uncured_bacon_is_misleading_because_it_is/
-https://www.reddit.com/r/todayilearned/comments/du91zc/til_gaius_appuleius_diocles_roman_charioteer_is/
-https://www.reddit.com/r/todayilearned/comments/du7n1q/til_modern_anatoliansnear_easterners_are_today/
-https://www.reddit.com/r/todayilearned/comments/du7n1q/til_modern_anatoliansnear_easterners_are_today/
-https://www.reddit.com/r/todayilearned/comments/du7f54/til_that_when_lois_ellen_frank_first_proposed_her/
-https://www.reddit.com/r/todayilearned/comments/du7f54/til_that_when_lois_ellen_frank_first_proposed_her/ 
-http://math.ucr.edu/home/baez/physics/Relativity/GR/grav_speed.html
-https://en.wikipedia.org/wiki/Draco_(lawgiver)
-https://www.bulbs.com/learning/history.aspx
-https://en.wikipedia.org/wiki/Albert_G%C3%B6ring
-https://www.insidescience.org/news/brave-features-hair-raising-animations
-https://gothamist.com/news/blind-brooklyn-woman-may-not-have-known-she-was-living-with-corpse-of-dead-son-for-years
+https://en.wikipedia.org/wiki/Doro_(musician), True
+https://www.nme.com/blogs/nme-blogs/the-incredible-way-michael-jackson-wrote-music-16799/amphttps://www.reddit.com/r/todayilearned/comments/du8kam/today_i_learned_that_there_are_2_million_lakes_in/, True
+https://www.goodhousekeeping.com/life/entertainment/g28438966/mandela-effect-examples/https://www.reddit.com/r/todayilearned/comments/du7ezx/til_uncured_bacon_is_misleading_because_it_is/, True
+https://en.wikipedia.org/wiki/Gaius_Appuleius_Diocleshttps://www.reddit.com/r/todayilearned/comments/du7n1q/til_modern_anatoliansnear_easterners_are_today/, True
+https://en.wikipedia.org/wiki/Genetic_history_of_Europe#Neolithichttps://www.reddit.com/r/todayilearned/comments/du7f54/til_that_when_lois_ellen_frank_first_proposed_her/, True
+https://en.wikipedia.org/wiki/Lois_Ellen_Frank#Careerhttp://math.ucr.edu/home/baez/physics/Relativity/GR/grav_speed.html
+https://en.wikipedia.org/wiki/Draco_(lawgiver), True
+https://www.bulbs.com/learning/history.aspx, False
+https://en.wikipedia.org/wiki/Albert_G%C3%B6ring, True
+https://www.insidescience.org/news/brave-features-hair-raising-animations, False
+https://gothamist.com/news/blind-brooklyn-woman-may-not-have-known-she-was-living-with-corpse-of-dead-son-for-years, False
