@@ -2,6 +2,7 @@ import spacy
 from gensim.models import KeyedVectors
 from spacy.parts_of_speech import  PUNCT, PROPN
 from spacy.lang.en import English
+from spacy.tokenizer import Tokenizer
 import queue as q
 import os
 
@@ -14,9 +15,23 @@ CWD_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
 nlp = spacy.load('en_core_web_lg')
 
-nlps = English()
-nlps.add_pipe(nlps.create_pipe('sentencizer'))
+def custom_tokenizer(nlp):
 
+    prefixes_re = spacy.util.compile_prefix_regex(nlp.Defaults.prefixes)
+
+    custom_infixes = ['\.\.\.+', '(?<=[0-9])-(?=[0-9])', '[?!&,:()]']
+    infix_re = spacy.util.compile_infix_regex(tuple(list(nlp.Defaults.infixes) + custom_infixes))
+
+    suffix_re = spacy.util.compile_suffix_regex(nlp.Defaults.suffixes)   
+
+    return Tokenizer(nlp.vocab, nlp.Defaults.tokenizer_exceptions,
+                     prefix_search = prefixes_re.search, 
+                     infix_finditer = infix_re.finditer, suffix_search = suffix_re.search,
+                     token_match=None)
+
+
+
+nlp.tokenizer = custom_tokenizer(nlp)
 
 # solely for testing purposes
 test = []
@@ -57,7 +72,7 @@ def preprocessing(doc):
 def sentence_parsing(text):
     sentences = []
     for num, paragraph in enumerate(text):
-        doc3 = nlps(paragraph)
+        doc3 = nlp(paragraph)
         for sent in doc3.sents:
             sentence = sent.text.strip().replace('\t', '').replace("\n", '')
             if len(sentence) > 0:
