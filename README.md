@@ -11,6 +11,8 @@ CS506 Project
 ## Installation
 Installations and downloads required before running the application
 ### Downloads
+  * Google News vector space https://code.google.com/archive/p/word2vec/ 
+  * Chrome driver https://sites.google.com/a/chromium.org/chromedriver/home
 <details>
   <summary> Developer Downloads </summary>
   <ul>
@@ -23,12 +25,13 @@ Installations and downloads required before running the application
    <li>* General mySQL installer: https://dev.mysql.com/downloads/installer/</li> 
    </ul>
  </ul>
+
+ <small> other word2vec options: https://github.com/3Top/word2vec-api#where-to-get-a-pretrained-models </small>
+ 
+ </details>
   
-  <small> Currently looking at Google News vector space https://code.google.com/archive/p/word2vec/ </small>
-  <small> other word2vec options: https://github.com/3Top/word2vec-api#where-to-get-a-pretrained-models </small>
+
   
-</details>
-* (optional test data) Reddit World News Database: https://www.kaggle.com/rootuser/worldnews-on-reddit
 
 
 ### Installs
