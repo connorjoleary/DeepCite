@@ -102,8 +102,6 @@ def predict(claim, text, k) :
     sentences = sentence_parsing(text)
 
     for num, sentence in enumerate(sentences):
-        print(" " + sentence)
-        input()
         clean_sent = preprocessing(nlp(sentence))
         doc3 = nlp(clean_sent)
         sentence_queue.put(Paragraph(num, doc1.similarity(doc3)))

@@ -66,7 +66,7 @@ class Claim:
             preref = "https://" + self.parent.href.split('/')[2]
             #print(preref)
             self.href = "".join([preref, self.href])
-            print(self.href)
+            #print(self.href)
         
         
         # Cycle Detection
@@ -83,7 +83,7 @@ class Claim:
         if self.href == "":
             self.score = self.parent.score
             return
-        print(self.href)
+        #print(self.href)
         if self.parent != None and  "https://en.wikipedia.org" in self.parent.href:
             if len(wiki(self.href, self.parent.href)) == 0:
                 #print(self.parent.cand[0])
@@ -96,6 +96,7 @@ class Claim:
             if not self.excep_handle():
                 self.score = self.parent.score
                 return 
+        # Blame Dillon
         try:
             response = requests.get(self.href)
         except Exception as e:
@@ -122,9 +123,11 @@ class Claim:
             
             return 
 
+        paragraphs = [unit.text for unit in text_raw]
+        sentences = tokenizer.sentence_parsing(paragraphs)
+        
         for unit in text_raw:
             if len(unit.findAll('a')) > 0:
-                print(unit)
                 for ref in unit.findAll('a'):
                     try:
                         ref2text[unit.text] = ref['href']
