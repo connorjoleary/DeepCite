@@ -68,7 +68,16 @@ def sanitize_claim(claim):
     return sanitized
 
 def sanitize_link(link):
-    return False
+    sanitized = link
+    badstrings = [';','&&','../','<','>','%3C','%3E','\'','--','1,2','\x00','`','(',')','file://','input://']
+    
+    for bad in badstrings:
+        if bad in sanitized:
+            return False # link is bad
+       
+    #TODO: check if link is malicious
+    # link is okay    
+    return True
 # @app.route('/users')
 # # sample code how infomation is retrieved from database
 # def users():
