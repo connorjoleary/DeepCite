@@ -1,5 +1,5 @@
 #!/bin/bash
-./help_test.sh &
+./helper.sh &
 cd nlp
 echo starting server
 coverage run app.py
