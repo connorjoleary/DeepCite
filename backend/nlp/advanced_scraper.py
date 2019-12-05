@@ -104,7 +104,9 @@ class Claim:
             return
 
         # if js is used to load HTML contents
-        driver = webdriver.Chrome()
+        op = webdriver.ChromeOptions()
+        op.add_argument('headless')
+        driver = webdriver.Chrome(options=op)
         driver.get(self.href)
         js_soup = BeautifulSoup(driver.page_source, "html.parser")
         article_text = js_soup.findAll('p')
