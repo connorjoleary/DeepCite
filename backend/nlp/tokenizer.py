@@ -32,6 +32,7 @@ def custom_tokenizer(nlp):
 
 
 nlp.tokenizer = custom_tokenizer(nlp)
+nlp.add_pipe(nlp.create_pipe('sentencizer'))
 
 # solely for testing purposes
 test = []
