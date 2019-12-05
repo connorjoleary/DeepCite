@@ -1,9 +1,8 @@
 from bs4 import BeautifulSoup
-from selenium import webdriver
+#from selenium import webdriver
 import requests
 import tokenizer
 from wiki_scraper import wiki
-from tree import Tree
 import sys
 import io
 import re
@@ -25,10 +24,11 @@ class Node:
         cl_dict = {}
         cl_dict['source'] = self.text
         cl_dict['link'] = self.url
+        cl_dict['score'] = self.score
         return cl_dict
 
 class Claim:
-    def __init__(self, href, text, height, parent, maxheight = 8):
+    def __init__(self, href, text, score=1, height=0, parent=None, maxheight = 8):
          # TODO: iteration 2 problem
         super(Claim, self).__init__()
         # hrefs : several reference links, which is a list of str
@@ -41,6 +41,7 @@ class Claim:
         self.text = text
         self.parent = parent
         self.child = []
+        self.score = score
         self.height = height
         self.visited = []
         self.parse_child(maxheight)
@@ -66,7 +67,7 @@ class Claim:
             preref = "https://" + self.parent.href.split('/')[2]
             #print(preref)
             self.href = "".join([preref, self.href])
-            #print(self.href)
+            print(self.href)
         
         
         # Cycle Detection
@@ -81,9 +82,8 @@ class Claim:
         # Do nothing if there is a cycle
         ref2text = {}
         if self.href == "":
-            self.score = self.parent.score
             return
-        #print(self.href)
+        print(self.href)
         if self.parent != None and  "https://en.wikipedia.org" in self.parent.href:
             if len(wiki(self.href, self.parent.href)) == 0:
                 #print(self.parent.cand[0])
@@ -91,12 +91,11 @@ class Claim:
                 self.score = self.parent.score
                 return
             else:
-                self.href = wiki(self.href, self.parent.href)[0]
+                self.href = wiki(self.href, self.parent.href)
         else:
             if not self.excep_handle():
                 self.score = self.parent.score
                 return 
-        # Blame Dillon
         try:
             response = requests.get(self.href)
         except Exception as e:
@@ -116,20 +115,21 @@ class Claim:
         soup = BeautifulSoup(response.text, 'html.parser')
         text_raw = soup.findAll('p')
 
-        # checks if JS was used to load HTML content
-        if len(text_raw) < len(article_text):
-            text_raw = article_text
+        
+        
+        #if len(text_raw) < len(article_text):
+        #    text_raw = article_text
+        
+        
          # Exception that the child of one claim has no valid sentences, then add its parent to the leaf list.
         if len(text_raw) < 5:
             # Terminate the scraper and parse the parent node to the leaf list
             
             return 
 
-        paragraphs = [unit.text for unit in text_raw]
-        sentences = tokenizer.sentence_parsing(paragraphs)
-        
         for unit in text_raw:
             if len(unit.findAll('a')) > 0:
+                print(unit)
                 for ref in unit.findAll('a'):
                     try:
                         ref2text[unit.text] = ref['href']
@@ -137,41 +137,46 @@ class Claim:
                         continue
             else:
                 ref2text[unit.text] = ""
-        cand = tokenizer.predict(self.text, list(ref2text.keys()), 1)
+        cand = tokenizer.predict(self.text, list(ref2text.keys()), 2)
         texts = [] 
         scores = []
+
         for text in cand:
             texts.append(text[1])
             scores.append(text[2])
-        #print("text: {}".format(texts))
-        #print("scores: {}".format(scores))
         self.cand = texts
-        self.score = scores
-        for words in texts:
+        print(scores)
+        #self.score = scores
+        
+        for i, words in enumerate(texts):
+            print("!!!!!!!!!!!!!!!!!!!!!!{}".format(i))
+        
+
             try:
-                if ref2text[text[1]] != "" and self.height < maxheight:
+                if ref2text[words] != "" and self.height < maxheight:
                     print("Branch 1")
-                    self.child.append(Claim(ref2text[words], words, (self.height +1), self))
+                    self.child.append(Claim(ref2text[words], words, scores[i], (self.height +1), self))
                 elif self.height < maxheight:
                     print("Branch 2")
-                    self.child.append(Claim("", words, (self.height +1), self))
+                    self.child.append(Claim("", words, scores[i], (self.height +1), self))
                         
             except KeyError:
                 ref_key = ""
                 #print(ref2text.keys())
                 for key in ref2text.keys():
-                    #print(key)
-                    if text[0] in key:
-                        #print("8")
+                    if key in words:
                         ref_key = key
-                        #print(ref_key)
                         break
+                if ref_key == "":
+                    print('!!!!!!!!!{}'.format(scores[i]))
+                    self.child.append(Claim("", words, scores[i], (self.height +1), self))
+                    continue
                 if ref2text[ref_key] != "" and self.height < maxheight:
                     print("Branch 3")
-                    self.child.append(Claim(ref2text[words], words, (self.height +1), self))
+                    self.child.append(Claim(ref2text[ref_key], words, scores[i], (self.height +1), self))
                 elif self.height < maxheight:
                     print("Branch 4")
-                    self.child.append(Claim("", words, (self.height +1), self))
+                    self.child.append(Claim("", words, scores[i], (self.height +1), self))
                     
 
     def get_jump(self, jumps):
@@ -191,4 +196,9 @@ class Claim:
                 # A jump start from a single node, ends at a list of children nodes
                 jumps.append((root, Node(onechild.href, onechild.text, False, onechild.score)))
                 
+
+
+
+
+
 
