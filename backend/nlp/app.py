@@ -4,7 +4,7 @@ import json
 # from nlp import Claim, Tree
 # from nlp.claim import Claim
 from tree import Tree
-from advanced_scraper import Claim
+from controller import Claim
 # from flask_mysqldb import MySQL
 
 # requires a hosting site for database
