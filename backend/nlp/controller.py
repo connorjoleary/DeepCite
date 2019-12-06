@@ -101,7 +101,7 @@ class Claim:
         except Exception as e:
             print("Exception: " + str(e))
             return
-
+        """
         # if js is used to load HTML contents
         op = webdriver.ChromeOptions()
         op.add_argument('headless')
@@ -109,6 +109,7 @@ class Claim:
         driver.get(self.href)
         js_soup = BeautifulSoup(driver.page_source, "html.parser")
         article_text = js_soup.findAll('p')
+        """
 
         # normal p tag find all
         self.visited.append(self.href)
@@ -140,7 +141,7 @@ class Claim:
         cand = tokenizer.predict(self.text, list(ref2text.keys()), 2)
         texts = [] 
         scores = []
-
+        print(cand)
         for text in cand:
             texts.append(text[1])
             scores.append(text[2])
@@ -149,7 +150,7 @@ class Claim:
         #self.score = scores
         
         for i, words in enumerate(texts):
-            print("!!!!!!!!!!!!!!!!!!!!!!{}".format(i))
+            #print("!!!!!!!!!!!!!!!!!!!!!!{}".format(i))
         
 
             try:
@@ -168,7 +169,7 @@ class Claim:
                         ref_key = key
                         break
                 if ref_key == "":
-                    print('!!!!!!!!!{}'.format(scores[i]))
+                    #print('!!!!!!!!!{}'.format(scores[i]))
                     self.child.append(Claim("", words, scores[i], (self.height +1), self))
                     continue
                 if ref2text[ref_key] != "" and self.height < maxheight:
