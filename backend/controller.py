@@ -3,6 +3,7 @@ from selenium import webdriver
 import requests
 import tokenizer
 from wiki_scraper import wiki
+import exceptions as error
 import sys
 import io
 import re
@@ -174,17 +175,24 @@ class Claim:
         # url is trash
         except Exception as e:
             print("Exception: " + str(e))
+            # faulty input
+            if self.parent == None:
+                raise error.BrokenLink()
+            # create leaf
             return
         
 
         # marked site as visited
         self.visited.append(self.href)
         text_raw = self.get_p_tags(response)
-        
-         # Exception that the child of one claim has no valid sentences, then add its parent to the leaf list.
+
+        # Exception that the child of one claim has no valid sentences, then add its parent to the leaf list.
         if len(text_raw) < 5:
             # Terminate the scraper and parse the parent node to the leaf list
-            # TODO: if height == 1: send error to front end
+            # cite is broken
+            if self.parent == None:
+                raise error.EmptyWebsite('Unable to obtain infomation from the website. Possible causes: error404, error500, error403, or contents if site cannot be obtained')
+            # creates leaf
             return 
 
         for unit in text_raw:
