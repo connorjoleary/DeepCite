@@ -53,8 +53,8 @@ class Claim:
         # self.branch = order
         # default value of score is 0
     
-    # def __str__(self):
-    #     return "text: " + self.text + "href: " + self.hre
+    def __str__(self):
+        return "text: " + self.text + " href: " + self.href + " size: " + str(len(self.child))
 
 
     # sets values based on previous jups, handles exceptions
@@ -205,10 +205,12 @@ class Claim:
                     
 
     def get_jump(self, jumps):
+        root = None
         if self.parent == None:
             root = Node(self.href, self.text, True, self.score)
         else:
             root = Node(self.href, self.text, False, self.score)
+
         if len(self.child) == 0:
             # Jump terminate at this node
             jumps.append((root, None))
@@ -217,6 +219,6 @@ class Claim:
             for onechild in self.child:
                 onechild.get_jump(jumps)
                 # A jump start from a single node, ends at a list of children nodes
-                jumps.append((root, Node(onechild.href, onechild.text, False, onechild.score)))
+            jumps.append((root, Node(onechild.href, onechild.text, False, onechild.score)))
 
 
