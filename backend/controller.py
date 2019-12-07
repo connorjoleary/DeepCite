@@ -83,43 +83,45 @@ class Claim:
     def get_p_tags(self, response):
         
         # dynamic html
+        """
         op = webdriver.ChromeOptions()
         op.add_argument('headless')
         driver = webdriver.Chrome(options=op)
         driver.get(self.href)  
         js_soup = BeautifulSoup(driver.page_source, "html.parser")
         dynamic = js_soup.findAll('p')
-
+        """
         # static html
         soup = BeautifulSoup(response.text, 'html.parser')
         static = soup.findAll('p')
-
+        """
         if len(static) < len(dynamic):
             return dynamic
+        """
         return static
 
 
     # calls tokenizer and gets potential sources to claim
     def set_cand(self, ref2text):
-        cand = tokenizer.predict(self.text, list(ref2text.keys()), 2)
+        cand = tokenizer.predict(self.text, list(ref2text.keys()), 3)
         texts = [] 
         scores = []
         for text in cand:
             texts.append(text[1])
             scores.append(text[2])
         self.cand = texts
-        self.score = scores
+        return scores
 
     # tree be making babies
-    def create_children(self, ref2text):
+    def create_children(self, ref2text, scores):
 
         # iterates through texts to check if there is a link associtated with text
         for i, words in enumerate(self.cand):
             try:
                 if ref2text[words] != "" and self.height < Claim.maxheight:
-                    self.child.append(Claim(ref2text[words], words, self.score[i], (self.height +1), self))
+                    self.child.append(Claim(ref2text[words], words, scores[i], (self.height +1), self))
                 elif self.height < Claim.maxheight:
-                    self.child.append(Claim("", words, self.score[i], (self.height +1), self))
+                    self.child.append(Claim("", words, scores[i], (self.height +1), self))
 
             # tokenizer returned a sentence            
             except KeyError:
@@ -132,14 +134,14 @@ class Claim:
 
                 # sentence was not found - creates a leaf node - should not be reached but okay
                 if ref_key == "":
-                    self.child.append(Claim("", words, self.score[i], (self.height +1), self))
+                    self.child.append(Claim("", words, scores[i], (self.height +1), self))
                     continue
                 # has a link - creates new jump
                 if ref2text[ref_key] != "" and self.height < Claim.maxheight:
                     self.child.append(Claim(ref2text[ref_key], words, self.score[i], (self.height +1), self))
                 # max height reached - creates leaf node
                 elif self.height < Claim.maxheight:
-                    self.child.append(Claim("", words, score[i], (self.height +1), self))
+                    self.child.append(Claim("", words, scores[i], (self.height +1), self))
 
 
 
@@ -152,7 +154,7 @@ class Claim:
         # is wikipedia link
         if self.parent != None and  "https://en.wikipedia.org" in self.parent.href:
 
-            if len(wiki(self.href, self.parent.href)) == 0:
+            if wiki(self.href, self.parent.href) == None:
                 self.score = self.parent.score
                 return
             else:
@@ -194,9 +196,9 @@ class Claim:
                 ref2text[unit.text] = ""
 
         # get tokenizer values
-        self.set_cand(ref2text)
+        scores = self.set_cand(ref2text)
         # creates leaf node or children
-        self.create_children(ref2text)
+        self.create_children(ref2text, scores)
         
                     
 
@@ -214,18 +216,5 @@ class Claim:
                 onechild.get_jump(jumps)
                 # A jump start from a single node, ends at a list of children nodes
                 jumps.append((root, Node(onechild.href, onechild.text, False, onechild.score)))
-
-
-if "__main__":
-    text = "Doro is a nickname for the German name Dorothee, so now I know how the heavy metal singer, Doro, former front-woman for Warlock, got her name"
-    url = "https://en.wikipedia.org/wiki/Doro_(musician)"
-    root = Claim(url, text, 0, 0)
-    tree = Tree(root)
-    print(tree.tofront())
-                
-
-
-
-
 
 
