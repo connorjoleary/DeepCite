@@ -48,13 +48,9 @@ def deep_cite():
         tree = Tree(root)
         print(tree.tofront())
         full_pre_json = {'results': tree.tofront()}
-        # ret_json = json.dumps(full_pre_json)
     except Exception as e:
         print("an excpetion occured" + str(e))
 
-
-    # ret_list
-    # print contents
     return jsonify(full_pre_json)
 
 
