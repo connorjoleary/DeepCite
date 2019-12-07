@@ -94,7 +94,7 @@ class Claim:
         # static html
         soup = BeautifulSoup(response.text, 'html.parser')
         static = soup.findAll('p')
-        
+
         if len(static) < len(dynamic):
             return dynamic
         return static
@@ -152,12 +152,15 @@ class Claim:
 
         # is wikipedia link
         if self.parent != None and  "https://en.wikipedia.org" in self.parent.href:
-
-            if wiki(self.href, self.parent.href) == None:
+            citation = wiki(self.href, self.parent.href)
+            if citation == None:
+                self.href = self.parent.href + self.href
+                print("\n" + self.href + "\n")
                 self.score = self.parent.score
                 return
             else:
-                self.href = wiki(self.href, self.parent.href)
+                print("\n" + self.href + "\n")
+                self.href = citation
         # not wikipedia link
         else:
             # no errors
