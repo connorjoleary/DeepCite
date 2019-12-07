@@ -4,3 +4,4 @@ backend/nlp/__pycache__
 backend/__pycache__
 backend/nlp/.coverage
 backend/nlp/vector.py
+backend/word_vectors/GoogleNews-vectors-negative300.bin
