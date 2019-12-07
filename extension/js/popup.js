@@ -39,6 +39,15 @@ $(document).ready(() => {
 
     //populate claim and link from storage
     // console.log("Persist store: " + );
+    var delay = 1000;
+    $("button").click(function() {
+        var $btn = $(this);
+        $btn.button('loading');
+        // simulating a timeout
+        setTimeout(function () {
+            $btn.button('reset');
+        }, delay);
+    });
 
     $('#linxerForm').on('submit', (event) => {
         event.preventDefault();
