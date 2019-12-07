@@ -47,6 +47,7 @@ body {
 .result-text{
   font-style: italic;
   font-weight: bold;
+  color: #985F6F
 }
 
 textarea {

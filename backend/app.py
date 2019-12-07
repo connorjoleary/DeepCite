@@ -44,7 +44,7 @@ def deep_cite():
     full_pre_json = ""
 
     try:
-        root = Claim(link, claim, 0, None)
+        root = Claim(link, claim, 0, 0)
         tree = Tree(root)
         print(tree.tofront())
         full_pre_json = {'results': tree.tofront()}
