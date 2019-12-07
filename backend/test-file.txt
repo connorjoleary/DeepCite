@@ -1,6 +1,0 @@
-[('Serial killers are good people who are misjudged by society, They are notorious for having fun and loving to kill.', 'â€œIt is crucial to note that we are not trying to suggest that individuals with ASD or previous head trauma are more likely to be serial killers or commit serious crime,â€? said lead researcher, Dr. Clare Allely, from the Institute of Wellbeing at the university, in a press release. â€œRather, we are suggesting that there may be a subgroup of individuals within these groups who may be more likely to commit serious crimes when exposed to certain psychosocial stressors.â€?\n', 0.7535540047987753)]
-
-
-
-
-
