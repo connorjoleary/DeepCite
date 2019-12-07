@@ -34,9 +34,6 @@ def custom_tokenizer(nlp):
 nlp.tokenizer = custom_tokenizer(nlp)
 #nlp.add_pipe(nlp.create_pipe('sentencizer'))
 
-# solely for testing purposes
-test = []
-
 class Paragraph(object):
     def __init__(self, index, similarity):
         self.index = index
@@ -132,28 +129,3 @@ def predict(claim, text, k) :
 
 
 
-
-# for testing purposes
-""" if "__main__":
-    
-    test_set_claims = os.path.join(CWD_FOLDER, 'testing_set', 'noah_test_claim1.txt')
-    f_claim = open(test_set_claims, 'r', errors='replace')
-
-    claims = [line for line in f_claim]
-    f_claim.close()
-
-    for num, claim in enumerate(claims):
-        test_set_links = os.path.join(CWD_FOLDER, 'testing_set', 'noah_test_link_1_article')
-        f_text = open(test_set_links+ str(num) + ".txt", 'r', errors='replace')
-
-        text = [paragraph for paragraph in f_text]
-        f_text.close()
-
-        test.append(predict(claim, text, 1))
-        #print("\nNext set: \n")
-
-    file_path = os.path.join(CWD_FOLDER, 'test-file.txt')
-    test_file = open(file_path, 'w+', errors='replace')
-    for x in test:
-        test_file.write(str(x) + '\n\n\n\n\n\n')
-    test_file.close() """
