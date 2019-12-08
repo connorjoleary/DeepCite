@@ -119,7 +119,6 @@ class Claim:
 
     # tree be making babies
     def create_children(self, ref2text, scores):
-
         # iterates through texts to check if there is a link associtated with text
         for i, words in enumerate(self.cand):
             try:
@@ -133,7 +132,7 @@ class Claim:
                 ref_key = ""
                 # looks for paragraph that the sentence is in 
                 for key in ref2text.keys():
-                    if key in words:
+                    if words in key:
                         ref_key = key
                         break
 
@@ -143,8 +142,8 @@ class Claim:
                     continue
                 # has a link - creates new jump
                 if ref2text[ref_key] != "" and self.height < Claim.maxheight:
-                    self.child.append(Claim(ref2text[ref_key], words, self.score[i], (self.height +1), self))
-                # max height reached - creates leaf node
+                    self.child.append(Claim(ref2text[ref_key], words, scores[i], (self.height +1), self))
+                # creates leaf node
                 elif self.height < Claim.maxheight:
                     self.child.append(Claim("", words, scores[i], (self.height +1), self))
 
@@ -161,11 +160,11 @@ class Claim:
             citation = wiki(self.href, self.parent.href)
             if citation == None:
                 self.href = self.parent.href + self.href
-                print("\n" + self.href + "\n")
+                print("None: \n" + self.href + "\n")
                 self.score = self.parent.score
                 return
             else:
-                print("\n" + self.href + "\n")
+                print("Something: \n" + self.href + "\n")
                 self.href = citation
         # not wikipedia link
         else:
