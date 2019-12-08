@@ -17,7 +17,7 @@ class ClaimPath(object):
         # comparison in largest to smalled
         return not (self.totscore < other.totscore)
     def __repr__(self):
-        return "claim path: " + str([claim.to_claim_link_dict() for claim in self.claims]) + " total score: " + str(self.totscore)
+        return "claim path: " + [claim.to_claim_link_dict() for claim in self.claims] + " total score: " + str(self.totscore)
     
 
 class Tree:
@@ -37,19 +37,18 @@ class Tree:
         #root = Node(claim.href, claim.text, claim.score)
         #jumps.append(root)
         recover_paths = []
-        if root.href == '':
+        if len(root.child) == 0:
             return
         while self.queue.not_empty:
             cand_path = self.queue.get()
             if root in cand_path.claims:
                 self.best_queue.put(cand_path)
-                if len(root.child) > 0:
-                    curr_score = cand_path.totscore
-                    for onechild in root.child:
-                        temp_path = cand_path.claims.copy()
-                        temp_path.append(onechild)                            
-                        self.queue.put(ClaimPath(temp_path, curr_score * onechild.score))
-                        self.beam_search(onechild)
+                curr_score = cand_path.totscore
+                for onechild in root.child:
+                    temp_path = cand_path.claims.copy()
+                    temp_path.append(onechild)                            
+                    self.queue.put(ClaimPath(temp_path, curr_score * onechild.score))
+                    self.beam_search(onechild)
                 break
             else:
                 recover_paths.append(cand_path)
