@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
+import exceptions as error
 import requests
 import tokenizer
 from wiki_scraper import wiki
@@ -12,16 +13,18 @@ import queue as q
 
 CWD_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
-
-
-
-
+regex = re.compile(
+    r'^(?:http|ftp)s?://' # http:// or https://
+    r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|' #domain...
+    r'localhost|' #localhost...
+    r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # ...or ip
+    r'(?::\d+)?' # optional port
+    r'(?:/?|[/?]\S+)$', re.IGNORECASE)
 
 
 class Claim:
-    maxheight = 8
+    maxheight = 5
     def __init__(self, href, text, score=1, height=0, parent=None):
-         # TODO: iteration 2 problem
         super(Claim, self).__init__()
         # hrefs : several reference links, which is a list of str
         # text : the text of the claim
@@ -29,6 +32,9 @@ class Claim:
         # score: matching score computed by nlp algorithm. Will be edited by user response.
         # parent: a instance of Claim class.
         # visited: a list to store all the hrefs for cycle detection.
+        if href == '' or text == '':
+            if parent == None:
+                raise error.InvalidInput('Input is invalid. Check your claim or link.')
         self.href = href
         self.text = text
         self.parent = parent
@@ -62,10 +68,12 @@ class Claim:
             self.visited = self.parent.visited
             self.realscore = self.parent.score
         
-        # fix broken link
-        if self.href[:5] != "https" and self.parent != None and self.href[:1] == "/":
-            preref = "https://" + self.parent.href.split('/')[2]
-            self.href = "".join([preref, self.href])
+        # malformed link
+        if re.match(regex, self.href) is None:
+            if self.parent == None:
+                raise error.MalformedLink('Link is malformed. Make sure to include, \'https\\\\\', and \'.com/.org/.edu/...\'')
+            return False
+
         
         
         # Cycle Detection
@@ -79,7 +87,7 @@ class Claim:
      # returns the p tags found in link
      # accounts for dynamically loaded html
     def get_p_tags(self, response):
-        """
+
         # dynamic html
         op = webdriver.ChromeOptions()
         op.add_argument('headless')
@@ -87,15 +95,14 @@ class Claim:
         driver.get(self.href)  
         js_soup = BeautifulSoup(driver.page_source, "html.parser")
         dynamic = js_soup.findAll('p')
-        """
 
         # static html
         soup = BeautifulSoup(response.text, 'html.parser')
         static = soup.findAll('p')
-        """
+
         if len(static) < len(dynamic):
             return dynamic
-        """
+
         return static
 
 
@@ -112,7 +119,6 @@ class Claim:
 
     # tree be making babies
     def create_children(self, ref2text, scores):
-
         # iterates through texts to check if there is a link associtated with text
         for i, words in enumerate(self.cand):
             try:
@@ -126,7 +132,7 @@ class Claim:
                 ref_key = ""
                 # looks for paragraph that the sentence is in 
                 for key in ref2text.keys():
-                    if key in words:
+                    if words in key:
                         ref_key = key
                         break
 
@@ -136,8 +142,8 @@ class Claim:
                     continue
                 # has a link - creates new jump
                 if ref2text[ref_key] != "" and self.height < Claim.maxheight:
-                    self.child.append(Claim(ref2text[ref_key], words, self.score[i], (self.height +1), self))
-                # max height reached - creates leaf node
+                    self.child.append(Claim(ref2text[ref_key], words, scores[i], (self.height +1), self))
+                # creates leaf node
                 elif self.height < Claim.maxheight:
                     self.child.append(Claim("", words, scores[i], (self.height +1), self))
 
@@ -154,11 +160,9 @@ class Claim:
             citation = wiki(self.href, self.parent.href)
             if citation == None:
                 self.href = self.parent.href + self.href
-                print("\n" + self.href + "\n")
                 self.score = self.parent.score
                 return
             else:
-                print("\n" + self.href + "\n")
                 self.href = citation
         # not wikipedia link
         else:
@@ -172,7 +176,10 @@ class Claim:
             response = requests.get(self.href)
         # url is trash
         except Exception as e:
-            print("Exception: " + str(e))
+            # faulty input
+            if self.parent == None:
+                raise error.URLError('Unable to reach URL: ' + self.href)
+            # create leaf
             return
         
 
@@ -183,7 +190,9 @@ class Claim:
          # Exception that the child of one claim has no valid sentences, then add its parent to the leaf list.
         if len(text_raw) < 5:
             # Terminate the scraper and parse the parent node to the leaf list
-            # TODO: if height == 1: send error to front end
+            # unable to obtain infomation from website
+            if self.parent == None:
+                raise error.EmptyWebsite('Unable to obtain infomation from the website. Possible causes: error404, error500, error403, or contents if site cannot be obtained')
             return 
 
         for unit in text_raw:
@@ -198,6 +207,9 @@ class Claim:
 
         # get tokenizer values
         scores = self.set_cand(ref2text)
+        if self.parent == None:
+            if scores[0] <= .67:
+                raise error.ClaimNotInLink('Unable to find claim in site. Please check the claim or site.')
         # creates leaf node or children
         self.create_children(ref2text, scores)
         
