@@ -1,13 +1,8 @@
 from flask import Flask, jsonify
 from flask import request
 import json
-# from nlp import Claim, Tree
-# from nlp.claim import Claim
 from tree import Tree
 from controller import Claim
-# from flask_mysqldb import MySQL
-import exceptions as error
-# requires a hosting site for database
 
 app = Flask(__name__)
 
@@ -43,15 +38,8 @@ def deep_cite():
         tree = Tree(root)
         print(tree.tofront())
         full_pre_json = {'results': tree.tofront()}
-    except error.BrokenLink as e:
-        print("an excpetion occured" + str(e))
-        full_pre_json['error'] = 'Broken Link'
-    except error.EmptyWebsite as e:
-        print("an excpetion occured" + str(e))
+    except Exception as e:
         full_pre_json['error'] = str(e)
-    except error.ClaimNotInLink as e:
-        print("an excpetion occured" + str(e))
-        full_pre_json['error'] = 'Claim Not In Link'
     
     return jsonify(full_pre_json)
 

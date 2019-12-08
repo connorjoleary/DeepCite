@@ -11,6 +11,14 @@ import os
 
 CWD_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
+regex = re.compile(
+    r'^(?:http|ftp)s?://' # http:// or https://
+    r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|' #domain...
+    r'localhost|' #localhost...
+    r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # ...or ip
+    r'(?::\d+)?' # optional port
+    r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+
 class Node:
     def __init__(self, url, text, isroot, score):
         self.text = text
@@ -29,7 +37,7 @@ class Node:
         return cl_dict
 
 class Claim:
-    maxheight = 8
+    maxheight = 5
     def __init__(self, href, text, score=1, height=0, parent=None):
          # TODO: iteration 2 problem
         super(Claim, self).__init__()
@@ -39,6 +47,8 @@ class Claim:
         # score: matching score computed by nlp algorithm. Will be edited by user response.
         # parent: a instance of Claim class.
         # visited: a list to store all the hrefs for cycle detection.
+        if href == '' or text == '':
+            raise error.InvalidInput('Input is invalid. Check your claim or link.')
         self.href = href
         self.text = text
         self.parent = parent
@@ -59,16 +69,17 @@ class Claim:
 
 
     # sets values based on previous jups, handles exceptions
+
     def excep_handle(self):
         if self.parent != None:
             self.visited = self.parent.visited
             self.realscore = self.parent.score
 
         
-        # fix broken link
-        if self.href[:5] != "https" and self.parent != None and self.href[:1] == "/":
-            preref = "https://" + self.parent.href.split('/')[2]
-            self.href = "".join([preref, self.href])
+        # malformed link
+        if re.match(regex, self.href) is None:
+            raise error.MalformedLink('Link is malformed. Make sure to include, \'https\\\\\', and \'.com/.org/.edu/...\'')
+
         
         
         # Cycle Detection
@@ -103,7 +114,7 @@ class Claim:
 
     # calls tokenizer and gets potential sources to claim
     def set_cand(self, ref2text):
-        cand = tokenizer.predict(self.text, list(ref2text.keys()), 3)
+        cand = tokenizer.predict(self.text, list(ref2text.keys()), 1)
         texts = [] 
         scores = []
         for text in cand:
@@ -177,7 +188,7 @@ class Claim:
             print("Exception: " + str(e))
             # faulty input
             if self.parent == None:
-                raise error.BrokenLink()
+                raise error.URLError('Unable to reach URL: ' + self.href)
             # create leaf
             return
         
@@ -207,6 +218,9 @@ class Claim:
 
         # get tokenizer values
         scores = self.set_cand(ref2text)
+        if self.parent == None:
+            if scores[0] <= .67:
+                raise error.ClaimNotInLink('Unable to find claim in site. Please check the claim or site. <developer> score found: ' + str(scores[0]))
         # creates leaf node or children
         self.create_children(ref2text, scores)
         
