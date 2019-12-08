@@ -1,54 +1,64 @@
 from bs4 import BeautifulSoup
 import requests
+# from advanced_scraper import Claim
 import os
+from controller import Claim
+import queue as q
+
 CWD_FOLDER = os.path.dirname(os.path.abspath(__file__))
 # Call the Claim constructor in advanced_scraper to create the instance root. Parse the root into constructor Tree to initialize instance 
 # Tree. Call tree.tofront() to return a list of tree nodes used for visualization.
-
-class Tree:
-    def __init__(self, root):
-        self.root = root
-        self.jumps = [] 
-        root.get_jump(self.jumps)
-
-    def tofront(self):
-        nodes = []
-        for jump in self.jumps:
-            nodes.append(jump[0].to_claim_link_dict())
-        return nodes
-
-
-# if __name__ == '__main__':
-#     from advanced_scraper import Claim
-#     url = "http://math.ucr.edu/home/baez/physics/Relativity/GR/grav_speed.html"
-#     text = "Gravity moves at the Speed of Light and is not Instantaneous. If the Sun were to disappear, we would continue our elliptical orbit for an additional 8 minutes and 20 seconds, the same time it would take us to stop seeing the light (according to General Relativity)."
-#     root = Claim(url, text, 0, None)
-#     tree = Tree(root)
-#     # The list of jumps, each element of the list is a tuple including start and end claim.
-#     # Ignore the score of the root node, the goal of it is to make scraper and nlp more convenient
-#     print(tree.tofront())
-#     #print(tree.tofront()[1][0].text)
-#     #print(tree.tofront()[1][1].text)
+class ClaimPath(object):
+    def __init__(self, claim_path, totscore):
+        self.claims = claim_path
+        self.totscore = totscore
+    
+    def __lt__(self, other):
+        # comparison in largest to smalled
+        return not (self.totscore < other.totscore)
+    def __repr__(self):
+        return "claim path: " + str([claim.to_claim_link_dict() for claim in self.claims]) + " total score: " + str(self.totscore)
     
 
-#     #------------------Testing---------------------------------------------
-#     test_set_claims = os.path.join(CWD_FOLDER, 'testing_set', 'claims.txt')
-#     f_claim = open(test_set_claims, 'r', errors='replace')
-#     claims = [line for line in f_claim]
-#     f_claim.close()
+class Tree:
+    def __init__(self, url, claim):
+        # root: Claim
+        root = Claim(url, claim)
+        self.queue = q.PriorityQueue()
+        inilist = []
+        inilist.append(root)
+        self.queue.put(ClaimPath(inilist, 1))
+        self.beam_search(root)
 
-#     test_set_links = os.path.join(CWD_FOLDER, 'testing_set', 'links.txt')
-#     f_links = open(test_set_links, 'r', errors='replace')
-#     links = [line for line in f_links]
-#     f_links.close()
 
-#     claim_Class = []
-#     for x in range(len(claims) - 1):
-#         claim_new = Claim(links[x].strip(), claims[x].strip(), 0, None)
-#         claim_Class.append(claim_new)
 
-#     for claim in claim_Class:
-#         tree = Tree(claim)
-#         print(tree.tofront())
+    def beam_search(self,root):
+        #root = Node(claim.href, claim.text, claim.score)
+        #jumps.append(root)
+        recover_paths = []
+        while self.queue.not_empty:
+            cand_path = self.queue.get()
+            if root in cand_path.claims:
+                if len(root.child) > 0:
+                    curr_score = cand_path.totscore
+                    for onechild in root.child:
+                        temp_path = cand_path.claims.copy()
+                        temp_path.append(onechild)                            
+                        self.queue.put(ClaimPath(temp_path, curr_score * onechild.score))
+                        self.beam_search(onechild)
+                break
+            else:
+                recover_paths.append(cand_path)
+        for path in recover_paths:
+            self.queue.put(path)
+      
+        
+    def get_best_path(self):
+        best_path = self.queue.get()
+        nodes = [claim.to_claim_link_dict() for claim in best_path.claim_path]        
+        
+
+
+
 
 

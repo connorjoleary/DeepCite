@@ -3,11 +3,12 @@ from selenium import webdriver
 import requests
 import tokenizer
 from wiki_scraper import wiki
-import exceptions as error
 import sys
 import io
 import re
 import os
+import queue as q
+
 
 CWD_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
@@ -19,22 +20,6 @@ regex = re.compile(
     r'(?::\d+)?' # optional port
     r'(?:/?|[/?]\S+)$', re.IGNORECASE)
 
-class Node:
-    def __init__(self, url, text, isroot, score):
-        self.text = text
-        self.url = url
-        self.score = score
-        self.isroot = isroot
-
-
-    def to_claim_link_dict(self):
-        if self.text == None or self.url == None:
-            return
-        cl_dict = {}
-        cl_dict['source'] = self.text
-        cl_dict['link'] = self.url
-        cl_dict['score'] = self.score
-        return cl_dict
 
 class Claim:
     maxheight = 5
@@ -64,17 +49,23 @@ class Claim:
         # self.branch = order
         # default value of score is 0
     
-    def __str__(self):
-        return "text: " + self.text + " href: " + self.href + " size: " + str(len(self.child))
+    # def __str__(self):
+    #     return "text: " + self.text + "href: " + self.hre
 
 
     # sets values based on previous jups, handles exceptions
-
+    def to_claim_link_dict(self):
+        cl_dict = {}
+        cl_dict['source'] = self.text
+        cl_dict['link'] = self.href
+        cl_dict['score'] = self.score
+        return cl_dict
+    
+    
     def excep_handle(self):
         if self.parent != None:
             self.visited = self.parent.visited
             self.realscore = self.parent.score
-
         
         # malformed link
         if re.match(regex, self.href) is None:
@@ -93,7 +84,7 @@ class Claim:
      # returns the p tags found in link
      # accounts for dynamically loaded html
     def get_p_tags(self, response):
-        
+        """
         # dynamic html
         op = webdriver.ChromeOptions()
         op.add_argument('headless')
@@ -101,14 +92,15 @@ class Claim:
         driver.get(self.href)  
         js_soup = BeautifulSoup(driver.page_source, "html.parser")
         dynamic = js_soup.findAll('p')
-
+        """
 
         # static html
         soup = BeautifulSoup(response.text, 'html.parser')
         static = soup.findAll('p')
-
+        """
         if len(static) < len(dynamic):
             return dynamic
+        """
         return static
 
 
@@ -196,14 +188,11 @@ class Claim:
         # marked site as visited
         self.visited.append(self.href)
         text_raw = self.get_p_tags(response)
-
-        # Exception that the child of one claim has no valid sentences, then add its parent to the leaf list.
+        
+         # Exception that the child of one claim has no valid sentences, then add its parent to the leaf list.
         if len(text_raw) < 5:
             # Terminate the scraper and parse the parent node to the leaf list
-            # cite is broken
-            if self.parent == None:
-                raise error.EmptyWebsite('Unable to obtain infomation from the website. Possible causes: error404, error500, error403, or contents if site cannot be obtained')
-            # creates leaf
+            # TODO: if height == 1: send error to front end
             return 
 
         for unit in text_raw:
@@ -226,21 +215,9 @@ class Claim:
         
                     
 
-    def get_jump(self, jumps):
-        root = None
-        if self.parent == None:
-            root = Node(self.href, self.text, True, self.score)
-        else:
-            root = Node(self.href, self.text, False, self.score)
 
-        if len(self.child) == 0:
-            # Jump terminate at this node
-            jumps.append((root, None))
-        
-        else:
-            for onechild in self.child:
-                onechild.get_jump(jumps)
-                # A jump start from a single node, ends at a list of children nodes
-            jumps.append((root, Node(onechild.href, onechild.text, False, onechild.score)))
+                
 
 
+                    
+       
