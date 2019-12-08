@@ -17,8 +17,8 @@ def test():
         print(tree.get_best_path())
 
 def main():
-    url = "https://en.wikipedia.org/wiki/Doro_(musician)"
-    claim = "Doro is a nickname for the German name Dorothee, so now I know how the heavy metal singer, Doro, former front-woman for Warlock, got her name"
+    url = "https://www.nature.com/articles/1704715"
+    claim = "After transplantation, it has been of central interest whether the newly developed hematopoietic system is of recipient or donor origin."
     tree = Tree(url, claim)
     print(tree.get_best_path())   
 

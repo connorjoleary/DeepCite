@@ -36,7 +36,7 @@ def deep_cite():
     try:
         tree = Tree(link, claim)
         # print()
-        # full_pre_json = {'results': tree.get_best_path()}
+        full_pre_json = {'results': tree.get_best_path()}
     except Exception as e:
         full_pre_json['error'] = str(e)
     
