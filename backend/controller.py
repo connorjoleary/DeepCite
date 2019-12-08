@@ -108,7 +108,7 @@ class Claim:
 
     # calls tokenizer and gets potential sources to claim
     def set_cand(self, ref2text):
-        cand = tokenizer.predict(self.text, list(ref2text.keys()), 1)
+        cand = tokenizer.predict(self.text, list(ref2text.keys()), 3)
         texts = [] 
         scores = []
         for text in cand:
@@ -160,11 +160,9 @@ class Claim:
             citation = wiki(self.href, self.parent.href)
             if citation == None:
                 self.href = self.parent.href + self.href
-                print("None: \n" + self.href + "\n")
                 self.score = self.parent.score
                 return
             else:
-                print("Something: \n" + self.href + "\n")
                 self.href = citation
         # not wikipedia link
         else:

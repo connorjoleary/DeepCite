@@ -8,12 +8,12 @@ import os
 
 CWD_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
-#gn_path = r'word_vectors/GoogleNews-vectors-negative300.bin'
-#gn_model = KeyedVectors.load_word2vec_format(gn_path, binary=True)
-#nlp = spacy.blank('en')
-#nlp.vocab.vectors = spacy.vocab.Vectors(data=gn_model.vectors, keys=gn_model.index2word)
+gn_path = r'word_vectors/GoogleNews-vectors-negative300.bin'
+gn_model = KeyedVectors.load_word2vec_format(gn_path, binary=True)
+nlp = spacy.blank('en')
+nlp.vocab.vectors = spacy.vocab.Vectors(data=gn_model.vectors, keys=gn_model.index2word)
 
-nlp = spacy.load('en_core_web_sm')
+#nlp = spacy.load('en_core_web_sm')
 
 def custom_tokenizer(nlp):
 
@@ -32,7 +32,7 @@ def custom_tokenizer(nlp):
 
 
 nlp.tokenizer = custom_tokenizer(nlp)
-#nlp.add_pipe(nlp.create_pipe('sentencizer'))
+nlp.add_pipe(nlp.create_pipe('sentencizer'))
 
 class Paragraph(object):
     def __init__(self, index, similarity):
