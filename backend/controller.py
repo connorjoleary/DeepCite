@@ -87,7 +87,7 @@ class Claim:
      # returns the p tags found in link
      # accounts for dynamically loaded html
     def get_p_tags(self, response):
-        """
+
         # dynamic html
         op = webdriver.ChromeOptions()
         op.add_argument('headless')
@@ -95,15 +95,14 @@ class Claim:
         driver.get(self.href)  
         js_soup = BeautifulSoup(driver.page_source, "html.parser")
         dynamic = js_soup.findAll('p')
-        """
 
         # static html
         soup = BeautifulSoup(response.text, 'html.parser')
         static = soup.findAll('p')
-        """
+
         if len(static) < len(dynamic):
             return dynamic
-        """
+
         return static
 
 
@@ -180,7 +179,6 @@ class Claim:
             response = requests.get(self.href)
         # url is trash
         except Exception as e:
-            print("Exception: " + str(e))
             # faulty input
             if self.parent == None:
                 raise error.URLError('Unable to reach URL: ' + self.href)
@@ -195,7 +193,9 @@ class Claim:
          # Exception that the child of one claim has no valid sentences, then add its parent to the leaf list.
         if len(text_raw) < 5:
             # Terminate the scraper and parse the parent node to the leaf list
-            # TODO: if height == 1: send error to front end
+            # unable to obtain infomation from website
+            if self.parent == None:
+                raise error.EmptyWebsite('Unable to obtain infomation from the website. Possible causes: error404, error500, error403, or contents if site cannot be obtained')
             return 
 
         for unit in text_raw:
@@ -212,7 +212,7 @@ class Claim:
         scores = self.set_cand(ref2text)
         if self.parent == None:
             if scores[0] <= .67:
-                raise error.ClaimNotInLink('Unable to find claim in site. Please check the claim or site. <developer> score found: ' + str(scores[0]))
+                raise error.ClaimNotInLink('Unable to find claim in site. Please check the claim or site.')
         # creates leaf node or children
         self.create_children(ref2text, scores)
         
