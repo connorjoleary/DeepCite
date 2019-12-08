@@ -13,7 +13,7 @@ CWD_FOLDER = os.path.dirname(os.path.abspath(__file__))
 #nlp = spacy.blank('en')
 #nlp.vocab.vectors = spacy.vocab.Vectors(data=gn_model.vectors, keys=gn_model.index2word)
 
-nlp = spacy.load('en_core_web_lg')
+nlp = spacy.load('en_core_web_sm')
 
 def custom_tokenizer(nlp):
 

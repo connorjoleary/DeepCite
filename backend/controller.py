@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
+import exceptions as error
 import requests
 import tokenizer
 from wiki_scraper import wiki
@@ -24,7 +25,6 @@ regex = re.compile(
 class Claim:
     maxheight = 5
     def __init__(self, href, text, score=1, height=0, parent=None):
-         # TODO: iteration 2 problem
         super(Claim, self).__init__()
         # hrefs : several reference links, which is a list of str
         # text : the text of the claim
@@ -33,7 +33,8 @@ class Claim:
         # parent: a instance of Claim class.
         # visited: a list to store all the hrefs for cycle detection.
         if href == '' or text == '':
-            raise error.InvalidInput('Input is invalid. Check your claim or link.')
+            if parent == None:
+                raise error.InvalidInput('Input is invalid. Check your claim or link.')
         self.href = href
         self.text = text
         self.parent = parent
@@ -69,7 +70,9 @@ class Claim:
         
         # malformed link
         if re.match(regex, self.href) is None:
-            raise error.MalformedLink('Link is malformed. Make sure to include, \'https\\\\\', and \'.com/.org/.edu/...\'')
+            if self.parent == None:
+                raise error.MalformedLink('Link is malformed. Make sure to include, \'https\\\\\', and \'.com/.org/.edu/...\'')
+            return False
 
         
         
