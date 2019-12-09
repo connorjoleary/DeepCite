@@ -96,7 +96,7 @@ class Claim:
         # dynamic html
         op = webdriver.ChromeOptions()
         op.add_argument('headless')
-        driver = webdriver.Chrome(options=op)
+        driver = webdriver.Chrome(executable_path= CWD_FOLDER + '/chromedriver.exe',options=op)
         driver.get(self.href)  
         js_soup = BeautifulSoup(driver.page_source, "html.parser")
         dynamic = js_soup.findAll('p')
