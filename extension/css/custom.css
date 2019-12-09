@@ -42,6 +42,7 @@ body {
   padding-left: 10px;
   margin-bottom: 5px;
   border-radius: 5px;
+  overflow-wrap: break-word;
 }
 
 .result-text{
