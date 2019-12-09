@@ -22,6 +22,14 @@ regex = re.compile(
     r'(?:/?|[/?]\S+)$', re.IGNORECASE)
 
 
+def new_indention(text):
+    style =  'style = \"color:#8b0000; font-style: italic; font-weight: bold;\">'
+    return "<div><p " + style + text + "</p></div>" 
+
+def html_link(link):
+    return "<a href= \"" + link + "\">" + link + "</a>"
+
+
 class Claim:
     maxheight = 5
     def __init__(self, href, text, score=1, height=0, parent=None):
@@ -34,7 +42,7 @@ class Claim:
         # visited: a list to store all the hrefs for cycle detection.
         if href == '' or text == '':
             if parent == None:
-                raise error.InvalidInput('Input is invalid. Check your claim or link.')
+                raise error.InvalidInput('Input is invalid.')
         self.href = href
         self.text = text
         self.parent = parent
@@ -49,9 +57,6 @@ class Claim:
         # Add field cand and score to the parent so that children can work correctly
         # self.branch = order
         # default value of score is 0
-    
-    # def __str__(self):
-    #     return "text: " + self.text + "href: " + self.hre
 
 
     # sets values based on previous jups, handles exceptions
@@ -61,7 +66,7 @@ class Claim:
         cl_dict['link'] = self.href
         cl_dict['score'] = self.score
         return cl_dict
-    
+
     
     def excep_handle(self):
         if self.parent != None:
@@ -71,7 +76,7 @@ class Claim:
         # malformed link
         if re.match(regex, self.href) is None:
             if self.parent == None:
-                raise error.MalformedLink('Link is malformed. Make sure to include, \'https\\\\\', and \'.com/.org/.edu/...\'')
+                raise error.MalformedLink(self.href +' is malformed\n.' + new_indention("Make sure to include, \'https\\\\\', and \'.com/.org/.edu/...\'"))
             return False
 
         
@@ -178,7 +183,7 @@ class Claim:
         except Exception as e:
             # faulty input
             if self.parent == None:
-                raise error.URLError('Unable to reach URL: ' + self.href)
+                raise error.URLError('Unable to reach URL: ' + html_link(self.href))
             # create leaf
             return
         
@@ -188,11 +193,12 @@ class Claim:
         text_raw = self.get_p_tags(response)
         
          # Exception that the child of one claim has no valid sentences, then add its parent to the leaf list.
-        if len(text_raw) < 5:
+        if len(text_raw) < 6:
             # Terminate the scraper and parse the parent node to the leaf list
             # unable to obtain infomation from website
             if self.parent == None:
-                raise error.EmptyWebsite('Unable to obtain infomation from the website. Possible causes: error404, error500, error403, or contents if site cannot be obtained')
+                raise error.EmptyWebsite('Unable to obtain infomation from the website.' + \
+                            new_indention(html_link(self.href) + ' could contain the following errors: Error404, Error403, Error500, or content of site cannot be obtained.'))
             return 
 
         for unit in text_raw:
@@ -209,7 +215,7 @@ class Claim:
         scores = self.set_cand(ref2text)
         if self.parent == None:
             if scores[0] <= .67:
-                raise error.ClaimNotInLink('Unable to find claim in site. Please check the claim or site.')
+                raise error.ClaimNotInLink('Unable to find \"' + self.text + '\" in ' + html_link(self.href))
         # creates leaf node or children
         self.create_children(ref2text, scores)
         

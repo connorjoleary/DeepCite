@@ -1,15 +1,9 @@
 const url = "http://18.223.108.40:5000/api/v1/deep_cite";
-
-/*const url = "http://localhost:5000/api/v1/deep_cite";
-const host = "localhost";
-const port = 5000;
-const path = "/api/v1/deep_cite";*/
-
-
+//const url = "http://localhost:5000/api/v1/deep_cite";
+var ajax = null;
 
 function handleClaimChange(e) {
     const fieldVal = document.getElementById(e.srcElement.id).value;
-    // console.log(fieldVal);
     chrome.storage.local.set({ 'claimField': fieldVal }, function () {
         console.log('claimField is set to ' + fieldVal);
     });
@@ -18,7 +12,6 @@ function handleClaimChange(e) {
 
 function handleLinkChange(e) {
     const fieldVal = document.getElementById(e.srcElement.id).value;
-    // console.log(fieldVal);
     chrome.storage.local.set({ 'linkField': fieldVal }, function () {
         console.log('linkField is set to ' + fieldVal);
     });
@@ -42,60 +35,61 @@ $(document).ready(() => {
     });
 
     //populate claim and link from storage
-    // console.log("Persist store: " + );
-    var delay = 1000;
-    $("button").click(function() {
-        var $btn = $(this);
-        $btn.button('loading');
-        // simulating a timeout
-        setTimeout(function () {
-            $btn.button('reset');
-        }, delay);
-    });
 
     $('#linxerForm').on('submit', (event) => {
+        var $btn = $("button");
+        $btn.button('loading');
+
+        $('#formClaimInput').attr('readonly', true);
+        $('#formLinkInput').attr('readonly', true);
+
         event.preventDefault();
         data = {
             claim: event.target["0"].value,
             link: event.target["1"].value
         };
         sendToServer(data); //perform some operations
+
+        var delay = 180000; // 3 minute timeout
+        this.setTimeout(function () {
+            $("body").html(`<div id="results" class="container-fluid main">
+            <h2 id="title" style="font-family: Book Antiqua">Error</h1>
+            </div>`);
+
+            $('#results').append(`
+                <div class="error">
+                    <p class="result-text" style="color:#8b0000">${"Error 504: Gateway Timeout"}</p>
+                </div>
+            `);
+
+            ajax.abort();
+
+        }, delay);
     });
 })
 
+function serverOffline() {
+    $("body").html(`<div id="results" class="container-fluid main">
+                    <h2 id="title" style="font-family: Book Antiqua">Error</h1>
+                    </div>`);
+
+    $('#results').append(`
+        <div class="error">
+            <p class="result-text" style="color:#8b0000">${"Error 503: Cannot Connect to Server"}</p>
+        </div>
+    `);
+}
+
+
 function sendToServer(data) {
-    $.ajax({
+    ajax = $.ajax({
         type: "POST",
         url: url, // where the post request gets sent to (backend server address)
         success: dataReceived, // callback function on success
+        error: serverOffline, // function if failed to connect to server
         contentType: "application/json", // exprected data type of the returned data
         data: JSON.stringify(data) // send the data json as a string
     });
-
-    /*http.get({
-        host: host, 
-        port: port,
-        path: path 
-      }, function(res) {
-        $.ajax({
-            type: "POST",
-            url: url, // where the post request gets sent to (backend server address)
-            success: dataReceived, // callback function on success
-            contentType: "application/json", // exprected data type of the returned data
-            data: JSON.stringify(data) // send the data json as a string
-        })
-
-      }).on("error", function(e) {
-        $("body").html(`<div id="results" class="container-fluid main">
-                        <h2 id="title" style="font-family: Book Antiqua">Error</h1>
-                        </div>`);
-
-        $('#results').append(`
-            <div class="error">
-                <p class="result-text" style="color:#8b0000">${"Error 503: Unable to contect to server"}</p>
-            </div>
-        `);
-      });*/
 }
 
 function dataReceived(data) {
@@ -139,7 +133,4 @@ function dataReceived(data) {
         chrome.tabs.create({ url: $(this).attr('href') });
         return false;
     });
-
-    // window.location.href="test.html";
-    // chrome.browserAction.setPopup({popup: "test.html"});
 }

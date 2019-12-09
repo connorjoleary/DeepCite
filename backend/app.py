@@ -2,7 +2,7 @@ from flask import Flask, jsonify
 from flask import request
 import json
 from tree import Tree
-from controller import Claim
+from controller import Claim, html_link, new_indention
 import exceptions as errors
 app = Flask(__name__)
 
@@ -13,8 +13,11 @@ exceptions = [errors.MalformedLink, errors.URLError, errors.EmptyWebsite, errors
 def deep_cite():
     content = request.get_json()
 
-    claim = sanitize_claim(content['claim'])
-    link = sanitize_link(content['link'])
+    try:
+        claim = sanitize_claim(content['claim'])
+        link = sanitize_link(content['link'])
+    except Exception as e:
+        return jsonify({'error': 'Error 505: HTTP Verison Not Supported, hacker' })
 
     full_pre_json = {'error': 'none'}
 
@@ -26,7 +29,9 @@ def deep_cite():
         if check_instance(e):
             full_pre_json['error'] = str(e)
         else:
-            full_pre_json['error'] = str('Internal Server Error 500 ' + str(e))
+            link = html_link('https://github.com/root1337/DeepCite/issues')
+            full_pre_json['error'] = str('Error 500: Internal Server Error ' + str(e) + "."  + \
+                        new_indention("Please add your error to " + link + " with the corresponding claim and link."))
     
     return jsonify(full_pre_json)
 
