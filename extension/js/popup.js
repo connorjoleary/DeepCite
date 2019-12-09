@@ -1,6 +1,7 @@
 const url = "http://18.223.108.40:5000/api/v1/deep_cite";
 //const url = "http://localhost:5000/api/v1/deep_cite";
 var ajax = null;
+var timeout = null;
 
 function handleClaimChange(e) {
     const fieldVal = document.getElementById(e.srcElement.id).value;
@@ -51,7 +52,8 @@ $(document).ready(() => {
         sendToServer(data); //perform some operations
 
         var delay = 180000; // 3 minute timeout
-        this.setTimeout(function () {
+        //var delay = 5000;
+        timeout = this.setTimeout(function () {
             $("body").html(`<div id="results" class="container-fluid main">
             <h2 id="title" style="font-family: Book Antiqua">Error</h1>
             </div>`);
@@ -69,6 +71,7 @@ $(document).ready(() => {
 })
 
 function serverOffline() {
+    clearTimeout(timeout)
     $("body").html(`<div id="results" class="container-fluid main">
                     <h2 id="title" style="font-family: Book Antiqua">Error</h1>
                     </div>`);
@@ -93,6 +96,9 @@ function sendToServer(data) {
 }
 
 function dataReceived(data) {
+
+    // cancel timeout
+    clearTimeout(timeout)
 
     //prints errors:
     if(data.error) {
