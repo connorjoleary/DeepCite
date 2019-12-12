@@ -21,17 +21,16 @@ CS506 Project
 7. To emulate backend returning results, follow instructions in the readme within DeepCite/test-server
 
 
-## Installation
-Installations and downloads required before setting up the server
+## Installation for Server
+Installations and downloads required before server can funciton properly
 
 ### Downloads
   * Google News vector space https://code.google.com/archive/p/word2vec/ -- in DeepCite/backend/word_vectors
   * Chrome driver https://sites.google.com/a/chromium.org/chromedriver/home -- in DeepCite/backend, check compatibility 
 
 
-### Installs
+### Installs:
 
-#### For Server:
 * `pip install beautifulsoup4`
 * `pip install selenium`
 * `pip install requests`
