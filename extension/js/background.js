@@ -1,11 +1,5 @@
 // adds DeepCite to right click context menu
 chrome.runtime.onInstalled.addListener(function () {
-    chrome.contextMenus.create({
-        title: 'DeepCite for "%s"',
-        contexts: ['selection'],
-        onclick: populateClaim
-    });
-
 
     chrome.storage.local.set({ 'claimField': "" }, function () {
         console.log('Initialized claimField');
@@ -18,6 +12,16 @@ chrome.runtime.onInstalled.addListener(function () {
     });
     chrome.storage.local.set({'lastData': "0"}, ()=>{
         console.log('Initialized previous data variable');
+    });
+
+    chrome.contextMenus.create({
+        title: `Send claim to DeepCite: "%s"`, 
+        contexts:["selection"], 
+        onclick: function(info, tab) {
+            chrome.storage.local.set({ 'claimField': info.selectionText }, function () {
+                console.log('Populated claimField');
+            });
+        }
     });
 });
 
