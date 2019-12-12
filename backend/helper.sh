@@ -21,5 +21,5 @@ curl -d '{"claim":"claim", "link":"https://www.google.com/hello_world"}' -H "Con
 sleep 10
 # claim is not in website
 curl -d '{"claim":"The chicken man exists", "link":"https://en.wikipedia.org/wiki/Hubert_Schmundt"}' -H "Content-Type: application/json" -X POST http://127.0.0.1:5000/api/v1/deep_cite
-sleep 10\
+sleep 10
 ps -ef | grep app.py | grep -v grep | awk '{print $2}' | xargs kill -15
