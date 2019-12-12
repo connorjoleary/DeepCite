@@ -21,19 +21,34 @@ function handleLinkChange(e) {
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelector('#formClaimInput').addEventListener('change', handleClaimChange);
     document.querySelector('#formLinkInput').addEventListener('change', handleLinkChange);
+    document.querySelector('#formClaimInput').addEventListener('paste', handleClaimChange);
+    document.querySelector('#formLinkInput').addEventListener('paste', handleLinkChange);
 });
 
 
 $(document).ready(() => {
+    chrome.storage.local.get(['state'], function(result){
+        let state = result.state;
+        console.log(state);
 
-    chrome.storage.local.get(['claimField'], function (result) {
-        console.log('Value currently is ' + result.claimField);
-        document.getElementById("formClaimInput").value = result.claimField;
+        if (state == 0){
+            chrome.storage.local.get(['claimField'], function (result) {
+                console.log('Value currently is ' + result.claimField);
+                document.getElementById("formClaimInput").value = result.claimField;
+            });
+            chrome.storage.local.get(['linkField'], function (result) {
+                console.log('Value currently is ' + result.linkField);
+                document.getElementById("formLinkInput").value = result.linkField;
+            });
+        }else if (state == 1){
+            chrome.storage.local.get(['lastData'], function(result){
+                dataReceived(result.lastData);
+            })
+        }
     });
-    chrome.storage.local.get(['linkField'], function (result) {
-        console.log('Value currently is ' + result.linkField);
-        document.getElementById("formLinkInput").value = result.linkField;
-    });
+
+
+    
 
     //populate claim and link from storage
 
@@ -97,6 +112,13 @@ function sendToServer(data) {
 
 function dataReceived(data) {
 
+    chrome.storage.local.set({'lastData': data}, ()=>{
+        console.log('Initialized previous data variable');
+    });
+    chrome.storage.local.set({ 'state': 1},  function(){
+        console.log('Data received');
+    });
+
     // cancel timeout
     clearTimeout(timeout)
 
@@ -118,7 +140,7 @@ function dataReceived(data) {
         // update popup with results
         console.log("Received: ", data);
         $("body").html(`<div id="results" class="container-fluid main">
-                        <h2 id="title" style="font-family: Book Antiqua">Citation List</h1>
+                        <h2 id="title" style="font-family: Book Antiqua">Citation List</h2>
                         </div>`);
         
         //for each item in data returned:
@@ -133,10 +155,28 @@ function dataReceived(data) {
 
     }
 
+    $("#results").append(`
+    </br>
+    <button class="btn btn-info btn-block" id="btnback" style="background-color: #7C77B9; border-color: #7C77B9; color:#EBF5EE">New Citation</button>
+    `);
+
 
     //makes anchor tags open in new tab
     $('body').on('click', 'a', function () {
         chrome.tabs.create({ url: $(this).attr('href') });
         return false;
     });
+    $('#btnback').on('click', function(){
+        chrome.storage.local.set({ 'claimField': "" }, function () {
+            console.log('Initialized claimField');
+        });
+        chrome.storage.local.set({ 'linkField': "" }, function () {
+            console.log('Initialized linkField');
+        });
+        chrome.storage.local.set({ 'state': 0},  function(){
+            console.log('Initialized extention state');
+        });
+
+        chrome.runtime.reload();
+    })
 }
