@@ -40,15 +40,20 @@ body {
   background: #ffffff99;
   font-size: 16px;
   padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 5px;
+  padding-top: 5px;
   margin-bottom: 5px;
+  margin-top: 5px;
   border-radius: 5px;
   overflow-wrap: break-word;
+
 }
 
 .result-text{
   font-style: italic;
   font-weight: bold;
-  color: #985F6F
+  color: #395060;
 }
 
 textarea {
