@@ -77,7 +77,7 @@ def test_structure():
 
 if "__main__":
     test_controller()
-    #test_accuracy()
-    #test_structure()
+    test_accuracy()
+    test_structure()
 
 
