@@ -140,7 +140,8 @@ function dataReceived(data) {
         // update popup with results
         console.log("Received: ", data);
         $("body").html(`<div id="results" class="container-fluid main">
-                        <h2 id="title" style="font-family: Book Antiqua">Citation List</h2>
+                        <h2 id="title" style="font-family: Book Antiqua; display:inline-block; margin-right:10px; width:200px; ">Citation List</h2>
+                        <button class="btn btn-info btn-block" id="btnback" style="background-color: #7C77B9; border-color: #7C77B9; color:#EBF5EE; display:inline-block; margin-top:15px; width:100px; float:right;"">New Citation</button>
                         </div>`);
         
         //for each item in data returned:
@@ -154,11 +155,6 @@ function dataReceived(data) {
         });
 
     }
-
-    $("#results").append(`
-    </br>
-    <button class="btn btn-info btn-block" id="btnback" style="background-color: #7C77B9; border-color: #7C77B9; color:#EBF5EE">New Citation</button>
-    `);
 
 
     //makes anchor tags open in new tab
