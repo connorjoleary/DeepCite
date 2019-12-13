@@ -1,5 +1,6 @@
 const url = "http://18.223.108.40:5000/api/v1/deep_cite";
 //const url = "http://localhost:5000/api/v1/deep_cite";
+//const url = "http://localhost:5000/";
 var ajax = null;
 var timeout = null;
 
@@ -21,19 +22,34 @@ function handleLinkChange(e) {
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelector('#formClaimInput').addEventListener('change', handleClaimChange);
     document.querySelector('#formLinkInput').addEventListener('change', handleLinkChange);
+    document.querySelector('#formClaimInput').addEventListener('paste', handleClaimChange);
+    document.querySelector('#formLinkInput').addEventListener('paste', handleLinkChange);
 });
 
 
 $(document).ready(() => {
+    chrome.storage.local.get(['state'], function(result){
+        let state = result.state;
+        console.log(state);
 
-    chrome.storage.local.get(['claimField'], function (result) {
-        console.log('Value currently is ' + result.claimField);
-        document.getElementById("formClaimInput").value = result.claimField;
+        if (state == 0){
+            chrome.storage.local.get(['claimField'], function (result) {
+                console.log('Value currently is ' + result.claimField);
+                document.getElementById("formClaimInput").value = result.claimField;
+            });
+            chrome.storage.local.get(['linkField'], function (result) {
+                console.log('Value currently is ' + result.linkField);
+                document.getElementById("formLinkInput").value = result.linkField;
+            });
+        }else if (state == 1){
+            chrome.storage.local.get(['lastData'], function(result){
+                dataReceived(result.lastData);
+            })
+        }
     });
-    chrome.storage.local.get(['linkField'], function (result) {
-        console.log('Value currently is ' + result.linkField);
-        document.getElementById("formLinkInput").value = result.linkField;
-    });
+
+
+    
 
     //populate claim and link from storage
 
@@ -44,11 +60,22 @@ $(document).ready(() => {
         $('#formClaimInput').attr('readonly', true);
         $('#formLinkInput').attr('readonly', true);
 
+        
+
+        chrome.tabs.query({
+            'active': true,
+            'lastFocusedWindow': true
+        }, function (tabs) {
+            var url = tabs[0].url;
+        });
+
         event.preventDefault();
         data = {
             claim: event.target["0"].value,
-            link: event.target["1"].value
+            link: event.target["1"].value,
+            current: url
         };
+        console.log(JSON.stringify(data));
         sendToServer(data); //perform some operations
 
         var delay = 180000; // 3 minute timeout
@@ -97,6 +124,13 @@ function sendToServer(data) {
 
 function dataReceived(data) {
 
+    chrome.storage.local.set({'lastData': data}, ()=>{
+        console.log('Initialized previous data variable');
+    });
+    chrome.storage.local.set({ 'state': 1},  function(){
+        console.log('Data received');
+    });
+
     // cancel timeout
     clearTimeout(timeout)
 
@@ -118,7 +152,8 @@ function dataReceived(data) {
         // update popup with results
         console.log("Received: ", data);
         $("body").html(`<div id="results" class="container-fluid main">
-                        <h2 id="title" style="font-family: Book Antiqua">Citation List</h1>
+                        <h2 id="title" style="font-family: Book Antiqua; display:inline-block; margin-right:10px; width:200px; ">Citation List</h2>
+                        <button class="btn btn-info btn-block" id="btnback" style="background-color: #7C77B9; border-color: #7C77B9; color:#EBF5EE; display:inline-block; margin-top:15px; width:100px; float:right;"">New Citation</button>
                         </div>`);
         
         //for each item in data returned:
@@ -139,4 +174,17 @@ function dataReceived(data) {
         chrome.tabs.create({ url: $(this).attr('href') });
         return false;
     });
+    $('#btnback').on('click', function(){
+        chrome.storage.local.set({ 'claimField': "" }, function () {
+            console.log('Initialized claimField');
+        });
+        chrome.storage.local.set({ 'linkField': "" }, function () {
+            console.log('Initialized linkField');
+        });
+        chrome.storage.local.set({ 'state': 0},  function(){
+            console.log('Initialized extention state');
+        });
+
+        chrome.runtime.reload();
+    })
 }
