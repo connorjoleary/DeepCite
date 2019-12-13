@@ -59,7 +59,8 @@ class Tree:
         
     def get_best_path(self):
         best_path = self.queue.get()
-        nodes = [claim.to_claim_link_dict() for claim in best_path.claims]        
+        # nodes = [claim.to_claim_link_dict() for claim in best_path.claims]   
+        nodes = [claim.to_claim_parent_link_dict() for claim in best_path.claims]        
         
         return nodes
 

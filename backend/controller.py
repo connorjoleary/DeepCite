@@ -67,6 +67,17 @@ class Claim:
         cl_dict['score'] = self.score
         return cl_dict
 
+    # this changes what link is associated with what claim,
+    # making the frontend look nicer
+    def to_claim_parent_link_dict(self):
+        cl_dict = {}
+        cl_dict['source'] = self.text
+        if (self.parent != None):
+            cl_dict['link'] = self.parent.href
+        else:
+            cl_dict['link'] = ""
+        cl_dict['score'] = self.score
+        return cl_dict
     
     def excep_handle(self):
         if self.parent != None:
@@ -94,6 +105,7 @@ class Claim:
     def get_p_tags(self, response):
 
         # dynamic html
+        # commented out for testing
         op = webdriver.ChromeOptions()
         op.add_argument('headless')
         driver = webdriver.Chrome(executable_path= CWD_FOLDER + '/chromedriver.exe',options=op)
@@ -105,6 +117,7 @@ class Claim:
         soup = BeautifulSoup(response.text, 'html.parser')
         static = soup.findAll('p')
 
+        # commented out for testing
         if len(static) < len(dynamic):
             return dynamic
 
