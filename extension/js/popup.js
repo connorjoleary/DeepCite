@@ -1,5 +1,6 @@
 const url = "http://18.223.108.40:5000/api/v1/deep_cite";
 //const url = "http://localhost:5000/api/v1/deep_cite";
+//const url = "http://localhost:5000/";
 var ajax = null;
 var timeout = null;
 
@@ -59,11 +60,22 @@ $(document).ready(() => {
         $('#formClaimInput').attr('readonly', true);
         $('#formLinkInput').attr('readonly', true);
 
+        
+
+        chrome.tabs.query({
+            'active': true,
+            'lastFocusedWindow': true
+        }, function (tabs) {
+            var url = tabs[0].url;
+        });
+
         event.preventDefault();
         data = {
             claim: event.target["0"].value,
-            link: event.target["1"].value
+            link: event.target["1"].value,
+            current: url
         };
+        console.log(JSON.stringify(data));
         sendToServer(data); //perform some operations
 
         var delay = 180000; // 3 minute timeout

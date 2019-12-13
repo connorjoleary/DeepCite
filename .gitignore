@@ -6,4 +6,5 @@ backend/nlp/.coverage
 backend/nlp/vector.py
 backend/word_vectors/GoogleNews-vectors-negative300.bin
 backend/.coverage
+backend/chromedriver.exe
 .coverage
