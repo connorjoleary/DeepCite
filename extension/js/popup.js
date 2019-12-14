@@ -97,6 +97,10 @@ $(document).ready(() => {
 
             ajax.abort();
 
+            chrome.storage.local.set({ 'state': 0},  function(){
+                console.log('Initialized extention state');
+            });
+
         }, delay);
     });
 })
@@ -112,6 +116,9 @@ function serverOffline() {
             <p class="result-text" style="color:#8b0000">${"Error 503: Cannot Connect to Server"}</p>
         </div>
     `);
+    chrome.storage.local.set({ 'state': 0},  function(){
+        console.log('Initialized extention state');
+    });
 }
 
 
@@ -150,6 +157,9 @@ function dataReceived(data) {
                 <p class="result-text" style="color:#8b0000">${data.error}</p>
             </div>
         `);
+        chrome.storage.local.set({ 'state': 0},  function(){
+            console.log('Initialized extention state');
+        });
     }
     else{ 
 
