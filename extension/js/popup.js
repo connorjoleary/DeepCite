@@ -155,11 +155,9 @@ function dataReceived(data) {
         $('#results').append(`
             <div class="error">
                 <p class="result-text" style="color:#8b0000">${data.error}</p>
+                <button class="btn btn-info btn-block" id="btnback" style="background-color: #7C77B9; border-color: #7C77B9; color:#EBF5EE; margin-top:15px;">New Citation</button>
             </div>
         `);
-        chrome.storage.local.set({ 'state': 0},  function(){
-            console.log('Initialized extention state');
-        });
     }
     else{ 
 
