@@ -54,6 +54,8 @@ Installations and downloads required before server can funciton properly
   * Follow the readme in that folder for its instructions
 
 ### System Testing
+* To run a local server testing bash shell script:
+* python -m spacy download en_core_web_sm
 * run `pip install coverage`
 * In DeepCite/backend, run run_tests.sh 
 
