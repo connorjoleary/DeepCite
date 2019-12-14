@@ -1,4 +1,4 @@
-// custom.css - this will contain all our custom css styles.
+/* custom.css - this will contain all our custom css styles. */
 body {
   font-size: 100%;
   font-weight: italic;
@@ -7,8 +7,8 @@ body {
 .main {
   font-family: 'Alfa Slab One', 'Anton', sans-serif;
   overflow: hidden;
-  width: 350px;
-  max-height: 600px;
+  width: 400px;
+  /* max-height: 800px; */
   overflow:auto;
   margin: 0px;
   padding: 15px;

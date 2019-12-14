@@ -66,14 +66,18 @@ $(document).ready(() => {
             'active': true,
             'lastFocusedWindow': true
         }, function (tabs) {
-            var url = tabs[0].url;
+            chrome.storage.local.set({
+                'claimsrc': tabs[0].url
+            }, () => {
+                console.log('Setting claim source');
+            });
+            console.log(tabs[0].url);
         });
 
         event.preventDefault();
         data = {
             claim: event.target["0"].value,
-            link: event.target["1"].value,
-            current: url
+            link: event.target["1"].value
         };
         console.log(JSON.stringify(data));
         sendToServer(data); //perform some operations
@@ -157,13 +161,25 @@ function dataReceived(data) {
                         </div>`);
         
         //for each item in data returned:
-        data.results.forEach(result => {
+        data.results.forEach((result, i) => {
+            if (i == 0){
+                $("#results").append(`
+                    <h5>Original Claim</h5>
+                `)
+            }
+            if (i == 1){
+                $("#results").append(`
+                    <h5 style='margin-top: 17px;'>We Found</h5>
+                `)
+            }
+
             $("#results").append(`
             <div class="result">
                 <p class="result-text">"${result.source}"</p>
                 <a href="${result.link}" class="card-link"><b>${result.link}</b></a>
             </div>
             `);
+
         });
 
     }
