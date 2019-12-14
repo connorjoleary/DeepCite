@@ -163,23 +163,23 @@ function dataReceived(data) {
         //for each item in data returned:
         data.results.forEach((result, i) => {
 
-            if(i == 0){
+            // if(i == 0){
+            //     $("#results").append(`
+            //     <h5 style="font-family: Book Antiqua>You Entered</h5>
+            //     <div class="result">
+            //         <p class="result-text">"${result.source}"</p>
+            //         <a href="${result.link}" class="card-link"><b>${result.link}</b></a>
+            //     </div>
+            //     <h5 style="font-family: Book Antiqua>We Found</h5>
+            //     `);
+            // }else{
                 $("#results").append(`
-                <h5 style="font-family: Book Antiqua>You Entered</h5>
                 <div class="result">
                     <p class="result-text">"${result.source}"</p>
                     <a href="${result.link}" class="card-link"><b>${result.link}</b></a>
                 </div>
-                <h5 style="font-family: Book Antiqua>We Found</h5>
                 `);
-            }else{
-                $("#results").append(`
-                <div class="result">
-                    <p class="result-text">"${result.source}"</p>
-                    <a href="${result.link}" class="card-link"><b>${result.link}</b></a>
-                </div>
-                `);
-            }
+            // }
 
         });
 
