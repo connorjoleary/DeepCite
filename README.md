@@ -71,6 +71,8 @@ Installations and downloads required before server can funciton properly
 ## Bugs
 * Server is down due to money
 * Server cannot handle two requests at the same time
+* App.py has a memory leak and needs to be restarted every so often
+* Server runs out of hard drive space for temp files in Chromium and needs to be rebooted every so often
 
 ## Authors
 Shourya Goel, Jiayi Hu, Vinay Janardhanam, Dillion O'Leary, Noah SickLick, and Catherine Yan
