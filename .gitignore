@@ -8,3 +8,8 @@ backend/word_vectors/GoogleNews-vectors-negative300.bin
 backend/.coverage
 backend/chromedriver.exe
 .coverage
+.sources/
+v-env/
+__pycache__/
+.vscode/
+.vscode/

@@ -1,23 +1,21 @@
-from flask import Flask, jsonify
-from flask import request
 import json
 from tree import Tree
 from controller import Claim, html_link, new_indention
 import exceptions as errors
-app = Flask(__name__)
 
 
 exceptions = [errors.MalformedLink, errors.URLError, errors.EmptyWebsite, errors.ClaimNotInLink, errors.InvalidInput]
 
-@app.route('/api/v1/deep_cite', methods=['GET', 'POST'])
-def deep_cite():
-    content = request.get_json()
+def deep_cite(request):
+    content = request
 
     try:
         claim = sanitize_claim(content['claim'])
         link = sanitize_link(content['link'])
     except Exception as e:
-        return jsonify({'error': 'Error 505: HTTP Verison Not Supported, hacker' })
+        print(e)
+        print('Error 505: HTTP Verison Not Supported, hacker')
+        return {'error': 'Error 505: HTTP Verison Not Supported, hacker' }
 
     full_pre_json = {'error': 'none'}
 
@@ -32,8 +30,8 @@ def deep_cite():
             link = html_link('https://github.com/root1337/DeepCite/issues')
             full_pre_json['error'] = str('Error 500: Internal Server Error ' + str(e) + "."  + \
                         new_indention("Please add your error to " + link + " with the corresponding claim and link."))
-    
-    return jsonify(full_pre_json)
+    print(full_pre_json)
+    return full_pre_json
 
 def check_instance(e):
     for error in exceptions:
@@ -64,4 +62,6 @@ def sanitize_link(link):
     return sanitized.strip()
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+    url = "https://www.nature.com/articles/1704715"
+    claim = "After transplantation, it has been of central interest whether the newly developed hematopoietic system is of recipient or donor origin."
+    deep_cite({'link': url, 'claim': claim})
