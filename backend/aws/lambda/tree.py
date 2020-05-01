@@ -63,7 +63,3 @@ class Tree:
         nodes = [claim.to_claim_parent_link_dict() for claim in best_path.claims]        
         
         return nodes
-
-
-
-
