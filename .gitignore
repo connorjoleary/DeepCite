@@ -12,3 +12,4 @@ backend/chromedriver.exe
 v-env/
 __pycache__/
 .vscode/
+*.zip

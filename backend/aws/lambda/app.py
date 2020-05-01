@@ -6,8 +6,8 @@ import exceptions as errors
 
 exceptions = [errors.MalformedLink, errors.URLError, errors.EmptyWebsite, errors.ClaimNotInLink, errors.InvalidInput]
 
-def deep_cite(request):
-    content = request
+def deep_cite(event, context):
+    content = event
 
     try:
         claim = sanitize_claim(content['claim'])
