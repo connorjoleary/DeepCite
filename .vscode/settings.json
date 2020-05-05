@@ -1,4 +1,5 @@
 {
-    "python.pythonPath": "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\Python36_64\\python.exe",
-    "python.linting.enabled": false
+    "python.pythonPath": "backend/aws/model/v-env/bin/python",
+    "python.linting.enabled": false,
+    "git.autofetch": true
 }

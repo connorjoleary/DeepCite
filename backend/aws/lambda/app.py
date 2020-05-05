@@ -64,4 +64,4 @@ def sanitize_link(link):
 if __name__ == "__main__":
     url = "https://www.nature.com/articles/1704715"
     claim = "After transplantation, it has been of central interest whether the newly developed hematopoietic system is of recipient or donor origin."
-    deep_cite({'link': url, 'claim': claim})
+    deep_cite({'link': url, 'claim': claim}, '')
