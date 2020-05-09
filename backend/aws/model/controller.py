@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 import exceptions as error
 import requests
-# import tokenizer
+import tokenizer
 from wiki_scraper import wiki
 import sys
 import io
@@ -127,7 +127,7 @@ class Claim:
 
     # calls tokenizer and gets potential sources to claim
     def set_cand(self, ref2text):
-        cand = [['', 'Summary:', 1]]# tokenizer.predict(self.text, list(ref2text.keys()), 3)
+        cand = tokenizer.predict(self.text, list(ref2text.keys()), 3)
         texts = [] 
         scores = []
         for text in cand:
@@ -141,12 +141,12 @@ class Claim:
         # iterates through texts to check if there is a link associtated with text
         for i, words in enumerate(self.cand):
             try:
-                if ref2text[words] != "" and self.height < Claim.maxheight:
+                if ref2text[words] != "" and self.height < Claim.maxheight: # if there is no link and the tree can get bigger
                     self.child.append(Claim(ref2text[words], words, scores[i], (self.height +1), self))
                 elif self.height < Claim.maxheight:
                     self.child.append(Claim("", words, scores[i], (self.height +1), self))
 
-            # tokenizer returned a sentence            
+            # tokenizer returned a sentence
             except KeyError:
                 ref_key = ""
                 # looks for paragraph that the sentence is in 
@@ -228,7 +228,7 @@ class Claim:
         # get tokenizer values
         scores = self.set_cand(ref2text)
         if self.parent == None:
-            if scores[0] <= .67:
+            if scores[0] <= .67: #TODO specify this number
                 raise error.ClaimNotInLink('Unable to find \"' + self.text + '\" in ' + html_link(self.href))
         # creates leaf node or children
         self.create_children(ref2text, scores)
