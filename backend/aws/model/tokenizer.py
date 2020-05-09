@@ -6,9 +6,13 @@ from spacy.tokenizer import Tokenizer
 import queue as q
 import os
 
+from flask import Flask, request, jsonify
+from redis import Redis, RedisError
+
+app = Flask(__name__)
 CWD_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
-gn_path = r'word_vectors/GoogleNews-vectors-negative300.bin'
+gn_path = r'word_vectors/GoogleNews-vectors-negative300.bin' #TODO compair this to spacy
 gn_model = KeyedVectors.load_word2vec_format(gn_path, binary=True)
 nlp = spacy.blank('en')
 nlp.vocab.vectors = spacy.vocab.Vectors(data=gn_model.vectors, keys=gn_model.index2word)
@@ -80,7 +84,10 @@ def sentence_parsing(text):
 # claim - the claim for comparison
 # text - the text of the article, preferably paragraph by paragraph
 # k - num similarities to be returned
+@app.route('/api/v1/deep_cite', methods=['GET', 'POST'])
 def predict(claim, text, k) :
+    content = request.get_json()
+
 
     queue = q.PriorityQueue()
 
@@ -125,7 +132,8 @@ def predict(claim, text, k) :
         if best_paragraph == -10 and best_sentence == -10:
             break
 
-    return predict
+    return jsonify(predict)
 
-
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=80)
 
