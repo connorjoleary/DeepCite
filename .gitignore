@@ -6,4 +6,4 @@ v-env/
 __pycache__/
 .vscode/
 *.zip
-word_vectors/*
+word_vectors/
