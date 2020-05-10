@@ -1,6 +1,6 @@
 FROM python:3.8
 
-#TODO add all files with exclude
+#TODO add all files with .dockerignore
 COPY app.py app.py
 COPY claim.py claim.py
 COPY controller.py controller.py
