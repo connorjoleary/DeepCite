@@ -10,8 +10,15 @@ app = Flask(__name__)
 
 exceptions = [errors.MalformedLink, errors.URLError, errors.EmptyWebsite, errors.ClaimNotInLink, errors.InvalidInput]
 
-@app.route('/api/v1/deep_cite', methods=['GET', 'POST'])
-def deep_cite(content):
+@app.route('/ping', methods=['GET'])
+def ping():
+    health = True #TODO make this better
+
+    status = 200 if health else 404
+    return flask.Response(response='\n', status=status, mimetype='application/json')
+
+@app.route('/invocations', methods=['POST'])
+def deep_cite():
     content = request.get_json()
 # def deep_cite(content):
 

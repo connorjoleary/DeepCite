@@ -1,36 +1,16 @@
 import boto3
 
 def handler(event, context):
-    client = boto3.client('ecs')
+    client = boto3.client('runtime.sagemaker')
+    print("Received event: " + json.dumps(event, indent=2))
+    
+    data = json.loads(json.dumps(event))
+    payload = data['data']
+    print(payload)
 
-    claim = event['claim']
-    link = event['link']
-
-    params = {'taskDefinition': 'deepcite',
-            'cluster': 'arn:aws:ecs:us-east-2:072491736148:cluster/deepcite',
-            'launchType': 'FARGATE',
-            'networkConfiguration':
-                {'awsvpcConfiguration': 
-                    {'subnets': [
-                        'subnet-05452e5640c015db2',
-                    ],
-                    'securityGroups': [
-                        'sg-0d1b015575624679e',
-                    ],
-                    'assignPublicIp': 'DISABLED'}
-            },
-            'overrides':
-                {'containerOverrides': [
-                    {'name': 'deepcite', 'environment': [
-                            {'name': 'claim', 'value': claim
-                            },
-                            {'name': 'link', 'value': link
-                            }
-                        ]
-                    }
-                ]
-            }
-        }
+    response = runtime.invoke_endpoint(EndpointName=ENDPOINT_NAME,
+                                       ContentType='text/csv',
+                                       Body=payload)
 
     print(client.list_clusters())
     print()
