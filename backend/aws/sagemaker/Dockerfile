@@ -7,9 +7,10 @@ FROM ubuntu:18.04
 MAINTAINER Connor OLeary <connor.trumpet@gmail.com>
 
 
-RUN apt-get -y update && apt-get install -y --no-install-recommends \
-         wget \
-         python3.8 \
+RUN apt-get -y update && apt-get install -y \
+         gunicorn3 \
+         python3-pip \
+        #  python3-dev \
          nginx \
          ca-certificates \
     && rm -rf /var/lib/apt/lists/*
@@ -20,11 +21,8 @@ RUN apt-get -y update && apt-get install -y --no-install-recommends \
 # a significant amount of space. These optimizations save a fair amount of space in the
 # image, which reduces start up time.
 COPY requirements.txt requirements.txt
-RUN apt-get install python3-distutils
-RUN wget https://bootstrap.pypa.io/get-pip.py && python3.8 get-pip.py && \
-    pip3 install --no-cache-dir -r requirements.txt && \
-        (cd /usr/local/lib/python3.8/dist-packages/scipy/.libs; rm *; ln ../../numpy/.libs/* .) && \
-        rm -rf /root/.cache
+RUN pip3 install --no-cache-dir -r requirements.txt
+RUN rm -rf /root/.cache
 
 # Set some environment variables. PYTHONUNBUFFERED keeps Python from buffering our standard
 # output stream, which means that logs can be delivered to the user quickly. PYTHONDONTWRITEBYTECODE
@@ -38,3 +36,5 @@ ENV PATH="/opt/program:${PATH}"
 # Set up the program in the image
 COPY model /opt/program
 WORKDIR /opt/program
+
+CMD ["gunicorn3", "-b", "0.0.0.0:8000", "app:app", "--workers=5"]

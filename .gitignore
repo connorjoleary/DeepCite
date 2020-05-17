@@ -8,3 +8,4 @@ __pycache__/
 *.zip
 word_vectors/
 see_json.json
+*.pem

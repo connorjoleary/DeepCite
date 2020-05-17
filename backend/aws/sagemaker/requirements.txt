@@ -2,7 +2,7 @@ spacy==2.2.4
 gensim==3.8.3
 flask==1.1.2
 redis==3.5.0
-bs4==4.9.0
+beautifulsoup4==4.9.0
 selenium==3.141.0
 pandas==1.0.3
 gevent==20.5.0
