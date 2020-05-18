@@ -141,7 +141,7 @@ class Claim:
         # iterates through texts to check if there is a link associtated with text
         for i, words in enumerate(self.cand):
             try:
-                if ref2text[words] != "" and self.height < Claim.maxheight:
+                if ref2text[words] != "" and self.height < Claim.maxheight:  # if there is no link and the tree can get bigger
                     self.child.append(Claim(ref2text[words], words, scores[i], (self.height +1), self))
                 elif self.height < Claim.maxheight:
                     self.child.append(Claim("", words, scores[i], (self.height +1), self))
@@ -228,7 +228,7 @@ class Claim:
         # get tokenizer values
         scores = self.set_cand(ref2text)
         if self.parent == None:
-            if scores[0] <= .67:
+            if scores[0] <= .67: #TODO specify this number
                 raise error.ClaimNotInLink('Unable to find \"' + self.text + '\" in ' + html_link(self.href))
         # creates leaf node or children
         self.create_children(ref2text, scores)

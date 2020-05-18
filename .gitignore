@@ -1,11 +1,4 @@
 node_modules/
-backend/nlp/word_vectors/GoogleNews-vectors-negative300.bin
-backend/nlp/__pycache__
-backend/__pycache__
-backend/nlp/.coverage
-backend/nlp/vector.py
-backend/word_vectors/GoogleNews-vectors-negative300.bin
-backend/.coverage
 backend/chromedriver.exe
 .coverage
 .sources/
@@ -13,3 +6,6 @@ v-env/
 __pycache__/
 .vscode/
 *.zip
+word_vectors/
+see_json.json
+*.pem 

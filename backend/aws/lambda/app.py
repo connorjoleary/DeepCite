@@ -27,7 +27,7 @@ def deep_cite(event, context):
         if check_instance(e):
             full_pre_json['error'] = str(e)
         else:
-            link = html_link('https://github.com/root1337/DeepCite/issues')
+            link = html_link('https://github.com/connorjoleary/DeepCite/issues')
             full_pre_json['error'] = str('Error 500: Internal Server Error ' + str(e) + "."  + \
                         new_indention("Please add your error to " + link + " with the corresponding claim and link."))
     print(full_pre_json)

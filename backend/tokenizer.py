@@ -105,12 +105,12 @@ def predict(claim, text, k) :
         sentence_queue.put(Paragraph(num, doc1.similarity(doc3)))
     
     
-
+# TODO what if the paragraph and sentence overlap
     predict = []
     best_paragraph = queue.get()
     best_sentence = sentence_queue.get()
     for i in range(k):
-        if best_paragraph.similarity > best_sentence.similarity :
+        if best_paragraph.similarity > best_sentence.similarity : #TODO why is the cuttof not here
             predict.append((claim, text[best_paragraph.index], best_paragraph.similarity))
             if queue.not_empty:
                 best_paragraph = queue.get()
