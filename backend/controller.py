@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 import exceptions as error
 import requests
-# import tokenizer
+import tokenizer
 from wiki_scraper import wiki
 import sys
 import io
@@ -112,7 +112,6 @@ class Claim:
         # driver.get(self.href)  
         # js_soup = BeautifulSoup(driver.page_source, "html.parser")
         # dynamic = js_soup.findAll('p')
-        dynamic = []
 
         # static html
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -127,7 +126,7 @@ class Claim:
 
     # calls tokenizer and gets potential sources to claim
     def set_cand(self, ref2text):
-        cand = [['', 'Summary:', 1]]# tokenizer.predict(self.text, list(ref2text.keys()), 3)
+        cand = tokenizer.predict(self.text, list(ref2text.keys()), 3)
         texts = [] 
         scores = []
         for text in cand:
