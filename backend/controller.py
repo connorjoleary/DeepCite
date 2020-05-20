@@ -118,8 +118,8 @@ class Claim:
         static = soup.findAll('p')
 
         # commented out for testing
-        if len(static) < len(dynamic):
-            return dynamic
+        # if len(static) < len(dynamic):
+        #     return dynamic
 
         return static
 
