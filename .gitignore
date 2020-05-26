@@ -9,3 +9,4 @@ __pycache__/
 word_vectors/
 see_json.json
 *.pem 
+commands.txt

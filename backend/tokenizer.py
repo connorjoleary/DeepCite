@@ -77,9 +77,9 @@ def sentence_parsing(text):
                 sentences.append(sentence)
     return sentences
 
-# claim will the the claim for comparison
-# text is the text of the article, preferably paragraph by paragraph
-# returns best k similarities
+# claim - the claim for comparison
+# text - the text of the article, preferably paragraph by paragraph
+# k - num similarities to be returned
 def predict(claim, text, k) :
 
     queue = q.PriorityQueue()
