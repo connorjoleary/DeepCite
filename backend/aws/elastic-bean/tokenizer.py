@@ -8,7 +8,7 @@ import os
 
 CWD_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
-gn_path = r'word_vectors/GoogleNews-vectors-negative300.bin'
+gn_path = r'aws/sagemaker/model/word_vectors/GoogleNews-vectors-negative300.bin'
 gn_model = KeyedVectors.load_word2vec_format(gn_path, binary=True)
 nlp = spacy.blank('en')
 nlp.vocab.vectors = spacy.vocab.Vectors(data=gn_model.vectors, keys=gn_model.index2word)
