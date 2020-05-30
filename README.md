@@ -28,16 +28,6 @@ Installations and downloads required before server can funciton properly
   * Google News vector space https://code.google.com/archive/p/word2vec/ -- in DeepCite/backend/word_vectors
   * Chrome driver https://sites.google.com/a/chromium.org/chromedriver/home -- in DeepCite/backend, check compatibility 
 
-
-### Installs:
-
-* `pip install beautifulsoup4`
-* `pip install selenium`
-* `pip install requests`
-* `pip install spacy`
-* `pip install --upgrade gensim` - installation for loading pretrain vectors into spaCy
-* `pip install Flask`
-
 <small>n Note: 'en_core_web_sm' installation is testing purposes. It has lower accurary compared to the word google vectors </small>
 
 
@@ -66,6 +56,8 @@ Installations and downloads required before server can funciton properly
 * More Robust Webscrapping
 
 ## Curl request for testing
+Run `gunicorn -c gunicorn_config.py wsgi` in Deepcite/backend
+
 * Local testing:
 `curl -d '{"claim":"the death of Sherlock Holmes almost destroyed the magazine that had originally published the stories. When Arthur Conan Doyle killed him off in 1893, 20,000 people cancelled their subscriptions. The magazine barely survived. Its staff referred to Holmes’ death as “the dreadful event”.", "link":"http://www.bbc.com/culture/story/20160106-how-sherlock-holmes-changed-the-world"}' -H "Content-Type: application/json" -X POST http://127.0.0.1:5000/api/v1/deep_cite`
 * Server Testing:
@@ -78,4 +70,4 @@ Installations and downloads required before server can funciton properly
 * Server runs out of hard drive space for temp files in Chromium and needs to be rebooted every so often
 
 ## Authors
-Shourya Goel, Jiayi Hu, Vinay Janardhanam, Dillion O'Leary, Noah SickLick, and Catherine Yan
+Connor O'Leary, Shourya Goel, Jiayi Hu, Vinay Janardhanam, Dillion O'Leary, Noah SickLick, and Catherine Yan
