@@ -10,3 +10,4 @@ word_vectors/
 see_json.json
 *.pem 
 commands.txt
+Pipfile*
