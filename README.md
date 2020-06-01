@@ -12,20 +12,34 @@ CS506 Project
 
 ## Setup
 
+#### Chrome
+
 1. Install Google Chrome
 2. In Chrome, navigate to `chrome://extensions/`
 3. Enable developer mode
-4. "Load unpacked" 
+4. Then click `Load unpacked` 
 5. Select DeepCite/extension folder
-6. Click DeepCite icon in upper-right corner of Chrome to use
-7. To emulate backend returning results, follow instructions in the readme within DeepCite/test-server
 
+#### Firefox
+
+1. Install Firefox
+2. Navigate to `about:debugging`
+3. Then select `This FireFox`
+4. Next click on the button `Load Temporary Add-on...`
+5. Select `DeepCite/extension/manifest.json`
+
+Once installed you can use DeepCite by clicking on the on the icon in the top right of the browser. There you can enter a link or claim and click `Cite` to run DeepCite. You can also populate the claim input by highlighting text, then right clicking and selecting _"Populate claim"_. Similiarly you can populate the link input with _"Populate link"_. 
 
 ## Installation for Server
 Installations and downloads required before server can funciton properly
 
 ### Downloads
-  * Google News vector space https://code.google.com/archive/p/word2vec/ -- in DeepCite/backend/word_vectors
+  * Google News vector space.
+  	* Google's word2vec can be found here https://code.google.com/archive/p/word2vec/ but you can no longer install the source code from here.
+  	* If you want to just download the Pre-trained models [recommended] then you can download it from this [google drive link](https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit) then extract it.
+  	* You can also find this link from the [archive page](https://code.google.com/archive/p/word2vec/) mentioned above.
+  	* Once you have your model you'll need to first create the directory `./DeepCite/backend/word_vectors` then you can copy or move the model into that folder.
+  	* Note: the backend expects a specific file name so you may need to rename the file. The end result should look like this `./DeepCite/backend/word_vectors/GoogleNews-vectors-negative300.bin`
   * Chrome driver https://sites.google.com/a/chromium.org/chromedriver/home -- in DeepCite/backend, check compatibility 
 
 <small>n Note: 'en_core_web_sm' installation is testing purposes. It has lower accurary compared to the word google vectors </small>
