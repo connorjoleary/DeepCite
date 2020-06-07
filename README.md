@@ -1,5 +1,5 @@
 # DeepCite
-CS506 Project
+
 <p> Google Chrome extension that finds the source of a claim using BeautifulSoup, spaCy, and gensim libraries. Please look at documentation for implemenation details. :trollface:</p>
 
 ## Table of Contents
@@ -94,4 +94,7 @@ Run `gunicorn -c gunicorn_config.py wsgi` in Deepcite/backend
 * Server runs out of hard drive space for temp files in Chromium and needs to be rebooted every so often
 
 ## Authors
-Connor O'Leary, Shourya Goel, Jiayi Hu, Vinay Janardhanam, Dillion O'Leary, Noah SickLick, and Catherine Yan
+Connor O'Leary
+
+With great help from the University of Wisconsin, Madison CS506 team
+Shourya Goel, Jiayi Hu, Vinay Janardhanam, Dillion O'Leary, Noah SickLick, and Catherine Yan
