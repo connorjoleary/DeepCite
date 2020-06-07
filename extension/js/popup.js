@@ -1,4 +1,4 @@
-const url = "http://18.223.108.40:5000/api/v1/deep_cite";
+const url = "https://jzvkkf7p6d.execute-api.us-east-2.amazonaws.com/default/deepcite";
 //const url = "http://localhost:5000/api/v1/deep_cite";
 //const url = "http://localhost:5000/";
 var ajax = null;
@@ -169,7 +169,7 @@ function dataReceived(data) {
                         </div>`);
         
         //for each item in data returned:
-        data.results.forEach((result, i) => {
+        JSON.parse(data).results.forEach((result, i) => {
             if (i == 0){
                 $("#results").append(`
                     <h5>Original Claim</h5>
