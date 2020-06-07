@@ -4,11 +4,18 @@ CS506 Project
 
 ## Table of Contents
 
+* [Contributions](#contributions)
 * [Setup](#setup)
 * [Installation](#installation)
 * [Testing](#testing)
 * [Authors](#authors)
 
+## Contributions
+
+Unfortunatly running code on AWS is not cheap and I would really appreciate any support you could give to see this project flourish.
+| Bitcoin Address       | 361Dq2e5wnjAhCnQ8FEkeiK3CYZZJ9QuGs |
+| Venmo                 | @fippy24                           |
+| Paypal and Sofi Money | connor.trumpet@gmail.com           |
 
 ## Setup
 
