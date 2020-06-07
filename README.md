@@ -1,14 +1,24 @@
 # DeepCite
-CS506 Project
+
 <p> Google Chrome extension that finds the source of a claim using BeautifulSoup, spaCy, and gensim libraries. Please look at documentation for implemenation details. :trollface:</p>
 
 ## Table of Contents
 
+* [Contributions](#contributions)
 * [Setup](#setup)
 * [Installation](#installation)
 * [Testing](#testing)
 * [Authors](#authors)
 
+## Contributions
+
+Unfortunatly running code on AWS is not cheap and I would really appreciate any support you could give to see this project flourish.
+
+| website               | payment address                    |
+|-----------------------|------------------------------------|
+| Bitcoin               | 361Dq2e5wnjAhCnQ8FEkeiK3CYZZJ9QuGs |
+| Venmo                 | @fippy24                           |
+| Paypal and Sofi Money | connor.trumpet@gmail.com           |
 
 ## Setup
 
@@ -73,9 +83,9 @@ Installations and downloads required before server can funciton properly
 Run `gunicorn -c gunicorn_config.py wsgi` in Deepcite/backend
 
 * Local testing:
-`curl -d '{"claim":"the death of Sherlock Holmes almost destroyed the magazine that had originally published the stories. When Arthur Conan Doyle killed him off in 1893, 20,000 people cancelled their subscriptions. The magazine barely survived. Its staff referred to Holmes’ death as “the dreadful event”.", "link":"http://www.bbc.com/culture/story/20160106-how-sherlock-holmes-changed-the-world"}' -H "Content-Type: application/json" -X POST http://127.0.0.1:5000/api/v1/deep_cite`
+`curl -d '{"claim":"the death of Sherlock Holmes almost destroyed the magazine that had originally published the stories. When Arthur Conan Doyle killed him off in 1893, 20,000 people cancelled their subscriptions. The magazine barely survived. Its staff referred to Holmes’ death as “the dreadful event”.", "link":"http://www.bbc.com/culture/story/20160106-how-sherlock-holmes-changed-the-world"}' -H "Content-Type: application/json" -X POST http://127.0.0.1:8000/api/v1/deep_cite`
 * Server Testing:
-`curl -d '{"claim":"the death of Sherlock Holmes almost destroyed the magazine that had originally published the stories. When Arthur Conan Doyle killed him off in 1893, 20,000 people cancelled their subscriptions. The magazine barely survived. Its staff referred to Holmes’ death as “the dreadful event”.", "link":"http://www.bbc.com/culture/story/20160106-how-sherlock-holmes-changed-the-world"}' -H "Content-Type: application/json" -X POST http://3.19.142.118:8000/api/v1/deep_cite`
+`curl -d '{"claim":"the death of Sherlock Holmes almost destroyed the magazine that had originally published the stories. When Arthur Conan Doyle killed him off in 1893, 20,000 people cancelled their subscriptions. The magazine barely survived. Its staff referred to Holmes’ death as “the dreadful event”.", "link":"http://www.bbc.com/culture/story/20160106-how-sherlock-holmes-changed-the-world"}' -X POST https://jzvkkf7p6d.execute-api.us-east-2.amazonaws.com/default/deepcite`
 
 ## Bugs
 * Server is down due to money
@@ -84,4 +94,7 @@ Run `gunicorn -c gunicorn_config.py wsgi` in Deepcite/backend
 * Server runs out of hard drive space for temp files in Chromium and needs to be rebooted every so often
 
 ## Authors
-Connor O'Leary, Shourya Goel, Jiayi Hu, Vinay Janardhanam, Dillion O'Leary, Noah SickLick, and Catherine Yan
+Connor O'Leary
+
+With great help from the University of Wisconsin, Madison CS506 team
+Shourya Goel, Jiayi Hu, Vinay Janardhanam, Dillion O'Leary, Noah SickLick, and Catherine Yan
