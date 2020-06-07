@@ -13,7 +13,10 @@ CS506 Project
 ## Contributions
 
 Unfortunatly running code on AWS is not cheap and I would really appreciate any support you could give to see this project flourish.
-| Bitcoin Address       | 361Dq2e5wnjAhCnQ8FEkeiK3CYZZJ9QuGs |
+
+| website               | payment address                    |
+|-----------------------|------------------------------------|
+| Bitcoin               | 361Dq2e5wnjAhCnQ8FEkeiK3CYZZJ9QuGs |
 | Venmo                 | @fippy24                           |
 | Paypal and Sofi Money | connor.trumpet@gmail.com           |
 
