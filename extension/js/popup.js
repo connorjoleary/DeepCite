@@ -1,4 +1,4 @@
-const url = "https://jzvkkf7p6d.execute-api.us-east-2.amazonaws.com/default/deepcite";
+const url = "https://jzvkkf7p6d.execute-api.us-east-2.amazonaws.com/prod/deepcite";
 //const url = "http://localhost:5000/api/v1/deep_cite";
 //const url = "http://localhost:5000/";
 var ajax = null;
