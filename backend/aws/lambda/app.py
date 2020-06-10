@@ -4,6 +4,10 @@ import psycopg2
 import sys
 import base64
 from dataclasses import dataclass
+import time
+
+# TODO: These should be env variables or imported from something better
+versions = {'model': 0.1, 'lambda': 0.1, 'api': 0.1, 'extension': 0.1}
 
 rds_host  = "deepcite.ckbyp3nhsmiu.us-east-2.rds.amazonaws.com"
 db_name = 'postgres'
@@ -23,7 +27,7 @@ except psycopg2.OperationalError as e:
     sys.exit()
 print("SUCCESS: Connection to RDS instance succeeded")
 
-# TODO: need this so that I pass json or a response object to be returned
+# need this so that I can pass json or a response object to be returned
 @dataclass
 class Response:
     body: str
@@ -31,7 +35,6 @@ class Response:
 
 
 def respond(err, res=None):
-    print(res)
     return {
         'statusCode': '400' if err else res.status_code,
         'body': err.message if err else res.body
@@ -48,17 +51,30 @@ def load_payload(event):
     return 'no body'
 
 def lambda_handler(event, context):
+    start = time.time()
 
     operations = {
         'POST': lambda x: call_deepcite(**x),
         'GET': lambda x: Response(body= x, status_code= 200)
     }
     operation = event['requestContext']['http']['method']
+    
+    # print(event)
+    stage = event['requestContext']['stage']
 
     if operation in operations:
         payload = load_payload(event)
-        return respond(None, operations[operation](payload))
+        response = respond(None, operations[operation](payload))
     else:
-        return respond(ValueError('Unsupported method "{}"'.format(operation)))
+        response = respond(ValueError('Unsupported method "{}"'.format(operation)))
+
+    user_id = event['requestContext']['http']['sourceIp']
+    time_elapsed = time.time()-start
+    
+    cur = conn.cursor()
+    cur.execute("INSERT INTO deepcite_call (user_id,stage,status_code,response,response_time_elapsed,current_versions) VALUES (%s, %s, %s, %s, %s, %s)", (user_id,stage,response['statusCode'],response['body'],time_elapsed,json.dumps(versions)))
+    conn.commit()
+
+    return response
 
 # print(lambda_handler({"requestContext": {"http": {"method": "GET"}}},0))
