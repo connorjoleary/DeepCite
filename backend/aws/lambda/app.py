@@ -1,5 +1,6 @@
 import json
 import requests
+import psycopg2
 import sys
 import base64
 from dataclasses import dataclass
@@ -19,12 +20,6 @@ secret_client = session.client(
     service_name='secretsmanager',
     region_name=region_name
 )
-rds_client = session.client(
-    service_name='rds-data',
-    region_name=region_name
-)
-
-print('Loading function')
 
 # private ip address of ec2
 url = 'http://172.31.35.42:8000/api/v1/deep_cite'
@@ -59,7 +54,6 @@ def get_secret():
             secret = get_secret_value_response['SecretString']
         else:
             secret = base64.b64decode(get_secret_value_response['SecretBinary'])
-    print(secret)
     return secret
     
 
@@ -69,6 +63,7 @@ class Response:
     body: str
     status_code: int = 200
 
+print('Loading function')
 
 def respond(err, res=None):
     return {
@@ -110,18 +105,20 @@ def lambda_handler(event, context):
     user_id = event['requestContext']['http']['sourceIp']
     time_elapsed = time.time()-start
     secret = get_secret()
-    print('got here')
-    print("INSERT INTO deepcite_call (user_id,stage,status_code,response,response_time_elapsed,current_versions) VALUES ('{}', '{}', {}, '{}', {}, '{}')".format(user_id,stage,response['statusCode'],response['body'].replace("'", ""),time_elapsed,json.dumps(versions)))
+
     try:
-        rds_response = rds_client.execute_statement(
-            resourceArn ='arn:aws:rds:us-east-2:072491736148:db:deepcite',
-            # database=db_name,
-            secretArn='arn:aws:secretsmanager:us-east-2:072491736148:secret:rds_deepcite_sample-Y9B0Sa',
-            sql ="INSERT INTO deepcite_call (user_id,stage,status_code,response,response_time_elapsed,current_versions) VALUES ('{}', '{}', {}, '{}', {}, '{}')".format(user_id,stage,response['statusCode'],response['body'].replace("'", ""),time_elapsed,json.dumps(versions))
-        )
-        print(rds_response)
-    except Exception as e:
+        secret = json.loads(secret)
+        conn = psycopg2.connect(host=secret['host'], user=secret['username'], password=secret['password'], database=secret['dbInstanceIdentifier'], port=secret['port'])
+
+        cur = conn.cursor()
+        cur.execute("INSERT INTO deepcite_call (user_id,stage,status_code,response,response_time_elapsed,current_versions) VALUES (%s, %s, %s, %s, %s, %s)", (user_id,stage,response['statusCode'],response['body'],time_elapsed,json.dumps(versions)))
+        conn.commit()
+    except psycopg2.OperationalError as e:
+        print("ERROR: Unexpected error: Could not connect to database instance.")
         print(e)
+    else:
+        print("SUCCESS: Connection to RDS instance succeeded")
+
     print(response)
         
     return response
