@@ -119,4 +119,4 @@ If you happen upon any bugs please feel free to submit an official issue. When s
 Connor O'Leary
 
 With great help from the University of Wisconsin, Madison CS506 team
-Shourya Goel, Jiayi Hu, Vinay Janardhanam, Dillion O'Leary, Noah SickLick, and Catherine Yan
+Shourya Goel, Jiayi Hu, Vinay Janardhanam, Dillon O'Leary, Noah SickLick, and Catherine Yan
