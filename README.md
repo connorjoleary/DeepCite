@@ -88,8 +88,6 @@ Run `gunicorn -c gunicorn_config.py wsgi` in Deepcite/backend
 `curl -d '{"claim":"the death of Sherlock Holmes almost destroyed the magazine that had originally published the stories. When Arthur Conan Doyle killed him off in 1893, 20,000 people cancelled their subscriptions. The magazine barely survived. Its staff referred to Holmes’ death as “the dreadful event”.", "link":"http://www.bbc.com/culture/story/20160106-how-sherlock-holmes-changed-the-world"}' -X POST https://jzvkkf7p6d.execute-api.us-east-2.amazonaws.com/dev/deepcite`
 
 ## Bugs
-* Server is down due to money
-* Server cannot handle two requests at the same time
 * App.py has a memory leak and needs to be restarted every so often
 * Server runs out of hard drive space for temp files in Chromium and needs to be rebooted every so often
 
