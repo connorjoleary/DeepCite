@@ -63,17 +63,3 @@ class Claim:
 
     def get_full_claim(self):
         return "\n\nClaim: {}\ntext: {}\nscore: {}\n".format(self.text, str(self.cand), str(self.score))
-
-
-""" if "__main__":
-    
-    url = "https://www.independent.co.uk/arts-entertainment/films/features/the-strained-making-of-apocalypse-now-1758689.html"
-    text = "real dead bodies were used on the set of “Apocalypse Now.” The man who supplied them turned out to be a grave robber and was arrested"
-    root = Claim(url, text, 0)
-    #root.parse_child()
-    print(str(root)) """
-
-
-
-        
-
