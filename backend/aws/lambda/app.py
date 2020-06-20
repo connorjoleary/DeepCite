@@ -7,7 +7,7 @@ from dataclasses import dataclass
 import time
 
 # TODO: These should be env variables or imported from something better
-versions = {'model': 0.1, 'lambda': 0.1, 'api': 0.1, 'extension': 0.1}
+versions = {'model': '0.2', 'lambda': '0.1', 'api': '0.1', 'extension': '0.1'}
 
 rds_host  = "deepcite.ckbyp3nhsmiu.us-east-2.rds.amazonaws.com"
 db_name = 'postgres'
