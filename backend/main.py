@@ -18,19 +18,19 @@ def deep_cite():
         claim = sanitize_claim(content['claim'])
         link = sanitize_link(content['link'])
     except Exception as e:
-        return jsonify({'error': 'Error 505: HTTP Verison Not Supported, hacker' })
+        return jsonify({'error': 'Error 505: HTTP Verison Not Supported' })
 
-    full_pre_json = {'error': 'none'}
+    full_pre_json = {'error': 'none', 'results': {'source': claim, 'link': link, 'score': 100}}
 
     try:
         tree = Tree(link, claim)
-        full_pre_json = {'results': tree.get_best_path()}
+        full_pre_json['results'] = tree.get_best_path()}
 
     # TODO: If one website fails then we shouldn't return only an error for everything
     # handles exceptions that arise
     except Exception as e:
         if check_instance(e):
-            full_pre_json = {'error': str(e)}
+            full_pre_json['error'] = str(e)
         else:
             # TODO: this should be better
             link = html_link('https://github.com/connorjoleary/DeepCite/issues')
