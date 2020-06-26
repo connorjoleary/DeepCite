@@ -8,21 +8,17 @@ import time
 from lambda_config import config
 
 
-# TODO: These should be env variables or imported from something better
-versions = {'model': 0.1, 'lambda': 0.1, 'api': 0.1, 'extension': 0.1}
-
-rds_host  = "deepcite.ckbyp3nhsmiu.us-east-2.rds.amazonaws.com"
-db_name = 'postgres'
-db_password = 'deepcite'
-db_username = 'postgres'
+versions = config['versions']
 
 print('Loading function')
 
-# private ip address of ec2
-url = 'http://172.31.35.42:8000/api/v1/deep_cite'
-
 try:
-    conn = psycopg2.connect(host=rds_host, user=db_username, password=db_password, database=db_name, port='5432')
+    conn = psycopg2.connect(
+        host=config['db']['rds'],
+        user=config['db']['username'],
+        password=config['db']['password'],
+        database=config['db']['name'],
+        port=config['db']['port'])
 except psycopg2.OperationalError as e:
     print("ERROR: Unexpected error: Could not connect to database instance.")
     print(e)
@@ -43,7 +39,8 @@ def respond(err, res=None):
     }
 
 def call_deepcite(claim, link):
-    response = requests.post(url=url, json={"claim": claim, "link": link})
+    # private ip address of ec2
+    response = requests.post(url=config['ec2']['url'], json={"claim": claim, "link": link})
     return Response(body = response.text)
 
 def load_payload(event):
