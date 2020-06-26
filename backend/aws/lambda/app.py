@@ -6,24 +6,35 @@ import base64
 from dataclasses import dataclass
 import time
 from lambda_config import config
+import boto3
+from botocore.exceptions import ClientError
 
+versions = {a: str(b) for a,b in config['versions'].items()}
 
-versions = config['versions']
+# Create a Secrets Manager client
+session = boto3.session.Session()
+secret_client = session.client(
+    service_name='secretsmanager',
+    region_name=config['secret']['region']
+)
 
-print('Loading function')
-
-try:
-    conn = psycopg2.connect(
-        host=config['db']['rds'],
-        user=config['db']['username'],
-        password=config['db']['password'],
-        database=config['db']['name'],
-        port=config['db']['port'])
-except psycopg2.OperationalError as e:
-    print("ERROR: Unexpected error: Could not connect to database instance.")
-    print(e)
-    sys.exit()
-print("SUCCESS: Connection to RDS instance succeeded")
+def get_secret():
+    print('grabbing secret')
+    try:
+        get_secret_value_response = secret_client.get_secret_value(
+            SecretId=config['secret']['name']
+        )
+    except ClientError as e:
+        print('error retrieving secret')
+        print(e)
+    else:
+        # Decrypts secret using the associated KMS CMK.
+        # Depending on whether the secret is a string or binary, one of these fields will be populated.
+        if 'SecretString' in get_secret_value_response:
+            secret = get_secret_value_response['SecretString']
+        else:
+            secret = base64.b64decode(get_secret_value_response['SecretBinary'])
+    return secret
 
 # need this so that I can pass json or a response object to be returned
 @dataclass
@@ -31,6 +42,7 @@ class Response:
     body: str
     status_code: int = 200
 
+print('Loading function')
 
 def respond(err, res=None):
     return {
@@ -58,22 +70,37 @@ def lambda_handler(event, context):
     }
     operation = event['requestContext']['http']['method']
     
-    # print(event)
+    print(event)
     stage = event['requestContext']['stage']
 
     if operation in operations:
-        payload = load_payload(event)
-        response = respond(None, operations[operation](payload))
+        try:
+            payload = load_payload(event)
+            response = respond(None, operations[operation](payload))
+        except Exception as e:
+            print(e)
     else:
         response = respond(ValueError('Unsupported method "{}"'.format(operation)))
 
     user_id = event['requestContext']['http']['sourceIp']
     time_elapsed = time.time()-start
-    
-    cur = conn.cursor()
-    cur.execute("INSERT INTO deepcite_call (user_id,stage,status_code,response,response_time_elapsed,current_versions) VALUES (%s, %s, %s, %s, %s, %s)", (user_id,stage,response['statusCode'],response['body'],time_elapsed,json.dumps(versions)))
-    conn.commit()
+    secret = get_secret()
 
+    try:
+        secret = json.loads(secret)
+        conn = psycopg2.connect(host=secret['host'], user=secret['username'], password=secret['password'], database=secret['dbInstanceIdentifier'], port=secret['port'])
+
+        cur = conn.cursor()
+        cur.execute("INSERT INTO deepcite_call (user_id,stage,status_code,response,response_time_elapsed,current_versions) VALUES (%s, %s, %s, %s, %s, %s)", (user_id,stage,response['statusCode'],response['body'],time_elapsed,json.dumps(versions)))
+        conn.commit()
+    except psycopg2.OperationalError as e:
+        print("ERROR: Unexpected error: Could not connect to database instance.")
+        print(e)
+    else:
+        print("SUCCESS: Connection to RDS instance succeeded")
+
+    print(response)
+        
     return response
 
 # print(lambda_handler({"requestContext": {"http": {"method": "GET"}}},0))

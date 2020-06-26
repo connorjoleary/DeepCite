@@ -13,3 +13,4 @@ commands.txt
 Pipfile*
 deep-cite-config.json
 *.env
+backend/aws/rds/database_config.json

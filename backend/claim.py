@@ -23,7 +23,8 @@ class Claim:
 
     def parse_child(self, maxheight):
         ref2text = {}
-        response = requests.get(self.href)
+        headers = {'User-Agent': 'Mozilla/5.0'}
+        response = requests.get(self.href, headers=headers)
         soup = BeautifulSoup(response.text, 'html.parser')
         text_raw = soup.findAll('p')
         for unit in text_raw:
@@ -62,17 +63,3 @@ class Claim:
 
     def get_full_claim(self):
         return "\n\nClaim: {}\ntext: {}\nscore: {}\n".format(self.text, str(self.cand), str(self.score))
-
-
-""" if "__main__":
-    
-    url = "https://www.independent.co.uk/arts-entertainment/films/features/the-strained-making-of-apocalypse-now-1758689.html"
-    text = "real dead bodies were used on the set of “Apocalypse Now.” The man who supplied them turned out to be a grave robber and was arrested"
-    root = Claim(url, text, 0)
-    #root.parse_child()
-    print(str(root)) """
-
-
-
-        
-
