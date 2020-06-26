@@ -1,5 +1,6 @@
 from flask import Flask, jsonify
 from flask import request
+from config import config
 import json
 from tree import Tree
 from controller import Claim, html_link, new_indention
@@ -64,4 +65,4 @@ def sanitize_link(link):
     return sanitized.strip()
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+    app.run(host=config['server']['host'], port=config['server']['port'])

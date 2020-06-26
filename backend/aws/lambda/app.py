@@ -5,6 +5,8 @@ import sys
 import base64
 from dataclasses import dataclass
 import time
+from lambda_config import config
+
 
 # TODO: These should be env variables or imported from something better
 versions = {'model': 0.1, 'lambda': 0.1, 'api': 0.1, 'extension': 0.1}

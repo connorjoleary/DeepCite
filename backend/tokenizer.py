@@ -3,13 +3,11 @@ from gensim.models import KeyedVectors
 from spacy.parts_of_speech import  PUNCT, PROPN
 from spacy.lang.en import English
 from spacy.tokenizer import Tokenizer
+from config import config
 import queue as q
 import os
 
-CWD_FOLDER = os.path.dirname(os.path.abspath(__file__))
-
-gn_path = r'word_vectors/GoogleNews-vectors-negative300.bin'
-gn_model = KeyedVectors.load_word2vec_format(gn_path, binary=True)
+gn_model = KeyedVectors.load_word2vec_format(config['gn_path'], binary=True)
 nlp = spacy.blank('en')
 nlp.vocab.vectors = spacy.vocab.Vectors(data=gn_model.vectors, keys=gn_model.index2word)
 
@@ -126,6 +124,3 @@ def predict(claim, text, k) :
             break
 
     return predict
-
-
-

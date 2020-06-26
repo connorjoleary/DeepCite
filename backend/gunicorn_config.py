@@ -1,6 +1,5 @@
-import multiprocessing
+from config import config
 
-bind = "0.0.0.0:8000"
-workers = 1 # multiprocessing.cpu_count() * 2 + 1
-
-timeout = 3 * 60  # 3 minutes
+bind = config['guincorn']['bind']
+workers = config['guincorn']['workers'] 
+timeout = config['guincorn']['timeout']
