@@ -54,7 +54,8 @@ config_file = env.get('CONFIG_FILE') or os.path.join(CWD, '..', CONFIG_FILENAME)
 
 if os.path.exists(config_file):
 	try:
-		config_json = json.load(config_file)
+		with open(config_file) as f:
+			config_json = json.load(f)
 	except json.JSONDecodeError:
 		config = {}
 	else:
@@ -68,7 +69,7 @@ config['cwd'] = CWD
 DEFAULT = {
 	'ENV': 'development',
 	'LANGUAGE': 'en',
-	'GN_PATH': os.path.join(CWD, r'word_vectors/GoogleNews-vectors-negative300.bin'),
+	'GN_PATH': os.path.join(CWD, 'word_vectors', 'GoogleNews-vectors-negative300.bin'),
 	'SERVER': {
 		'HOST': '0.0.0.0',
 		'PORT': 5000,
