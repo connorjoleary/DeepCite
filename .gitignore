@@ -11,3 +11,5 @@ see_json.json
 *.pem 
 commands.txt
 Pipfile*
+deep-cite-config.json
+*.env
