@@ -14,30 +14,30 @@ chrome.runtime.onInstalled.addListener(function () {
         console.log('Initialized previous data variable');
     });
 
-    chrome.contextMenus.create({
-        title: `Populate claim: "%s"`, 
-        contexts:["selection"], 
-        onclick: function(info, tab) {
-            chrome.storage.local.set({ 'state': 0},  function(){
-                console.log('Reset extention state');
-            }); 
-            chrome.storage.local.set({ 'claimField': info.selectionText }, function () {
-                console.log('Populated claimField');
-            });
-        }
-    });
-    chrome.contextMenus.create({
-        title: `Populate link`, 
-        contexts:["link"], 
-        onclick: function(info, tab) {
-            chrome.storage.local.set({ 'state': 0},  function(){
-                console.log('Reset extention state');
-            }); 
-            chrome.storage.local.set({ 'linkField': info.linkUrl }, function () {
-                console.log('Populated claimField');
-            });
-        }
-    });
+    // chrome.contextMenus.create({
+    //     title: `Populate claim: "%s"`, 
+    //     contexts:["selection"], 
+    //     onclick: function(info, tab) {
+    //         chrome.storage.local.set({ 'state': 0},  function(){
+    //             console.log('Reset extention state');
+    //         }); 
+    //         chrome.storage.local.set({ 'claimField': info.selectionText }, function () {
+    //             console.log('Populated claimField');
+    //         });
+    //     }
+    // });
+    // chrome.contextMenus.create({
+    //     title: `Populate link`, 
+    //     contexts:["link"], 
+    //     onclick: function(info, tab) {
+    //         chrome.storage.local.set({ 'state': 0},  function(){
+    //             console.log('Reset extention state');
+    //         }); 
+    //         chrome.storage.local.set({ 'linkField': info.linkUrl }, function () {
+    //             console.log('Populated claimField');
+    //         });
+    //     }
+    // });
 });
 
 function populateClaim() {

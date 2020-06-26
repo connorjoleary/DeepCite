@@ -231,12 +231,3 @@ class Claim:
                 raise error.ClaimNotInLink('Unable to find \"' + self.text + '\" in ' + html_link(self.href))
         # creates leaf node or children
         self.create_children(ref2text, scores)
-        
-                    
-
-
-                
-
-
-                    
-       

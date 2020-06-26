@@ -62,17 +62,17 @@ $(document).ready(() => {
 
         
 
-        chrome.tabs.query({
-            'active': true,
-            'lastFocusedWindow': true
-        }, function (tabs) {
-            chrome.storage.local.set({
-                'claimsrc': tabs[0].url
-            }, () => {
-                console.log('Setting claim source');
-            });
-            console.log(tabs[0].url);
-        });
+        // chrome.tabs.query({
+        //     'active': true,
+        //     'lastFocusedWindow': true
+        // }, function (tabs) {
+        //     chrome.storage.local.set({
+        //         'claimsrc': tabs[0].url
+        //     }, () => {
+        //         console.log('Setting claim source');
+        //     });
+        //     console.log(tabs[0].url);
+        // });
 
         event.preventDefault();
         data = {

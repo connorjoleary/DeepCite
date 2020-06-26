@@ -11,19 +11,21 @@ exceptions = [errors.MalformedLink, errors.URLError, errors.EmptyWebsite, errors
 
 @app.route('/api/v1/deep_cite', methods=['GET', 'POST'])
 def deep_cite():
+# def deep_cite(claim, link):
     content = request.get_json()
 
     try:
         claim = sanitize_claim(content['claim'])
         link = sanitize_link(content['link'])
     except Exception as e:
-        return jsonify({'error': 'Error 505: HTTP Verison Not Supported, hacker' })
+        return jsonify({'error': 'Error 505: HTTP Verison Not Supported' })
 
-    full_pre_json = {'error': 'none'}
+    full_pre_json = {'error': 'none', 'results': {'source': claim, 'link': link, 'score': 100}}
 
     try:
         tree = Tree(link, claim)
-        full_pre_json = {'results': tree.get_best_path()}
+        full_pre_json['results'] = tree.get_best_path()}
+
     # handles exceptions that arise
     except Exception as e:
         if check_instance(e):
@@ -64,4 +66,5 @@ def sanitize_link(link):
     return sanitized.strip()
 
 if __name__ == "__main__":
+    # deep_cite(**{"claim":"6 years after resigning, Nixon testified on behalf of former FBI assistant director Mark Felt at Felts own trial, and gave money to Felts defense fund. In 2005 Felt revealed he had been Deep Throat, Bob Woodwards source while breaking the Watergate scandal that led to Nixons resignation", "link":"https://www.reddit.com/r/todayilearned/comments/6bu1xc/til_nixon_sent_champagne_and_a_note_saying/"})
     app.run(host='0.0.0.0')

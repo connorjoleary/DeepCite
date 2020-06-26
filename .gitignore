@@ -11,3 +11,4 @@ see_json.json
 *.pem 
 commands.txt
 Pipfile*
+backend/aws/rds/database_config.json

@@ -14,14 +14,12 @@
     "scripts": ["js/background.js"]
   },
   "permissions": [
-    "contextMenus",
-    "storage",
-    "tabs"
+    "storage"
   ],
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["js/jquery-3.2.1.min.js","js/content.js"]
+      "matches": ["https://jzvkkf7p6d.execute-api.us-east-2.amazonaws.com/*"],
+      "js": ["js/jquery-3.2.1.min.js"]
     }
   ]
 }
