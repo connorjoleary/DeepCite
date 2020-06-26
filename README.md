@@ -142,17 +142,14 @@ There are a couple ways to configure both the backend and the aws lambda service
   "aws": {
     "env": "development",
     "versions": {
-      "model": "0.1",
+      "model": "0.2",
       "lambda": "0.1",
       "api": "0.1",
       "extension": "0.1"
     },
-    "db": {
-      "rds": "deepcite.ckbyp3nhsmiu.us-east-2.rds.amazonaws.com",
-      "name": "postgres",
-      "port": "5432",
-      "username": "postgres",
-      "password": "deepcite"
+    "secret": {
+      "region": "us-east-2",
+      "name": "rds_deepcite_sample"
     },
     "ec2": {
       "ip": "172.31.35.42",
@@ -177,12 +174,9 @@ There are a couple ways to configure both the backend and the aws lambda service
  GUNICORN_TIMEOUT=180
  EC2_IP=172.31.35.42
  EC2_PORT=8000
- DB_RDS=deepcite.ckbyp3nhsmiu.us-east-2.rds.amazonaws.com
- DB_NAME=postgres
- DB_PORT=5432
- DB_USERNAME=postgres
- DB_PASSWORD=deepcite
- VERSIONS_MODEL=0.1
+ SECRET_REGION=us-east-2
+ SECRET_NAME=rds_deepcite_sample
+ VERSIONS_MODEL=0.2
  VERSIONS_LAMBDA=0.1
  VERSIONS_API=0.1
  VERSIONS_EXTENSION=0.1
