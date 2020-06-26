@@ -8,6 +8,7 @@
 * [Setup](#setup)
 * [Installation](#installation)
 * [Testing](#testing)
+* [Configuration](#configuration)
 * [Authors](#authors)
 
 ## Contributions
@@ -114,6 +115,78 @@ If you happen upon any bugs please feel free to submit an official issue. When s
  * OS:
  * ( any additional relevant information and/or screenshots )
 ```
+
+## Configuration
+
+There are a couple ways to configure both the backend and the aws lambda service. The first priority, or the first place the config will look is in the root folder for a json file named `deep-cite-config.json`. Next the config will look in the environment, and finally anything not found in the json config or environment will fallback to the defaults. Here are the defaults and config options:
+
+ * As a JSON `./DeepCite/deep-cite-config.json`:
+
+ ```json
+ {
+  "backend": {
+    "env": "development",
+    "language": "en",
+    "gn_path": "./DeepCite/backend/word_vectors/GoogleNews-vectors-negative300.bin",
+    "server": {
+      "host": "0.0.0.0",
+      "port": "5000" 
+    },
+    "gunicorn": {
+      "host": "0.0.0.0",
+      "port": "8000" ,
+      "workers": "1",
+      "timeout": "180"
+    }
+  },
+  "aws": {
+    "env": "development",
+    "versions": {
+      "model": "0.1",
+      "lambda": "0.1",
+      "api": "0.1",
+      "extension": "0.1"
+    },
+    "db": {
+      "rds": "deepcite.ckbyp3nhsmiu.us-east-2.rds.amazonaws.com",
+      "name": "postgres",
+      "port": "5432",
+      "username": "postgres",
+      "password": "deepcite"
+    },
+    "ec2": {
+      "ip": "172.31.35.42",
+      "port": "8000",
+      "url": "http://172.31.35.42:8000/api/v1/deep_cite"
+    }
+  }
+}
+ ```
+
+ * As an `.env`:
+
+ ```bash
+ ENV=development
+ LANGUAGE=en
+ GN_PATH=./DeepCite/backend/word_vectors/GoogleNews-vectors-negative300.bin
+ SERVER_HOST=0.0.0.0
+ SERVER_PORT=5000
+ GUNICORN_HOST=0.0.0.0
+ GUNICORN_PORT=8000
+ GUNICORN_WORKERS=1
+ GUNICORN_TIMEOUT=180
+ EC2_IP=172.31.35.42
+ EC2_PORT=8000
+ DB_RDS=deepcite.ckbyp3nhsmiu.us-east-2.rds.amazonaws.com
+ DB_NAME=postgres
+ DB_PORT=5432
+ DB_USERNAME=postgres
+ DB_PASSWORD=deepcite
+ VERSIONS_MODEL=0.1
+ VERSIONS_LAMBDA=0.1
+ VERSIONS_API=0.1
+ VERSIONS_EXTENSION=0.1
+ ```
 
 ## Authors
 Connor O'Leary
