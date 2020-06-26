@@ -22,10 +22,10 @@ config_validator = Validator({
         'type': 'dict',
         'required': True,
         'schema': {
-            'model': { 'type': 'float' },
-            'lambda': { 'type': 'float' },
-            'api': { 'type': 'float' },
-            'extension': { 'type': 'float' },
+            'model': { 'type': 'float', 'coerce': float, },
+            'lambda': { 'type': 'float', 'coerce': float, },
+            'api': { 'type': 'float', 'coerce': float, },
+            'extension': { 'type': 'float', 'coerce': float, },
         },
     },
     'db': {
@@ -36,7 +36,7 @@ config_validator = Validator({
             'password': { 'type': 'string' },
             'username': { 'type': 'string' },
             'rds': { 'type': 'string' },
-            'port': { 'type': 'integer' },
+            'port': { 'type': 'integer', 'coerce': int, },
         },
     },
     'ec2': {
@@ -44,7 +44,7 @@ config_validator = Validator({
         'required': True,
         'schema': {
             'ip': { 'type': 'string' },
-            'port': { 'type': 'integer' },
+            'port': { 'type': 'integer', 'coerce': int, },
             'url': { 'type': 'string' },
         },
     },
@@ -60,11 +60,10 @@ if os.path.exists(config_file):
         with open(config_file) as f:
             config_json = json.load(f)
     except json.JSONDecodeError as e:
-        print(e)
+        print(f"Error parsing json config file: {e}")
         config = {}
     else:
         config = config_json['aws']
-    print(config)
 else:
     config = {}
 
@@ -97,23 +96,23 @@ config['env'] = config.get('env') or env.get('ENV') or DEFAULT['ENV']
 
 ec2 = config.get('ec2', {})
 ec2['ip'] = ec2.get('ip') or env.get('EC2_IP') or DEFAULT['EC2']['IP']
-ec2['port'] = int(ec2.get('port')) or env.get('EC2_PORT') or DEFAULT['EC2']['PORT']
+ec2['port'] = ec2.get('port') or env.get('EC2_PORT') or DEFAULT['EC2']['PORT']
 ec2['url'] = ec2.get('url') or env.get('EC2_URL') or f"http://{ec2['ip']}:{ec2['port']}/api/v1/deep_cite"
 config['ec2'] = ec2
 
 db = config.get('db', {})
 db['rds'] = db.get('rds') or env.get('DB_RDS') or DEFAULT['DB']['RDS']
-db['port'] = int(db.get('port')) or env.get('DB_PORT') or DEFAULT['DB']['PORT']
+db['port'] = db.get('port') or env.get('DB_PORT') or DEFAULT['DB']['PORT']
 db['name'] = db.get('name') or env.get('DB_NAME') or DEFAULT['DB']['NAME']
 db['username'] = db.get('username') or env.get('DB_USERNAME') or DEFAULT['DB']['USERNAME']
 db['password'] = db.get('password') or env.get('DB_PASSWORD') or DEFAULT['DB']['PASSWORD']
 config['db'] = db
 
 versions = config.get('versions', {})
-versions['model'] = float(versions.get('model')) or env.get('VERSIONS_MODEL') or DEFAULT['VERSIONS']['MODEL']
-versions['lambda'] = float(versions.get('lambda')) or env.get('VERSIONS_LAMBDA') or DEFAULT['VERSIONS']['LAMBDA']
-versions['api'] = float(versions.get('api')) or env.get('VERSIONS_API') or DEFAULT['VERSIONS']['API']
-versions['extension'] = float(versions.get('extension')) or env.get('VERSIONS_EXTENSION') or DEFAULT['VERSIONS']['EXTENSION']
+versions['model'] = versions.get('model') or env.get('VERSIONS_MODEL') or DEFAULT['VERSIONS']['MODEL']
+versions['lambda'] = versions.get('lambda') or env.get('VERSIONS_LAMBDA') or DEFAULT['VERSIONS']['LAMBDA']
+versions['api'] = versions.get('api') or env.get('VERSIONS_API') or DEFAULT['VERSIONS']['API']
+versions['extension'] = versions.get('extension') or env.get('VERSIONS_EXTENSION') or DEFAULT['VERSIONS']['EXTENSION']
 config['versions'] = versions
 
 config_validator.validate(config)

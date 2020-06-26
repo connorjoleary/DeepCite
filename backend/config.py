@@ -25,8 +25,8 @@ config_validator = Validator({
             'bind': { 'type': 'string' },
             'host': { 'type': 'string' },
             'port': { 'type': 'integer' },
-            'workers': { 'type': 'integer' },
-            'timeout': { 'type': 'integer' },
+            'workers': { 'type': 'integer', 'coerce': int, },
+            'timeout': { 'type': 'integer', 'coerce': int, },
         },
     },
     'server': {
@@ -34,7 +34,7 @@ config_validator = Validator({
         'required': True,
         'schema': {
             'host': { 'type': 'string' },
-            'port': { 'type': 'integer' },
+            'port': { 'type': 'integer', 'coerce': int, },
         },
     },
     'gn_path': {
@@ -56,7 +56,8 @@ if os.path.exists(config_file):
     try:
         with open(config_file) as f:
             config_json = json.load(f)
-    except json.JSONDecodeError:
+    except json.JSONDecodeError as e:
+        print(f"Error parsing json config file: {e}")
         config = {}
     else:
         config = config_json['backend']
