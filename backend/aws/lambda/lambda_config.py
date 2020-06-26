@@ -6,48 +6,48 @@ from configparser import ConfigParser
 from cerberus import Validator
 
 config_validator = Validator({
-	'file_path' : {
-		'type': 'string',
-		'required': True,
-	},
-	'cwd' : {
-		'type': 'string',
-		'required': True,
-	},
-	'env': {
-		'type': 'string',
-		'required': True,
-	},
-	'versions': {
-		'type': 'dict',
-		'required': True,
-		'schema': {
-			'model': { 'type': 'float' },
-			'lambda': { 'type': 'float' },
-			'api': { 'type': 'float' },
-			'extension': { 'type': 'float' },
-		},
-	},
-	'db': {
-		'type': 'dict',
-		'required': True,
-		'schema': {
-			'name': { 'type': 'string' },
-			'password': { 'type': 'string' },
-			'username': { 'type': 'string' },
-			'rds': { 'type': 'string' },
-			'port': { 'type': 'integer' },
-		},
-	},
-	'ec2': {
-		'type': 'dict',
-		'required': True,
-		'schema': {
-			'ip': { 'type': 'string' },
-			'port': { 'type': 'integer' },
-			'url': { 'type': 'string' },
-		},
-	},
+    'file_path' : {
+        'type': 'string',
+        'required': True,
+    },
+    'cwd' : {
+        'type': 'string',
+        'required': True,
+    },
+    'env': {
+        'type': 'string',
+        'required': True,
+    },
+    'versions': {
+        'type': 'dict',
+        'required': True,
+        'schema': {
+            'model': { 'type': 'float' },
+            'lambda': { 'type': 'float' },
+            'api': { 'type': 'float' },
+            'extension': { 'type': 'float' },
+        },
+    },
+    'db': {
+        'type': 'dict',
+        'required': True,
+        'schema': {
+            'name': { 'type': 'string' },
+            'password': { 'type': 'string' },
+            'username': { 'type': 'string' },
+            'rds': { 'type': 'string' },
+            'port': { 'type': 'integer' },
+        },
+    },
+    'ec2': {
+        'type': 'dict',
+        'required': True,
+        'schema': {
+            'ip': { 'type': 'string' },
+            'port': { 'type': 'integer' },
+            'url': { 'type': 'string' },
+        },
+    },
 })
 
 CONFIG_FILENAME = 'deep-cite-config.json'
@@ -56,41 +56,41 @@ CWD = os.getcwd()
 config_file = env.get('CONFIG_FILE') or os.path.join(CWD, '..', '..', '..', CONFIG_FILENAME)
 
 if os.path.exists(config_file):
-	try:
-		with open(config_file) as f:
-			config_json = json.load(f)
-	except json.JSONDecodeError as e:
-		print(e)
-		config = {}
-	else:
-		config = config_json['aws']
-	print(config)
+    try:
+        with open(config_file) as f:
+            config_json = json.load(f)
+    except json.JSONDecodeError as e:
+        print(e)
+        config = {}
+    else:
+        config = config_json['aws']
+    print(config)
 else:
-	config = {}
+    config = {}
 
 config['file_path'] = config_file
 config['cwd'] = CWD
 
 DEFAULT = {
-	'ENV': 'development',
-	'EC2': {
-		'IP': '172.31.35.42',
-		'PORT': 8000,
-	},
-	'DB': {
-		'RDS': "deepcite.ckbyp3nhsmiu.us-east-2.rds.amazonaws.com",
-		'NAME': 'postgres',
-		'PORT': 5432,
-		'USERNAME': 'postgres',
-		'PASSWORD': 'deepcite',
-	},
-	'VERSIONS': {
-		'MODEL': 0.1,
-		'LAMBDA': 0.1,
-		'API': 0.1,
-		'EXTENSION': 0.1,
+    'ENV': 'development',
+    'EC2': {
+        'IP': '172.31.35.42',
+        'PORT': 8000,
+    },
+    'DB': {
+        'RDS': "deepcite.ckbyp3nhsmiu.us-east-2.rds.amazonaws.com",
+        'NAME': 'postgres',
+        'PORT': 5432,
+        'USERNAME': 'postgres',
+        'PASSWORD': 'deepcite',
+    },
+    'VERSIONS': {
+        'MODEL': 0.1,
+        'LAMBDA': 0.1,
+        'API': 0.1,
+        'EXTENSION': 0.1,
 
-	},
+    },
 }
 
 config['env'] = config.get('env') or env.get('ENV') or DEFAULT['ENV']
@@ -118,8 +118,8 @@ config['versions'] = versions
 
 config_validator.validate(config)
 if config_validator.errors:
-	print("Invalid Config:")
-	pprint(json.dumps(config_validator.errors, indent=4))
-	exit(1)
+    print("Invalid Config:")
+    pprint(json.dumps(config_validator.errors, indent=4))
+    exit(1)
 
 config = config_validator.document
