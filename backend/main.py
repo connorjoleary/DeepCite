@@ -21,11 +21,11 @@ def deep_cite():
     except Exception as e:
         return jsonify({'error': 'Error 505: HTTP Verison Not Supported' })
 
-    full_pre_json = {'error': 'none', 'results': {'source': claim, 'link': link, 'score': 100}}
+    full_pre_json = {'error': 'none', 'results': [{'source': claim, 'link': link, 'score': 100}]}
 
     try:
         tree = Tree(link, claim)
-        full_pre_json['results'] = tree.get_best_path()}
+        full_pre_json['results'] = tree.get_best_path()
 
     # handles exceptions that arise
     except Exception as e:
