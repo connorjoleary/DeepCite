@@ -1,5 +1,6 @@
 from flask import Flask, jsonify
 from flask import request
+from config import config
 import json
 from tree import Tree
 from controller import Claim, html_link, new_indention
@@ -67,4 +68,4 @@ def sanitize_link(link):
 
 if __name__ == "__main__":
     # deep_cite(**{"claim":"6 years after resigning, Nixon testified on behalf of former FBI assistant director Mark Felt at Felts own trial, and gave money to Felts defense fund. In 2005 Felt revealed he had been Deep Throat, Bob Woodwards source while breaking the Watergate scandal that led to Nixons resignation", "link":"https://www.reddit.com/r/todayilearned/comments/6bu1xc/til_nixon_sent_champagne_and_a_note_saying/"})
-    app.run(host='0.0.0.0')
+    app.run(host=config['server']['host'], port=config['server']['port'])
