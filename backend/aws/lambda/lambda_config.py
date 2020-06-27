@@ -1,51 +1,6 @@
 import os
 import json
 from os import environ as env
-from pprint import pprint
-from configparser import ConfigParser
-from cerberus import Validator
-
-config_validator = Validator({
-    'file_path' : {
-        'type': 'string',
-        'required': True,
-    },
-    'cwd' : {
-        'type': 'string',
-        'required': True,
-    },
-    'env': {
-        'type': 'string',
-        'required': True,
-    },
-    'versions': {
-        'type': 'dict',
-        'required': True,
-        'schema': {
-            'model': { 'type': 'float', 'coerce': float, },
-            'lambda': { 'type': 'float', 'coerce': float, },
-            'api': { 'type': 'float', 'coerce': float, },
-            'extension': { 'type': 'float', 'coerce': float, },
-        },
-    },
-    'secret': {
-        'type': 'dict',
-        'required': True,
-        'schema': {
-            'name': { 'type': 'string' },
-            'region': { 'type': 'string' },
-        },
-    },
-    'ec2': {
-        'type': 'dict',
-        'required': True,
-        'schema': {
-            'ip': { 'type': 'string' },
-            'port': { 'type': 'integer', 'coerce': int, },
-            'url': { 'type': 'string' },
-        },
-    },
-})
 
 CONFIG_FILENAME = 'deep-cite-config.json'
 CWD = os.getcwd()
@@ -105,11 +60,3 @@ versions['lambda'] = versions.get('lambda') or env.get('VERSIONS_LAMBDA') or DEF
 versions['api'] = versions.get('api') or env.get('VERSIONS_API') or DEFAULT['VERSIONS']['API']
 versions['extension'] = versions.get('extension') or env.get('VERSIONS_EXTENSION') or DEFAULT['VERSIONS']['EXTENSION']
 config['versions'] = versions
-
-config_validator.validate(config)
-if config_validator.errors:
-    print("Invalid Config:")
-    pprint(json.dumps(config_validator.errors, indent=4))
-    exit(1)
-
-config = config_validator.document

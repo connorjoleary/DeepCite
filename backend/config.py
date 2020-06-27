@@ -1,51 +1,6 @@
 import os
 import json
 from os import environ as env
-from pprint import pprint
-from configparser import ConfigParser
-from cerberus import Validator
-
-config_validator = Validator({
-    'file_path' : {
-        'type': 'string',
-        'required': True,
-    },
-    'cwd' : {
-        'type': 'string',
-        'required': True,
-    },
-    'env': {
-        'type': 'string',
-        'required': True,
-    },
-    'gunicorn': {
-        'type': 'dict',
-        'required': True,
-        'schema': {
-            'bind': { 'type': 'string' },
-            'host': { 'type': 'string' },
-            'port': { 'type': 'integer' },
-            'workers': { 'type': 'integer', 'coerce': int, },
-            'timeout': { 'type': 'integer', 'coerce': int, },
-        },
-    },
-    'server': {
-        'type': 'dict',
-        'required': True,
-        'schema': {
-            'host': { 'type': 'string' },
-            'port': { 'type': 'integer', 'coerce': int, },
-        },
-    },
-    'gn_path': {
-        'type': 'string',
-        'required': True,
-    },
-    'language': {
-        'type': 'string',
-        'required': True,
-    },
-})
 
 CONFIG_FILENAME = 'deep-cite-config.json'
 CWD = os.getcwd()
@@ -99,12 +54,3 @@ gunicorn['bind'] = gunicorn.get('bind') or env.get('GUNICORN_BIND') or f"{gunico
 gunicorn['workers'] = gunicorn.get('workers') or env.get('GUNICORN_WORKERS') or DEFAULT['GUNICORN']['WORKERS']
 gunicorn['timeout'] = gunicorn.get('timeout') or env.get('GUNICORN_TIMEOUT') or DEFAULT['GUNICORN']['TIMEOUT']
 config['gunicorn'] = gunicorn
-
-
-config_validator.validate(config)
-if config_validator.errors:
-    print("Invalid Config:")
-    pprint(json.dumps(config_validator.errors, indent=4))
-    exit(1)
-
-config = config_validator.document
