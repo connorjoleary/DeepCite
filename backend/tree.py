@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 # from advanced_scraper import Claim
 import os
-from controller import Claim
+from claim import Claim
 import queue as q
 
 # Call the Claim constructor in advanced_scraper to create the instance root. Parse the root into constructor Tree to initialize instance 
@@ -29,7 +29,6 @@ class Tree:
         self.queue.put(ClaimPath(inilist, 1))
         self.best_queue = q.PriorityQueue()
         self.beam_search(root)
-
 
 
     def beam_search(self,root):
