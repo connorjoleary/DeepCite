@@ -5,32 +5,24 @@ import sys
 import base64
 from dataclasses import dataclass
 import time
+from lambda_config import config
 import boto3
 from botocore.exceptions import ClientError
 
-# TODO: These should be env variables or imported from something better
-versions = {'model': '0.2', 'lambda': '0.1', 'api': '0.1', 'extension': '0.1'}
-
-secret_name = "rds_deepcite_sample"
-region_name = "us-east-2"
-db_name = 'postgres'
+versions = {a: str(b) for a,b in config['versions'].items()}
 
 # Create a Secrets Manager client
 session = boto3.session.Session()
 secret_client = session.client(
     service_name='secretsmanager',
-    region_name=region_name
+    region_name=config['secret']['region']
 )
-
-# private ip address of ec2
-url = 'http://172.31.35.42:8000/api/v1/deep_cite'
-
 
 def get_secret():
     print('grabbing secret')
     try:
         get_secret_value_response = secret_client.get_secret_value(
-            SecretId=secret_name
+            SecretId=config['secret']['name']
         )
     except ClientError as e:
         print('error retrieving secret')
@@ -43,7 +35,6 @@ def get_secret():
         else:
             secret = base64.b64decode(get_secret_value_response['SecretBinary'])
     return secret
-    
 
 # need this so that I can pass json or a response object to be returned
 @dataclass
@@ -60,7 +51,8 @@ def respond(err, res=None):
     }
 
 def call_deepcite(claim, link):
-    response = requests.post(url=url, json={"claim": claim, "link": link})
+    # private ip address of ec2
+    response = requests.post(url=config['ec2']['url'], json={"claim": claim, "link": link})
     return Response(body = response.text)
 
 def load_payload(event):
