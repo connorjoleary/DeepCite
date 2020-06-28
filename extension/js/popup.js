@@ -4,211 +4,232 @@ const url = "https://jzvkkf7p6d.execute-api.us-east-2.amazonaws.com/prod/deepcit
 var ajax = null;
 var timeout = null;
 
-function handleClaimChange(e) {
-    const fieldVal = document.getElementById(e.srcElement.id).value;
-    chrome.storage.local.set({ 'claimField': fieldVal }, function () {
-        console.log('claimField is set to ' + fieldVal);
-    });
+if (!deepCite) {
+	var deepCite = {};
+}
+deepCite.citationWindow = document.getElementById("citation-list-modal");
+deepCite.deepCiteWindow = document.getElementById("deep-cite-modal");
+deepCite.errorWindow = document.getElementById("error-modal");
 
+deepCite.errorMessageTextTag = document.getElementById("error-message-text");
+deepCite.submitButton = document.getElementById("btnsubmit");
+deepCite.formClaimInput = document.getElementById("formClaimInput");
+deepCite.formLinkInput = document.getElementById("formLinkInput");
+deepCite.citationResults = document.getElementById("results");
+
+function hideAllWindows() {
+	deepCite.citationWindow.style = "display: none;";
+	deepCite.deepCiteWindow.style = "display: none;";
+	deepCite.errorWindow.style = "display: none;";
+	deepCite.errorMessageTextTag.value = null;
+}
+
+function showCitationWindow() {
+	hideAllWindows();
+	// clear previous citation results (remove innerHTML in the future)
+	deepCite.citationResults.innerHTML = "";
+	deepCite.citationWindow.style = null;
+}
+function showDeepCiteWindow() {
+	hideAllWindows();
+	enableCiteActions();
+	deepCite.deepCiteWindow.style = null;
+}
+function showErrorWindowWithMessage(errorMessage) {
+	hideAllWindows();
+	// response error message is HTML, and should be changed to strictly text.
+	// innerHTML needs to be removed to avoid cross-site scripting.
+	deepCite.errorMessageTextTag.innerHTML = errorMessage;
+	deepCite.errorWindow.style = null;
+}
+
+function handleClaimChange(e) {
+	const fieldVal = document.getElementById(e.srcElement.id).value;
+	chrome.storage.local.set({ 'claimField': fieldVal }, function () {
+		console.log('claimField is set to ' + fieldVal);
+	});
 }
 
 function handleLinkChange(e) {
-    const fieldVal = document.getElementById(e.srcElement.id).value;
-    chrome.storage.local.set({ 'linkField': fieldVal }, function () {
-        console.log('linkField is set to ' + fieldVal);
-    });
+	const fieldVal = document.getElementById(e.srcElement.id).value;
+	chrome.storage.local.set({ 'linkField': fieldVal }, function () {
+		console.log('linkField is set to ' + fieldVal);
+	});
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    document.querySelector('#formClaimInput').addEventListener('change', handleClaimChange);
-    document.querySelector('#formLinkInput').addEventListener('change', handleLinkChange);
-    document.querySelector('#formClaimInput').addEventListener('paste', handleClaimChange);
-    document.querySelector('#formLinkInput').addEventListener('paste', handleLinkChange);
+	deepCite.formClaimInput.addEventListener('change', handleClaimChange);
+	deepCite.formLinkInput.addEventListener('change', handleLinkChange);
+	deepCite.formClaimInput.addEventListener('paste', handleClaimChange);
+	deepCite.formLinkInput.addEventListener('paste', handleLinkChange);
 });
 
-
 $(document).ready(() => {
-    chrome.storage.local.get(['state'], function(result){
-        let state = result.state;
-        console.log(state);
+	chrome.storage.local.get(['state'], function (result) {
+		let state = result.state;
+		console.log(state);
 
-        if (state == 0){
-            chrome.storage.local.get(['claimField'], function (result) {
-                console.log('Value currently is ' + result.claimField);
-                document.getElementById("formClaimInput").value = result.claimField;
-            });
-            chrome.storage.local.get(['linkField'], function (result) {
-                console.log('Value currently is ' + result.linkField);
-                document.getElementById("formLinkInput").value = result.linkField;
-            });
-        }else if (state == 1){
-            chrome.storage.local.get(['lastData'], function(result){
-                dataReceived(result.lastData);
-            })
-        }
-    });
+		if (state == 0) {
+			chrome.storage.local.get(['claimField'], function (result) {
+				console.log('Value currently is ' + result.claimField);
+				deepCite.formClaimInput.value = result.claimField;
+			});
+			chrome.storage.local.get(['linkField'], function (result) {
+				console.log('Value currently is ' + result.linkField);
+				deepCite.formLinkInput.value = result.linkField;
+			});
+		} else if (state == 1) {
+			chrome.storage.local.get(['lastData'], function (result) {
+				dataReceived(result.lastData);
+			})
+		}
+	});
 
+	//makes anchor tags open in new tab
+	$('body').on('click', 'a', function () {
+		chrome.tabs.create({ url: $(this).attr('href') });
+		return false;
+	});
+	// we cannot strictly call functions with an onclick attribute from an html tag, so we must create ids for each button separately
+	$('#btnback-citation').on('click', function () {
+		newCitationButtonClicked();
+	});
+	$('#btnback-error').on('click', function () {
+		newCitationButtonClicked();
+	});
 
-    
+	//populate claim and link from storage
+	$('#linxerForm').on('submit', (event) => {
 
-    //populate claim and link from storage
+		var claimValue = event.target["0"].value;
+		var linkValue = event.target["1"].value;
 
-    $('#linxerForm').on('submit', (event) => {
-        var $btn = $("button");
-        $btn.button('loading');
+		// wait for both fields to be filled out
+		if (!claimValue || !linkValue) {
+			return;
+		}
 
-        $('#formClaimInput').attr('readonly', true);
-        $('#formLinkInput').attr('readonly', true);
+		disableCiteActions();
 
-        
+		event.preventDefault();
+		data = {
+			claim: claimValue,
+			link: linkValue
+		};
+		console.log(JSON.stringify(data));
+		sendToServer(data); //perform some operations
 
-        // chrome.tabs.query({
-        //     'active': true,
-        //     'lastFocusedWindow': true
-        // }, function (tabs) {
-        //     chrome.storage.local.set({
-        //         'claimsrc': tabs[0].url
-        //     }, () => {
-        //         console.log('Setting claim source');
-        //     });
-        //     console.log(tabs[0].url);
-        // });
-
-        event.preventDefault();
-        data = {
-            claim: event.target["0"].value,
-            link: event.target["1"].value
-        };
-        console.log(JSON.stringify(data));
-        sendToServer(data); //perform some operations
-
-        var delay = 180000; // 3 minute timeout
-        //var delay = 5000;
-        timeout = this.setTimeout(function () {
-            $("body").html(`<div id="results" class="container-fluid main">
-            <h2 id="title" style="font-family: Book Antiqua">Error</h1>
-            </div>`);
-
-            $('#results').append(`
-                <div class="error">
-                    <p class="result-text" style="color:#8b0000">${"Error 504: Gateway Timeout"}</p>
-                </div>
-            `);
-
-            ajax.abort();
-
-            chrome.storage.local.set({ 'state': 0},  function(){
-                console.log('Initialized extention state');
-            });
-
-        }, delay);
-    });
+		var delay = 180000; //180000 is a 3 minute timeout
+		timeout = this.setTimeout(function () {
+			ajax.abort();
+			chrome.storage.local.set({ 'state': 0 }, function () {
+				console.log('Initialized extention state');
+			});
+		}, delay);
+	});
 })
 
-function serverOffline() {
-    clearTimeout(timeout)
-    $("body").html(`<div id="results" class="container-fluid main">
-                    <h2 id="title" style="font-family: Book Antiqua">Error</h1>
-                    </div>`);
+function disableCiteActions() {
+	deepCite.formClaimInput.readOnly = true;
+	deepCite.formLinkInput.readOnly = true;
 
-    $('#results').append(`
-        <div class="error">
-            <p class="result-text" style="color:#8b0000">${"Error 503: Cannot Connect to Server"}</p>
-        </div>
-    `);
-    chrome.storage.local.set({ 'state': 0},  function(){
-        console.log('Initialized extention state');
-    });
+	deepCite.submitButton.disabled = true;
+	deepCite.submitButton.classList.add("btn-disabled");
+	deepCite.submitButton.innerText = "loading...";
 }
 
+function enableCiteActions() {
+	deepCite.formClaimInput.readOnly = false;
+	deepCite.formClaimInput.value = "";
+
+	deepCite.formLinkInput.readOnly = false;
+	deepCite.formLinkInput.value = "";
+
+	deepCite.submitButton.disabled = false;
+	deepCite.submitButton.classList.remove("btn-disabled");
+	deepCite.submitButton.innerText = "Cite";
+}
+
+function serverOffline() {
+	clearTimeout(timeout);
+	var serverOfflineErrorMessage = "Error 503: Cannot Connect to Server.";
+	showErrorWindowWithMessage(serverOfflineErrorMessage);
+
+	chrome.storage.local.set({ 'state': 0 }, function () {
+		console.log('Initialized extention state');
+	});
+}
 
 function sendToServer(data) {
-    ajax = $.ajax({
-        type: "POST",
-        url: url, // where the post request gets sent to (backend server address)
-        success: dataReceived, // callback function on success
-        error: serverOffline, // function if failed to connect to server
-        contentType: "application/json", // exprected data type of the returned data
-        data: JSON.stringify(data) // send the data json as a string
-    });
+	ajax = $.ajax({
+		type: "POST",
+		url: url, // where the post request gets sent to (backend server address)
+		success: dataReceived, // callback function on success
+		error: serverOffline, // function if failed to connect to server
+		contentType: "application/json", // exprected data type of the returned data
+		data: JSON.stringify(data) // send the data json as a string
+	});
 }
 
 function dataReceived(data) {
+	chrome.storage.local.set({ 'lastData': data }, () => {
+		console.log('Initialized previous data variable');
+	});
+	chrome.storage.local.set({ 'state': 1 }, function () {
+		console.log('Data received');
+	});
 
-    chrome.storage.local.set({'lastData': data}, ()=>{
-        console.log('Initialized previous data variable');
-    });
-    chrome.storage.local.set({ 'state': 1},  function(){
-        console.log('Data received');
-    });
+	// cancel timeout
+	clearTimeout(timeout)
 
-    // cancel timeout
-    clearTimeout(timeout)
+	var response = JSON.parse(data);
+	if (!response) {
+		return;
+	}
 
-    //prints errors:
-    if(data.error) {
-        console.log("Received: ", data);
-        $("body").html(`<div id="results" class="container-fluid main">
-                        <h2 id="title" style="font-family: Book Antiqua">Error</h1>
-                        </div>`);
+	//prints errors:
+	if (!!response.error && response.error !== "none") {
+		showErrorWindowWithMessage(response.error);
+	}
+	else {
+		showCitationWindow();
+		//for each item in data returned, populate results
+		if (!!response.results && !!response.results.length) {
+			populateCitationResults(response.results);
+		}
+	}
+}
 
-        $('#results').append(`
-            <div class="error">
-                <p class="result-text" style="color:#8b0000">${data.error}</p>
-                <button class="btn btn-info btn-block" id="btnback" style="background-color: #7C77B9; border-color: #7C77B9; color:#EBF5EE; margin-top:15px;">New Citation</button>
-            </div>
-        `);
-    }
-    else{ 
+function newCitationButtonClicked() {
+	chrome.storage.local.set({ 'claimField': "" }, function () {
+		console.log('Initialized claimField');
+	});
+	chrome.storage.local.set({ 'linkField': "" }, function () {
+		console.log('Initialized linkField');
+	});
+	chrome.storage.local.set({ 'state': 0 }, function () {
+		console.log('Initialized extention state');
+	});
+	showDeepCiteWindow();
+}
 
-        // update popup with results
-        console.log("Received: ", data);
-        $("body").html(`<div id="results" class="container-fluid main">
-                        <h2 id="title" style="font-family: Book Antiqua; display:inline-block; margin-right:10px; width:200px; ">Citation List</h2>
-                        <button class="btn btn-info btn-block" id="btnback" style="background-color: #7C77B9; border-color: #7C77B9; color:#EBF5EE; display:inline-block; margin-top:15px; width:100px; float:right;"">New Citation</button>
-                        </div>`);
-        
-        //for each item in data returned:
-        JSON.parse(data).results.forEach((result, i) => {
-            if (i == 0){
-                $("#results").append(`
-                    <h5>Original Claim</h5>
-                `)
-            }
-            if (i == 1){
-                $("#results").append(`
-                    <h5 style='margin-top: 17px;'>We Found</h5>
-                `)
-            }
+function populateCitationResults(results) {
+	results.forEach((result, i) => {
+		var resultSectionHtml = `<div class="form-section">`;
 
-            $("#results").append(`
-            <div class="result">
-                <p class="result-text">"${result.source}"</p>
-                <a href="${result.link}" class="card-link"><b>${result.link}</b></a>
-            </div>
-            `);
-
-        });
-
-    }
-
-
-    //makes anchor tags open in new tab
-    $('body').on('click', 'a', function () {
-        chrome.tabs.create({ url: $(this).attr('href') });
-        return false;
-    });
-    $('#btnback').on('click', function(){
-        chrome.storage.local.set({ 'claimField': "" }, function () {
-            console.log('Initialized claimField');
-        });
-        chrome.storage.local.set({ 'linkField': "" }, function () {
-            console.log('Initialized linkField');
-        });
-        chrome.storage.local.set({ 'state': 0},  function(){
-            console.log('Initialized extention state');
-        });
-
-        chrome.runtime.reload();
-    })
+		if (i == 0) {
+			resultSectionHtml += `<div class="form-group-title">Original Claim</div>`;
+		}
+		if (i == 1) {
+			resultSectionHtml += `<div class="form-group-title">We Found</div>`;
+		}
+		resultSectionHtml += `
+					<div class="form-field">
+						<div class="result-text">"${result.source}"</div>
+						<a href="${result.link}" class="result-link">${result.link}</a>
+					</div>
+				</div>
+				`;
+		$("#results").append(resultSectionHtml);
+	});
 }

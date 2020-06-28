@@ -1,0 +1,78 @@
+/* popup.css - this contains css for the popup modal. */
+body {
+  font-size: 100%;
+}
+
+.popup-window {
+	font-family: 'Alfa Slab One', 'Anton', sans-serif;
+	width: 40em;
+	margin: 0px;
+	background-color: #292a2d;
+	color: #e8eaed;
+	padding: 1em;
+	box-shadow: 0 0 5px black;
+}
+
+.popup-title-wrapper {
+	display: inline-flex;
+}
+
+.popup-image {
+	width: 50px;
+	height: 50px;
+	margin: 1em;
+}
+
+.title-text {
+	font-size: xx-large;
+	font-family: Book Antiqua;
+	margin: auto;
+	margin-left: 0.3em;
+}
+
+.popup-button {
+	background-color: #1a73e8;
+	color: white;
+	font-weight: 500;
+	width: 100%;
+	display: block;
+	margin: auto;
+	padding: 0.5em;
+	border: none;
+	border-radius: 5px;
+	font-size: medium;
+}
+
+.popup-button.btn-disabled {
+	background-color: #5a8dd0;
+}
+
+.form-section {
+	margin: 2em 0;
+}
+
+.form-group-title {
+	margin: 0.5em;
+	font-size: medium;
+}
+
+.form-field {
+	display: block;
+	width: 100%;
+	padding: 0.5em 0.7em;
+	font-size: 14px;
+	background-color: #e8eaed;
+	border: none;
+	color: black;
+}
+
+.result-text {
+	font-style: italic;
+	font-weight: bold;
+	color: #395060;
+}
+
+.result-link {
+	font-weight: bold;
+	text-overflow: ellipsis;
+}
