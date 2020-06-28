@@ -85,9 +85,9 @@ def predict(claim, text) :
 
     # compares claim to individual paragraphs
     for num, paragraph in enumerate(text):
-        clean_paragraph = preprocessing(nlp(paragraph))
+        clean_paragraph = preprocessing(nlp(paragraph)) #TODO:why does nlp run twice
         doc2 = nlp(clean_paragraph)
-        similarity = doc1.similarity(doc2)
+        similarity = doc1.similarity(doc2) #TODO: this would probably be better with tfidf vector
         paragraph_queue.put(Paragraph(num, similarity))
 
     # compares to individual sentences
@@ -97,17 +97,15 @@ def predict(claim, text) :
     for num, sentence in enumerate(sentences):
         clean_sent = preprocessing(nlp(sentence))
         doc3 = nlp(clean_sent)
-        similarity = doc1.similarity(doc2)
+        similarity = doc1.similarity(doc3)
         sentence_queue.put(Paragraph(num, similarity))
 
-
-    # TODO what if the paragraph and sentence overlap
     predict = []
     best_paragraph = paragraph_queue.get()
     best_sentence = sentence_queue.get()
     k = config['model']['num_claims_returned']
     for i in range(k):
-        if best_paragraph.similarity > best_sentence.similarity: #TODO why is the cuttof not here
+        if best_paragraph.similarity > best_sentence.similarity: #&& if already contained in a sentence in predict
             predict.append((claim, text[best_paragraph.index], best_paragraph.similarity))
             if paragraph_queue.not_empty:
                 best_paragraph = paragraph_queue.get()
