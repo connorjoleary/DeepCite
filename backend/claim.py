@@ -226,7 +226,7 @@ class Claim:
         # get tokenizer values
         scores = self.set_cand(ref2text)
         if self.parent == None:
-            if scores[0] <= .67: #TODO specify this number
+            if scores[0] <= config['model']['similarity_cutoff']
                 raise error.ClaimNotInLink('Unable to find \"' + self.text + '\" in ' + html_link(self.href))
         # creates leaf node or children
         self.create_children(ref2text, scores)
