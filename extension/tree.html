@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="utf-8" />
+	<title>DeepSite Source Tree</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/tree.css" rel="stylesheet">
+
+	<script src="js/jquery-3.2.1.min.js"></script>
+</head>
+<body>
+	<!-- Canvas Element for Lines -->
+	<canvas class="canvas-element" id="canvas-element"></canvas>
+
+	<div class="nav-bar">
+		<div class="nav-bar-text-wrapper">
+			<img class="nav-bar-logo" src="images/icon128.png" />
+			<span class="nav-bar-deep">Deep</span><span class="nav-bar-cite">Cite</span>
+			<span>Source Tree</span>
+			<div class="nav-button-wrapper">
+				<div class="button-donate" onclick="donateButtonClicked()">
+					Donate
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="content">
+		<div class="tree-container" id="tree-container">
+			<!-- This information is dynamically populated -->
+		</div>
+	</div>
+
+	<!-- Original Claim Component -->
+	<div class="generated-claim-box" style="display: none;">
+		<div class="generated-claim">
+			<div class="section-title">
+				Original Claim
+			</div>
+			<div class="section-content source"></div>
+			<div class="section-content link"></div>
+			<div class="section-content score" style="display: none;"></div>
+		</div>
+	</div>
+
+	<!-- Cite Component -->
+	<div class="generated-cite-box" style="display: none;">
+		<div class="generated-cite">
+			<div class="section-content source"></div>
+			<div class="section-content link"></div>
+			<div class="section-content score"></div>
+			<div class="section-content vote-wrapper">
+				<div class="vote-button upvote" onclick="upvoteButtonClicked(this)">
+					<img class="vote-button-image" src="images/upvote.png" />
+				</div>
+				<div class="vote-button downvote" onclick="downvoteButtonClicked(this)">
+					<img class="vote-button-image" src="images/downvote.png" />
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="js/tree.js"></script>
+</body>
+</html>
