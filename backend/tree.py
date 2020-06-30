@@ -46,7 +46,7 @@ class Tree:
                     temp_path = cand_path.claims.copy()
                     temp_path.append(onechild)
                     self.queue.put(ClaimPath(temp_path, curr_score * onechild.score))
-                    self.response_object.append({'citeID': onechild.id, 'parentCiteID': root.id, 'link': onechild.href, 'score': curr_score * onechild.score, 'source': onechild.text})
+                    self.response_object.append({'citeID': onechild.id, 'parentCiteID': root.id, 'link': root.href, 'score': curr_score * onechild.score, 'source': onechild.text})
                     self.beam_search(onechild)
                 break
             else:

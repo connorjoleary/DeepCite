@@ -142,7 +142,7 @@ class Claim:
         for i, words in enumerate(self.cand):
             try:
                 if ref2text[words] != "" and self.height < Claim.maxheight:  # if there is no link and the tree can get bigger
-                    self.child.append(Claim(ref2text[words], words, scores[i], (self.height +1), self))
+                    self.child.append(Claim(ref2text[words], words, scores[i], (self.height +1), self)) # does ref2text allow for multiple links
                 elif self.height < Claim.maxheight:
                     self.child.append(Claim("", words, scores[i], (self.height +1), self))
 
