@@ -9,7 +9,8 @@ import io
 import re
 import os
 import queue as q
-
+from config import config
+import uuid
 
 CWD_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
@@ -34,6 +35,7 @@ class Claim:
     maxheight = 5
     def __init__(self, href, text, score=1, height=0, parent=None):
         super(Claim, self).__init__()
+        self.id = str(uuid.uuid4())
         # hrefs : several reference links, which is a list of str
         # text : the text of the claim
         # child: a list of claims

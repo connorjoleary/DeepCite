@@ -25,7 +25,7 @@ def deep_cite(claim, link):
 
     try:
         tree = Tree(link, claim)
-        full_pre_json['results'] = tree.get_best_path()
+        full_pre_json['results'] = tree.response_object
 
     # handles exceptions that arise
     except Exception as e:

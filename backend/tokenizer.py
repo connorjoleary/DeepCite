@@ -77,7 +77,7 @@ def sentence_parsing(text):
 
 # claim - the claim for comparison
 # text - the text of the article, preferably paragraph by paragraph
-def predict(claim, text) :
+def predict(claim, text) : #TODO: this doesn't take into account the original claim, this happens in beam_search in Tree, but it might be better here
     paragraph_queue = q.PriorityQueue()
 
     clean_claim = preprocessing(nlp(claim))
