@@ -9,6 +9,10 @@ from lambda_config import config
 import boto3
 from botocore.exceptions import ClientError
 
+# 1. allow for option where uuid is provided, then just retrieve response from database
+# 2. split responce into extension or website, then if extension trim response to just being the few best sources
+# 3. why does the deepcite extension in prod not look better
+
 versions = {a: str(b) for a,b in config['versions'].items()}
 
 # Create a Secrets Manager client
@@ -17,6 +21,7 @@ secret_client = session.client(
     service_name='secretsmanager',
     region_name=config['secret']['region']
 )
+new_submission = True
 
 def get_secret():
     print('grabbing secret')
@@ -53,7 +58,25 @@ def respond(err, res=None):
 def call_deepcite(claim, link):
     # private ip address of ec2
     response = requests.post(url=config['ec2']['url'], json={"claim": claim, "link": link})
+    new_submission = True
     return Response(body = response.text)
+
+def grab_response(id, claim, link, conn):
+    try:
+        cur = conn.cursor()
+        cur.execute("SELECT response FROM deepcite_call where id = %s", (id)) #potentially this could just be a search by source claim and link and run for everything
+        responses = conn.fetchall()
+    except psycopg2.OperationalError as e:
+        print("ERROR: Unexpected error: Could commit to database instance.")
+        print(e)
+        responses = []
+
+    if len(responses) != 1:
+        print('There were {} responses returned for the uuid {}'.format(len(responses), id))
+        return call_deepcite(claim, link)
+    else:
+        new_submission=False
+        return Response(body = responses[0])
 
 def load_payload(event):
     if 'body' in event:
@@ -63,10 +86,19 @@ def load_payload(event):
 
 def lambda_handler(event, context):
     start = time.time()
+    secret = get_secret()
+    try:
+        secret = json.loads(secret)
+        conn = psycopg2.connect(host=secret['host'], user=secret['username'], password=secret['password'], database=secret['dbInstanceIdentifier'], port=secret['port'])
+    except psycopg2.OperationalError as e:
+        print("ERROR: Unexpected error: Could not connect to database instance.")
+        print(e)
+    else:
+        print("SUCCESS: Connection to RDS instance succeeded")
 
     operations = {
-        'POST': lambda x: call_deepcite(**x),
-        'GET': lambda x: Response(body= x, status_code= 200)
+        'POST': lambda x, conn: grab_response(x['id'], conn) if 'id' in x else call_deepcite(**x),
+        'GET': lambda x, conn: Response(body= x, status_code= 200)
     }
     operation = event['requestContext']['http']['method']
     
@@ -76,7 +108,7 @@ def lambda_handler(event, context):
     if operation in operations:
         try:
             payload = load_payload(event)
-            response = respond(None, operations[operation](payload))
+            response = respond(None, operations[operation](payload, conn))
         except Exception as e:
             print(e)
     else:
@@ -84,23 +116,20 @@ def lambda_handler(event, context):
 
     user_id = event['requestContext']['http']['sourceIp']
     time_elapsed = time.time()-start
-    secret = get_secret()
 
     try:
-        secret = json.loads(secret)
-        conn = psycopg2.connect(host=secret['host'], user=secret['username'], password=secret['password'], database=secret['dbInstanceIdentifier'], port=secret['port'])
-
         cur = conn.cursor()
-        cur.execute("INSERT INTO deepcite_call (user_id,stage,status_code,response,response_time_elapsed,current_versions) VALUES (%s, %s, %s, %s, %s, %s)", (user_id,stage,response['statusCode'],response['body'],time_elapsed,json.dumps(versions)))
+        if new_submission:
+            cur.execute("INSERT INTO deepcite_retrieval (id,user_id,stage,status_code,response_time_elapsed,current_versions) VALUES (%s, %s, %s, %s, %s, %s)", (base_id, id, user_id,stage,response['statusCode'],time_elapsed,json.dumps(versions)))
+        else:
+            cur.execute("INSERT INTO deepcite_call (id,user_id,stage,status_code,response,response_time_elapsed,current_versions) VALUES (%s, %s, %s, %s, %s, %s, %s)", (base_id, id, user_id,stage,response['statusCode'],response['body'],time_elapsed,json.dumps(versions)))
         conn.commit()
     except psycopg2.OperationalError as e:
-        print("ERROR: Unexpected error: Could not connect to database instance.")
+        print("ERROR: Unexpected error: Could commit to database instance.")
         print(e)
-    else:
-        print("SUCCESS: Connection to RDS instance succeeded")
-
+    
     print(response)
         
     return response
 
-# print(lambda_handler({"requestContext": {"http": {"method": "GET"}}},0))
+print(lambda_handler({"requestContext": {"http": {"method": "GET"}}},0))
