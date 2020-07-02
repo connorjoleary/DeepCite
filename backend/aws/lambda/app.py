@@ -6,12 +6,10 @@ import base64
 from dataclasses import dataclass
 import time
 from lambda_config import config
+import traceback
+from create_response import respond
 import boto3
 from botocore.exceptions import ClientError
-
-# 1. allow for option where uuid is provided, then just retrieve response from database
-# 2. split responce into extension or website, then if extension trim response to just being the few best sources
-# 3. why does the deepcite extension in prod not look better
 
 versions = {a: str(b) for a,b in config['versions'].items()}
 
@@ -41,27 +39,15 @@ def get_secret():
             secret = base64.b64decode(get_secret_value_response['SecretBinary'])
     return secret
 
-# need this so that I can pass json or a response object to be returned
-@dataclass
-class Response:
-    body: str
-    status_code: int = 200
-
 print('Loading function')
 
-def respond(err, res=None):
-    return {
-        'statusCode': '400' if err else res.status_code,
-        'body': err.message if err else res.body
-    }
-
-def call_deepcite(claim, link):
+def call_deepcite(claim, link, **kwargs):
     # private ip address of ec2
     response = requests.post(url=config['ec2']['url'], json={"claim": claim, "link": link})
     new_submission = True
-    return Response(body = response.text)
+    return json.loads(response.text)
 
-def grab_response(id, claim, link, conn):
+def grab_response(conn, id, claim, link, **kwargs):
     try:
         cur = conn.cursor()
         cur.execute("SELECT response FROM deepcite_call where id = %s", (id)) #potentially this could just be a search by source claim and link and run for everything
@@ -76,13 +62,13 @@ def grab_response(id, claim, link, conn):
         return call_deepcite(claim, link)
     else:
         new_submission=False
-        return Response(body = responses[0])
+        return responses[0] #not sure if i need json loads
 
 def load_payload(event):
     if 'body' in event:
         body = event.get('body')
         return json.loads(base64.b64decode(body)) if event['isBase64Encoded'] else json.loads(body)
-    return 'no body'
+    raise('No body in payload')
 
 def lambda_handler(event, context):
     start = time.time()
@@ -95,10 +81,10 @@ def lambda_handler(event, context):
         print(e)
     else:
         print("SUCCESS: Connection to RDS instance succeeded")
+    conn = None
 
     operations = {
-        'POST': lambda x, conn: grab_response(x['id'], conn) if 'id' in x else call_deepcite(**x),
-        'GET': lambda x, conn: Response(body= x, status_code= 200)
+        'POST': lambda x, conn: grab_response(conn, **x) if 'id' in x else call_deepcite(**x)
     }
     operation = event['requestContext']['http']['method']
     
@@ -108,11 +94,14 @@ def lambda_handler(event, context):
     if operation in operations:
         try:
             payload = load_payload(event)
-            response = respond(None, operations[operation](payload, conn))
+            response = operations[operation](payload, conn)
         except Exception as e:
+            traceback.print_tb(e.__traceback__)
             print(e)
+            response = e
     else:
-        response = respond(ValueError('Unsupported method "{}"'.format(operation)))
+        response = Exception('Unsupported method "{}"'.format(operation))
+        payload = {}
 
     user_id = event['requestContext']['http']['sourceIp']
     time_elapsed = time.time()-start
@@ -125,11 +114,12 @@ def lambda_handler(event, context):
             cur.execute("INSERT INTO deepcite_call (id,user_id,stage,status_code,response,response_time_elapsed,current_versions) VALUES (%s, %s, %s, %s, %s, %s, %s)", (base_id, id, user_id,stage,response['statusCode'],response['body'],time_elapsed,json.dumps(versions)))
         conn.commit()
     except psycopg2.OperationalError as e:
-        print("ERROR: Unexpected error: Could commit to database instance.")
+        print("ERROR: Unexpected error: Could commit to databa bnse instance.")
         print(e)
     
     print(response)
-        
-    return response
 
-print(lambda_handler({"requestContext": {"http": {"method": "GET"}}},0))
+    return respond(payload.get('response_size', 'small'), response)
+
+# body = "{\"id\": \"fdaeasfsd\", \"resonse_size\": \"small\", \"claim\":\"the death of Sherlock Holmes almost destroyed the magazine thries. When Arthur Conan Doyle killed him off in 1893, 20,000 people cancelled their subscriptions. The magazine barely survived. Its staff referred to Holmes’ death as “the dreadful event”.\", \"link\":\"http://www.bbc.com/culture/story/20160106-how-sherlock-holmes-changed-the-world\"}"
+# print(lambda_handler({"isBase64Encoded": False, "body": body, "requestContext": {"http": {"method": "POST", "sourceIp": "dfsds"}, "stage": "dev", }},0))
