@@ -3,7 +3,7 @@ from flask import request
 from config import config
 import json
 from tree import Tree
-from controller import Claim, html_link, new_indention
+from claim import Claim, html_link, new_indention
 import exceptions as errors
 app = Flask(__name__)
 
@@ -25,7 +25,7 @@ def deep_cite():
 
     try:
         tree = Tree(link, claim)
-        full_pre_json['results'] = tree.get_best_path()
+        full_pre_json['results'] = tree.response_object
 
     # handles exceptions that arise
     except Exception as e:
@@ -67,5 +67,5 @@ def sanitize_link(link):
     return sanitized.strip()
 
 if __name__ == "__main__":
-    # deep_cite(**{"claim":"6 years after resigning, Nixon testified on behalf of former FBI assistant director Mark Felt at Felts own trial, and gave money to Felts defense fund. In 2005 Felt revealed he had been Deep Throat, Bob Woodwards source while breaking the Watergate scandal that led to Nixons resignation", "link":"https://www.reddit.com/r/todayilearned/comments/6bu1xc/til_nixon_sent_champagne_and_a_note_saying/"})
+    # deep_cite(**{"claim":"6 years after resigning, Nixon testified on behalf of former FBI assistant director Mark Felt at Felts own trial, and gave money to Felts defense fund. In 2005 Felt revealed he had been Deep Throat, Bob Woodwards source while breaking the Watergate scandal that led to Nixons resignation", "link":"https://en.wikipedia.org/wiki/Mark_Felt#Trial_and_conviction"})
     app.run(host=config['server']['host'], port=config['server']['port'])

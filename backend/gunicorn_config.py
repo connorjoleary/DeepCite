@@ -1,5 +1,5 @@
-from config import config
+from config import config as file_config
 
-bind = config['guincorn']['bind']
-workers = config['guincorn']['workers'] 
-timeout = config['guincorn']['timeout']
+bind = file_config['gunicorn']['bind']
+workers = file_config['gunicorn']['workers'] 
+timeout = file_config['gunicorn']['timeout']

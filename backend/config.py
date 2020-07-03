@@ -36,6 +36,11 @@ DEFAULT = {
         'WORKERS': 1,
         'TIMEOUT': 3 * 60,
     },
+    'MODEL': {
+        'SIMILARITY_CUTOFF': .67,
+        'NUM_CLAIMS_RETURNED': 15,
+        'MAX_HEIGHT': 5
+    }
 }
 
 config['env'] = config.get('env') or env.get('ENV') or DEFAULT['ENV']
@@ -54,3 +59,9 @@ gunicorn['bind'] = gunicorn.get('bind') or env.get('GUNICORN_BIND') or f"{gunico
 gunicorn['workers'] = gunicorn.get('workers') or env.get('GUNICORN_WORKERS') or DEFAULT['GUNICORN']['WORKERS']
 gunicorn['timeout'] = gunicorn.get('timeout') or env.get('GUNICORN_TIMEOUT') or DEFAULT['GUNICORN']['TIMEOUT']
 config['gunicorn'] = gunicorn
+
+model = config.get('model', {})
+model['similarity_cutoff'] = model.get('similarity_cutoff') or env.get('MODEL_SIMILARITY_CUTOFF') or DEFAULT['MODEL']['SIMILARITY_CUTOFF']
+model['num_claims_returned'] = model.get('num_claims_returned') or env.get('MODEL_NUM_CLAIMS_RETURNED') or DEFAULT['MODEL']['NUM_CLAIMS_RETURNED']
+model['max_height'] = model.get('max_height') or env.get('MODEL_MAX_HEIGHT') or DEFAULT['MODEL']['MAX_HEIGHT']
+config['model'] = model
