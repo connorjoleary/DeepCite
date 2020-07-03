@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 exceptions = [errors.MalformedLink, errors.URLError, errors.EmptyWebsite, errors.ClaimNotInLink, errors.InvalidInput]
 
-@app.route('/api/v1/deep_cite', methods=['GET', 'POST'])
+@app.route('/api/v1/deep_cite', methods=['POST'])
 def deep_cite():
 # def deep_cite(claim, link):
     content = request.get_json()
