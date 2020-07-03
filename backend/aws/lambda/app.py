@@ -10,6 +10,7 @@ import traceback
 from create_response import respond
 import boto3
 from botocore.exceptions import ClientError
+import uuid
 
 versions = {a: str(b) for a,b in config['versions'].items()}
 
@@ -81,7 +82,6 @@ def lambda_handler(event, context):
         print(e)
     else:
         print("SUCCESS: Connection to RDS instance succeeded")
-    conn = None
 
     operations = {
         'POST': lambda x, conn: grab_response(conn, **x) if 'id' in x else call_deepcite(**x)
@@ -102,8 +102,15 @@ def lambda_handler(event, context):
     else:
         response = Exception('Unsupported method "{}"'.format(operation))
         payload = {}
+    
+    print(response)
 
     user_id = event['requestContext']['http']['sourceIp']
+    if isinstance(response, Exception):
+        base_id = str(uuid.uuid4())
+    else:
+        base_id = response['results'][0]['citeID']
+
     time_elapsed = time.time()-start
 
     try:
@@ -116,8 +123,6 @@ def lambda_handler(event, context):
     except psycopg2.OperationalError as e:
         print("ERROR: Unexpected error: Could commit to databa bnse instance.")
         print(e)
-    
-    print(response)
 
     return respond(payload.get('response_size', 'small'), response)
 
