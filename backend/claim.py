@@ -32,7 +32,7 @@ def html_link(link):
 
 
 class Claim:
-    maxheight = 5
+    maxheight = config['model']['max_height']
     def __init__(self, href, text, score=1, height=0, parent=None):
         super(Claim, self).__init__()
         self.id = str(uuid.uuid4())

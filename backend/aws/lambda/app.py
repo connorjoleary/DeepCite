@@ -121,7 +121,7 @@ def lambda_handler(event, context):
             cur.execute("INSERT INTO deepcite_call (id,user_id,stage,status_code,response,response_time_elapsed,current_versions) VALUES (%s, %s, %s, %s, %s, %s, %s)", (base_id, id, user_id,stage,response['statusCode'],response['body'],time_elapsed,json.dumps(versions)))
         conn.commit()
     except psycopg2.OperationalError as e:
-        print("ERROR: Unexpected error: Could commit to databa bnse instance.")
+        print("ERROR: Unexpected error: Could commit to database instance.")
         print(e)
 
     return respond(payload.get('response_size', 'small'), response)
