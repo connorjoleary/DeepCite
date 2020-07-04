@@ -160,7 +160,7 @@ function groupCiteData(data) {
 }
 
 function sortCiteData(data) {
-	var sortedData = [], subset, previousSortedRowIDs;
+	var sortedData = [], subset, unsortedSubset, sortedSubset, previousSortedRowIDs;
 	data.forEach(function (rowSubset) {
 		// each rowSubset is a row of cites
 		subset = [];
@@ -175,9 +175,16 @@ function sortCiteData(data) {
 			});
 			// for each previousSortedRowID (parentCiteIDs of the current rowSubset), let's populate subset in order
 			previousSortedRowIDs.forEach(function (parentCiteID) {
-				subset.push(...rowSubset.filter(function (cite) {
+				// find the cites that share a parentCiteID
+				unsortedSubset = rowSubset.filter(function (cite) {
 					return cite.parentCiteID === parentCiteID;
-				}));
+				});
+				// order these cites by score, highest to lowest going from left to right
+				sortedSubset = unsortedSubset.sort(function (a, b) {
+					return b.score - a.score;
+				});
+				// add this cite list to the subset (the current row)
+				subset.push(...sortedSubset);
 			})
 
 		}
