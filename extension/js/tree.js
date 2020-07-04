@@ -1,5 +1,5 @@
 /*
- *	DeepSite Source Tree page 
+ *	DeepCite Source Tree page 
 */
 
 if (!deepCite) {
@@ -19,17 +19,33 @@ function init() {
 }
 
 function generateTestData() {
-	var record, parentRecordID, randomTextCount;
+	var record, parentRecordID, randomTextCount, enforcedMaximumChildrenBool, maximumChildrenCount;
 	var text = "";
 	var runningRecordID = 1;
 	var randomText = "lorem ipsum dolor ";
 	var testData = [];
-	// random number 3-20
-	var randomCount = (Math.floor(Math.random() * 18) + 3);
+	// random number 3-15
+	var randomCount = (Math.floor(Math.random() * 13) + 3);
 
 	while (randomCount > 0) {
 		// a random cite with a lower id.  if citeID = 1, parentCiteID = 0
-		parentRecordID = runningRecordID !== 1 ? Math.floor(Math.random() * (runningRecordID - 1) + 1) : 0;
+		if (runningRecordID === 1) {
+			parentRecordID = 0;
+		}
+		// enforce maximum children limit (currently 3)
+		else {
+			var enforcedMaximumChildrenBool = false;
+			while (!enforcedMaximumChildrenBool) {
+				parentRecordID = Math.floor(Math.random() * (runningRecordID - 1) + 1);
+				maximumChildrenCount = testData.filter(function (createdCite) {
+					return createdCite.parentCiteID === parentRecordID;
+				}).length;
+				// if we're trying to create a fourth children to a parent cite, we need to pick a different parent
+				if (maximumChildrenCount < 3) {
+					enforcedMaximumChildrenBool = true;
+				}
+			}
+		}		
 		text = "";
 		// get a random amount of text
 		randomTextCount = (Math.floor(Math.random() * 20) + 1);
