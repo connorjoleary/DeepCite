@@ -1,6 +1,8 @@
 # DeepCite
 
-<p> Google Chrome extension that finds the source of a claim using BeautifulSoup, spaCy, and gensim libraries. Please look at documentation for implemenation details. :trollface:</p>
+<p> In a world filled with fake news and alternative facts, get the real deep sources for your information. </p>
+
+https://chrome.google.com/webstore/detail/deepcite/oibmgglhkkaigemacdkfeedffkjbpgoi?hl=en-US
 
 ## Table of Contents
 
@@ -51,12 +53,20 @@ Installations and downloads required before server can funciton properly
   	* You can also find this link from the [archive page](https://code.google.com/archive/p/word2vec/) mentioned above.
   	* Once you have your model you'll need to first create the directory `./DeepCite/backend/word_vectors` then you can copy or move the model into that folder.
   	* Note: the backend expects a specific file name so you may need to rename the file. The end result should look like this `./DeepCite/backend/word_vectors/GoogleNews-vectors-negative300.bin`
-  * Chrome driver https://sites.google.com/a/chromium.org/chromedriver/home -- in DeepCite/backend, check compatibility 
 
 <small>n Note: 'en_core_web_sm' installation is testing purposes. It has lower accurary compared to the word google vectors </small>
 
 
 ## Testing
+
+### Full End to End Testing
+
+##### Extension
+
+##### Lambda
+
+##### Model
+
 
 ### Frontend Testing
 * Download and install node.js from <a href="https://nodejs.org/en/"> their website </a>
@@ -137,14 +147,19 @@ There are a couple ways to configure both the backend and the aws lambda service
       "port": "8000" ,
       "workers": "1",
       "timeout": "180"
+    },
+    "model": {
+        "similarity_cutoff": 0.67,
+        "num_claims_returned": 15,
+        "max_height": 5
     }
   },
   "aws": {
     "env": "development",
     "versions": {
       "model": "0.3",
-      "lambda": "0.1",
-      "api": "0.1",
+      "lambda": "0.2",
+      "api": "0.2",
       "extension": "0.2"
     },
     "secret": {
@@ -172,18 +187,21 @@ There are a couple ways to configure both the backend and the aws lambda service
  GUNICORN_PORT=8000
  GUNICORN_WORKERS=1
  GUNICORN_TIMEOUT=180
+ MODEL_SIMILARITY_CUTOFF=.67
+ MODEL_NUM_CLAIMS_RETURNED=15
+ MODEL_MAX_HEIGHT=5
  EC2_IP=172.31.35.42
  EC2_PORT=8000
  SECRET_REGION=us-east-2
  SECRET_NAME=rds_deepcite_sample
  VERSIONS_MODEL=0.3
- VERSIONS_LAMBDA=0.1
- VERSIONS_API=0.1
+ VERSIONS_LAMBDA=0.2
+ VERSIONS_API=0.2
  VERSIONS_EXTENSION=0.2
  ```
 
 ## Authors
-Connor O'Leary
+Connor O'Leary, Joe Pagani, and Jake Heaser
 
 With great help from the University of Wisconsin, Madison CS506 team
 Shourya Goel, Jiayi Hu, Vinay Janardhanam, Dillon O'Leary, Noah SickLick, and Catherine Yan
