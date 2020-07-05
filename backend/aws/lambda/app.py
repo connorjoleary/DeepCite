@@ -100,7 +100,7 @@ def lambda_handler(event, context):
             print(e)
             response = e
     else:
-        response = Exception('Unsupported method "{}"'.format(operation))
+        response = Exception(f'Unsupported method "{operation}"')
         payload = {}
     
     print(response)

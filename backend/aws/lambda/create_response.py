@@ -1,4 +1,5 @@
 import json
+from lambda_config import config
 
 def trim_response(error, results):
     if len(results) == 0:
@@ -9,7 +10,7 @@ def trim_response(error, results):
     shortened_results = shortened_results[1:]
     sorted_results = sorted(shortened_results, key=lambda k: k['score'], reverse=True)
 
-    return json.dumps([source]+sorted_results[:3])
+    return json.dumps([source]+sorted_results[:config['response']['num_best_returned']])
 
 def respond(response_size, res=None):
     if isinstance(res, Exception):
