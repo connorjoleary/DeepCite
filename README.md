@@ -168,7 +168,7 @@ There are a couple ways to configure both the backend and the aws lambda service
       "model": "0.3",
       "lambda": "0.2",
       "api": "0.2",
-      "extension": "0.2"
+      "extension": "0.3"
     },
     "secret": {
       "region": "us-east-2",
@@ -205,7 +205,7 @@ There are a couple ways to configure both the backend and the aws lambda service
  VERSIONS_MODEL=0.3
  VERSIONS_LAMBDA=0.2
  VERSIONS_API=0.2
- VERSIONS_EXTENSION=0.2
+ VERSIONS_EXTENSION=0.3
  ```
 
 ## Authors

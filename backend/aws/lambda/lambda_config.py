@@ -36,8 +36,7 @@ DEFAULT = {
         'MODEL': 0.3,
         'LAMBDA': 0.2,
         'API': 0.2,
-        'EXTENSION': 0.2,
-
+        'EXTENSION': 0.3,
     },
 }
 
