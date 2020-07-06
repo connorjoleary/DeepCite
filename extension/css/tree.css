@@ -49,8 +49,8 @@ body {
 }
 
 .content {
-	width: 80%;
-	margin: 2em auto 2em auto;
+	width: 75%;
+	margin: auto;
 }
 
 .generated-claim-box {
@@ -63,18 +63,22 @@ body {
 	background-color: #151515;
 	width: 25em;
 	margin: 4em 0;
+	border-radius: 2.5em;
 }
 
 .generated-cite-box {
 	/* width is dynamically calculated */
 	justify-content: center;
 	display: inherit;
+	margin: 1em;
+	height: fit-content;
 }
 
 .generated-cite {
 	background-color: #151515;
 	width: 25em;
 	margin: 4em 0;
+	border-radius: 2.5em;
 }
 
 .section-title {
@@ -104,8 +108,9 @@ body {
 .section-content.vote-wrapper {
 	background-color: #151515;
 	padding: 0.5em;
-	width: 30%;
+	width: 50%;
 	display: flex;
+	margin: auto;
 }
 
 .vote-button {

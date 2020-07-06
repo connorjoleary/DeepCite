@@ -1,5 +1,5 @@
 /*
- *	DeepSite Source Tree page 
+ *	DeepCite Source Tree page 
 */
 
 if (!deepCite) {
@@ -11,59 +11,60 @@ deepCite.claimComponent = document.getElementsByClassName("generated-claim-box")
 deepCite.treeContainer = document.getElementById("tree-container");
 deepCite.canvasElement = document.getElementById("canvas-element");
 
-var testData = [{
-	citeID: 1,
-	parentCiteID: 0,
-	link: "https://en.wikipedia.org/wiki/Video_game",
-	score: 0,
-	source: "Video games are fun."
-}, {
-	citeID: 2,
-	parentCiteID: 1,
-	link: "https://google.com",
-	score: 70,
-	source: "Video games are enjoyed by many people."
-}, {
-	citeID: 3,
-	parentCiteID: 1,
-	link: "https://angrygamer.com",
-	score: 20,
-	source: "Video games are NOT fun."
-}, {
-	citeID: 4,
-	parentCiteID: 1,
-	link: "https://philosophyofvideogames.com",
-	score: 10,
-	source: "It is unknown whether or not video games are fun."
-}, {
-	citeID: 5,
-	parentCiteID: 2,
-	link: "https://reddit.com",
-	score: 100,
-	source: "I have played video games, and I enjoy them."
-}, {
-	citeID: 6,
-	parentCiteID: 3,
-	link: "https://angrygamer.com",
-	score: 10,
-	source: "I personally hate video games."
-}, {
-	citeID: 7,
-	parentCiteID: 6,
-	link: "https://angryoldman.com",
-	score: 10,
-	source: "I personally hate everything."
-}, {
-	citeID: 8,
-	parentCiteID: 3,
-	link: "https://gamerlore.com",
-	score: 100,
-	source: "Gamers like games more than non-gamers."
-}];
-
 // initialization function
 function init() {
+	// this function will be replaced by getData, an ajax call that will gather data from the server.
+	var testData = generateTestData();
 	populateDataIntoTree(testData);
+}
+
+function generateTestData() {
+	var record, parentRecordID, randomTextCount, enforcedMaximumChildrenBool, maximumChildrenCount;
+	var text = "";
+	var runningRecordID = 1;
+	var randomText = "lorem ipsum dolor ";
+	var testData = [];
+	// random number 3-15
+	var randomCount = (Math.floor(Math.random() * 13) + 3);
+
+	while (randomCount > 0) {
+		// a random cite with a lower id.  if citeID = 1, parentCiteID = 0
+		if (runningRecordID === 1) {
+			parentRecordID = 0;
+		}
+		// enforce maximum children limit (currently 3)
+		else {
+			var enforcedMaximumChildrenBool = false;
+			while (!enforcedMaximumChildrenBool) {
+				parentRecordID = Math.floor(Math.random() * (runningRecordID - 1) + 1);
+				maximumChildrenCount = testData.filter(function (createdCite) {
+					return createdCite.parentCiteID === parentRecordID;
+				}).length;
+				// if we're trying to create a fourth children to a parent cite, we need to pick a different parent
+				if (maximumChildrenCount < 3) {
+					enforcedMaximumChildrenBool = true;
+				}
+			}
+		}		
+		text = "";
+		// get a random amount of text
+		randomTextCount = (Math.floor(Math.random() * 20) + 1);
+		while (randomTextCount > 0) {
+			text = text + "" + randomText;
+			randomTextCount--;
+		}
+		record = {
+			citeID: runningRecordID,
+			parentCiteID: parentRecordID,
+			link: "https://www.testData.com",
+			score: Math.floor(Math.random() * 100),
+			source: text
+		}
+		testData.push(record);
+		runningRecordID++;
+		randomCount--;
+	}
+	return testData;
 }
 
 function donateButtonClicked() {
@@ -89,12 +90,14 @@ function findClosestCiteID(element) {
 }
 
 function populateDataIntoTree(data) {
-	var clonedCiteBox, populatedCiteBox, groupedData;
+	var clonedCiteBox, populatedCiteBox, groupedData, sortedGroupedData;
 	var rowCiteCount = 1;
 	// first, we need to group our citations by parentCiteID
-	groupedData = groupCiteData(data);
-	// next, we need to create cite/claim boxes for each item and put them in the correct row
-	groupedData.forEach(function (dataGroup) {
+	groupedData = groupCiteData(data); 
+	// next, we want to sort our data so the flow chart is clean after drawing lines
+	sortedGroupedData = sortCiteData(groupedData);
+	// then, we need to create cite/claim boxes for each item and put them in the correct row
+	sortedGroupedData.forEach(function (dataGroup) {
 		rowCiteCount = dataGroup.length;
 		dataGroup.forEach(function (item) {
 			if (!item.parentCiteID) {
@@ -112,8 +115,14 @@ function populateDataIntoTree(data) {
 			deepCite.treeContainer.appendChild(populatedCiteBox);
 		});
 	});
+	// we need to make sure we are scrolled all the way up so the lines draw correctly
+	forceScrollToTop();
 	// lastly, we need to draw lines between elements and their parent.
 	drawLines(data);
+}
+
+function forceScrollToTop() {
+	$(this).scrollTop(0);
 }
 
 function groupCiteData(data) {
@@ -166,6 +175,44 @@ function groupCiteData(data) {
 	return groupedData;
 }
 
+function sortCiteData(data) {
+	var sortedData = [], subset, unsortedSubset, sortedSubset, previousSortedRowIDs;
+	data.forEach(function (rowSubset) {
+		// each rowSubset is a row of cites
+		subset = [];
+		if (rowSubset.length > 1) {
+			// if there's multiple cites on this row, we need to sort by parentCiteID to keep lines from crossing
+			// problem is, the above row may not be citeID ascending, so we can't order by sort(a - b)
+			previousSortedRowIDs = [];
+			// grab the parent row's citeIDs.  it's sorted correctly at this point.
+			// we can safely assume there will be an array of at least one item here.
+			sortedData[sortedData.length - 1].forEach(function (cite) {
+				previousSortedRowIDs.push(cite.citeID);
+			});
+			// for each previousSortedRowID (parentCiteIDs of the current rowSubset), let's populate subset in order
+			previousSortedRowIDs.forEach(function (parentCiteID) {
+				// find the cites that share a parentCiteID
+				unsortedSubset = rowSubset.filter(function (cite) {
+					return cite.parentCiteID === parentCiteID;
+				});
+				// order these cites by score, highest to lowest going from left to right
+				sortedSubset = unsortedSubset.sort(function (a, b) {
+					return b.score - a.score;
+				});
+				// add this cite list to the subset (the current row)
+				subset.push(...sortedSubset);
+			})
+
+		}
+		else {
+			// this is the original claim
+			subset = rowSubset;
+		}
+		sortedData.push(subset);
+	});
+	return sortedData;
+}
+
 function populateDataIntoCiteBox(citeBox, data) {
 	var sourceNode = citeBox.getElementsByClassName("section-content source")[0];
 	var linkNode = citeBox.getElementsByClassName("section-content link")[0];
@@ -181,14 +228,13 @@ function populateDataIntoCiteBox(citeBox, data) {
 }
 
 function drawLines(citeData) {
-	// this function currently only draws lines on the observable page.
-	// changing screen resolution will misplace lines, and scrolling down will reveal an absence of lines.
-	// this should be modified to fix these two issues.
+	// changing screen resolution will misplace lines.
 	var currentCiteBox, parentCiteBox, currentCite, parentCite, currentx, currenty, parentx, parenty, canvasContext;
-	// set canvasElement bounds to observable window
-	deepCite.canvasElement.width = window.innerWidth;
-	deepCite.canvasElement.height = window.innerHeight;
+	// set canvasElement bounds to scrollable screen size.
+	deepCite.canvasElement.width = $(document).width();
+	deepCite.canvasElement.height = $(document).height();
 	canvasContext = deepCite.canvasElement.getContext("2d");
+	canvasContext.lineWidth = 2;
 
 	citeData.forEach(function (citeItem) {
 		if (!citeItem.parentCiteID) {
