@@ -1,12 +1,11 @@
 from bs4 import BeautifulSoup
 import requests
-# from advanced_scraper import Claim
 import os
-from controller import Claim
+from claim import Claim
 import queue as q
 
-# Call the Claim constructor in advanced_scraper to create the instance root. Parse the root into constructor Tree to initialize instance 
-# Tree. Call tree.tofront() to return a list of tree nodes used for visualization.
+# Call the Claim constructor to create the instance root. Parse the root into constructor Tree to initialize instance 
+# Tree.
 class ClaimPath(object):
     def __init__(self, claim_path, totscore):
         self.claims = claim_path
@@ -22,16 +21,16 @@ class ClaimPath(object):
 class Tree:
     def __init__(self, url, claim):
         # root: Claim
-        root = Claim(url, claim)
+        self.tree_root = Claim(url, claim)
+        self.response_object = [{'citeID': self.tree_root.id, 'parentCiteID': 0, 'link': self.tree_root.href, 'score': self.tree_root.score, 'source': self.tree_root.text}]
         self.queue = q.PriorityQueue()
         inilist = []
-        inilist.append(root)
+        inilist.append(self.tree_root)
         self.queue.put(ClaimPath(inilist, 1))
-        self.best_queue = q.PriorityQueue()
-        self.beam_search(root)
+        self.best_queue = q.PriorityQueue() # This can likly be deleted
+        self.beam_search(self.tree_root)
 
-
-
+    # This function multiplies the cild scores by the parents
     def beam_search(self,root):
         #root = Node(claim.href, claim.text, claim.score)
         #jumps.append(root)
@@ -45,8 +44,9 @@ class Tree:
                 curr_score = cand_path.totscore
                 for onechild in root.child:
                     temp_path = cand_path.claims.copy()
-                    temp_path.append(onechild)                            
+                    temp_path.append(onechild)
                     self.queue.put(ClaimPath(temp_path, curr_score * onechild.score))
+                    self.response_object.append({'citeID': onechild.id, 'parentCiteID': root.id, 'link': root.href, 'score': curr_score * onechild.score, 'source': onechild.text})
                     self.beam_search(onechild)
                 break
             else:
@@ -55,10 +55,11 @@ class Tree:
         for path in recover_paths:
             self.queue.put(path)
       
+    # May be removed soon, but unsure at this point
+    # def get_best_path(self):
+    #     best_path = self.queue.get()
+    #     # nodes = [claim.to_claim_link_dict() for claim in best_path.claims]
+    #     nodes = [claim.to_claim_parent_link_dict() for claim in best_path.claims]
         
-    def get_best_path(self):
-        best_path = self.queue.get()
-        # nodes = [claim.to_claim_link_dict() for claim in best_path.claims]   
-        nodes = [claim.to_claim_parent_link_dict() for claim in best_path.claims]        
-        
-        return nodes
+    #     return nodes
+

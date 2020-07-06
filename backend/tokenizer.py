@@ -77,21 +77,18 @@ def sentence_parsing(text):
 
 # claim - the claim for comparison
 # text - the text of the article, preferably paragraph by paragraph
-# k - num similarities to be returned
-def predict(claim, text, k) :
-
-    queue = q.PriorityQueue()
+def predict(claim, text) : #TODO: this doesn't take into account the original claim, this happens in beam_search in Tree, but it might be better here
+    paragraph_queue = q.PriorityQueue()
 
     clean_claim = preprocessing(nlp(claim))
     doc1 = nlp(clean_claim)
 
     # compares claim to individual paragraphs
     for num, paragraph in enumerate(text):
-        clean_paragraph = preprocessing(nlp(paragraph))
+        clean_paragraph = preprocessing(nlp(paragraph)) #TODO:why does nlp run twice
         doc2 = nlp(clean_paragraph)
-        queue.put(Paragraph(num, doc1.similarity(doc2)))
-
-    
+        similarity = doc1.similarity(doc2) #TODO: this would probably be better with tfidf vector
+        paragraph_queue.put(Paragraph(num, similarity))
 
     # compares to individual sentences
     sentence_queue = q.PriorityQueue()
@@ -100,23 +97,23 @@ def predict(claim, text, k) :
     for num, sentence in enumerate(sentences):
         clean_sent = preprocessing(nlp(sentence))
         doc3 = nlp(clean_sent)
-        sentence_queue.put(Paragraph(num, doc1.similarity(doc3)))
-    
-    
-# TODO what if the paragraph and sentence overlap
+        similarity = doc1.similarity(doc3)
+        sentence_queue.put(Paragraph(num, similarity))
+
     predict = []
-    best_paragraph = queue.get()
+    best_paragraph = paragraph_queue.get()
     best_sentence = sentence_queue.get()
+    k = config['model']['num_claims_returned']
     for i in range(k):
-        if best_paragraph.similarity > best_sentence.similarity : #TODO why is the cuttof not here
+        if best_paragraph.similarity > best_sentence.similarity: #&& if already contained in a sentence in predict
             predict.append((claim, text[best_paragraph.index], best_paragraph.similarity))
-            if queue.not_empty:
-                best_paragraph = queue.get()
+            if paragraph_queue.not_empty:
+                best_paragraph = paragraph_queue.get()
             else:
                 best_paragraph = Paragraph(0, -10)
         else:
             predict.append((claim,sentences[best_sentence.index], best_sentence.similarity))
-            if queue.not_empty:
+            if paragraph_queue.not_empty:
                 best_sentence = sentence_queue.get()
             else:
                 best_sentence = Paragraph(0, -10)
