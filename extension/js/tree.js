@@ -1,5 +1,5 @@
 /*
- *	DeepSite Source Tree page 
+ *	DeepCite Source Tree page 
 */
 
 if (!deepCite) {
@@ -19,20 +19,36 @@ function init() {
 }
 
 function generateTestData() {
-	var record, parentRecordID, randomTextCount;
+	var record, parentRecordID, randomTextCount, enforcedMaximumChildrenBool, maximumChildrenCount;
 	var text = "";
 	var runningRecordID = 1;
 	var randomText = "lorem ipsum dolor ";
 	var testData = [];
-	// random number 3-20
-	var randomCount = (Math.floor(Math.random() * 18) + 3);
+	// random number 3-15
+	var randomCount = (Math.floor(Math.random() * 13) + 3);
 
 	while (randomCount > 0) {
 		// a random cite with a lower id.  if citeID = 1, parentCiteID = 0
-		parentRecordID = runningRecordID !== 1 ? Math.floor(Math.random() * (runningRecordID - 1) + 1) : 0;
+		if (runningRecordID === 1) {
+			parentRecordID = 0;
+		}
+		// enforce maximum children limit (currently 3)
+		else {
+			var enforcedMaximumChildrenBool = false;
+			while (!enforcedMaximumChildrenBool) {
+				parentRecordID = Math.floor(Math.random() * (runningRecordID - 1) + 1);
+				maximumChildrenCount = testData.filter(function (createdCite) {
+					return createdCite.parentCiteID === parentRecordID;
+				}).length;
+				// if we're trying to create a fourth children to a parent cite, we need to pick a different parent
+				if (maximumChildrenCount < 3) {
+					enforcedMaximumChildrenBool = true;
+				}
+			}
+		}		
 		text = "";
 		// get a random amount of text
-		randomTextCount = (Math.floor(Math.random() * 20) + 1);
+		randomTextCount = (Math.floor(Math.random() * 10) + 1);
 		while (randomTextCount > 0) {
 			text = text + "" + randomText;
 			randomTextCount--;
@@ -40,8 +56,8 @@ function generateTestData() {
 		record = {
 			citeID: runningRecordID,
 			parentCiteID: parentRecordID,
-			link: "https://www.testData.com",
-			score: Math.floor(Math.random() * 100),
+			link: "https://www.google.com/search?rlz=1C1CHBF_enUS897US897&sxsrf=ALeKk00tGtiAE0FRqCZBEMQggSU9STLJBA%3A1593977105987&ei=ESkCX8ntO8e6tAaZy5ugCg&q=deepCite&oq=deepCite&gs_lcp=CgZwc3ktYWIQAzoECCMQJzoFCAAQkQI6BAgAEEM6BQgAELEDOgIIADoHCAAQsQMQQzoECAAQClC0EljjG2DLHGgAcAB4AYAB9wKIAcwHkgEHNi4xLjAuMZgBAKABAaoBB2d3cy13aXo&sclient=psy-ab&ved=0ahUKEwiJurq567bqAhVHHc0KHZnlBqQQ4dUDCAw&uact=5",
+			score: Math.floor(Math.random() * 100) + 1, // 1-100
 			source: text
 		}
 		testData.push(record);
@@ -207,8 +223,45 @@ function populateDataIntoCiteBox(citeBox, data) {
 
 	sourceNode.innerText = `"` + data.source + `"`;
 	linkNode.innerText = data.link;
-	scoreNode.innerText = "Score: " + data.score + "%";
+	linkNode.href = data.link;
+	// score node changes color depending on the score
+	scoreNode.innerText = data.score;
+	scoreNode.style.backgroundColor = getBackgroundColorByScore(data.score, 1);
+	scoreNode.style.color = getTextColorByScore(data.score);
+	scoreNode.style.borderColor = getBackgroundColorByScore(data.score, /* multiplier */ 0.7);
+
 	return citeBox;
+}
+
+function getBackgroundColorByScore(score, multiplier) {
+	// score of 0 is red background, socre of 100 is green background
+	var redVal = 240, greenVal = 240, blueVal = 0;
+	var rgbString = "rgb(";
+
+	if (score < 50) {
+		greenVal = greenVal - ((50 - score) * 5);
+	}
+	else {
+		redVal = redVal - ((score - 50) * 5);
+	}
+
+	// if multiplier has a value, apply it to the colors
+	if (!!multiplier) {
+		greenVal = greenVal * multiplier;
+		redVal = redVal * multiplier;
+		blueVal = blueVal * multiplier;
+	}
+
+	return rgbString + redVal + "," + greenVal + "," + blueVal + ")";
+}
+
+function getTextColorByScore(score) {
+	// text color is white < 30, and black >= 30
+	var value = 0;
+	if (score < 30) {
+		value = 255;
+	}
+	return "rgb(" + value + "," + value + "," + value + ")";
 }
 
 function drawLines(citeData) {
@@ -219,6 +272,7 @@ function drawLines(citeData) {
 	deepCite.canvasElement.height = $(document).height();
 	canvasContext = deepCite.canvasElement.getContext("2d");
 	canvasContext.lineWidth = 2;
+	canvasContext.strokeStyle = '#7b7b7b';
 
 	citeData.forEach(function (citeItem) {
 		if (!citeItem.parentCiteID) {
@@ -236,15 +290,25 @@ function drawLines(citeData) {
 		if (!currentCite || !parentCite) {
 			return;
 		}
-		// we want to draw a line from the bottom of the parent cite to the top of the child cite
+		// we want to draw a line from the bottom of the parent cite to the top of the child cite (using three lines and right angles)
 		currentx = currentCite.getBoundingClientRect().x + (currentCite.offsetWidth / 2);
 		currenty = currentCite.getBoundingClientRect().y;
 		parentx = parentCite.getBoundingClientRect().x + (parentCite.offsetWidth / 2);
 		parenty = parentCite.getBoundingClientRect().y + parentCite.offsetHeight;
-		// draw the line
+		// draw line from child up
 		canvasContext.beginPath();
 		canvasContext.moveTo(currentx, currenty);
-		canvasContext.lineTo(parentx, parenty);
+		canvasContext.lineTo(currentx, currenty - 40);
+		canvasContext.stroke();
+		// draw line from parent down
+		canvasContext.beginPath();
+		canvasContext.moveTo(parentx, parenty);
+		canvasContext.lineTo(parentx, currenty - 80);
+		canvasContext.stroke();
+		// draw line to connect the first two lines
+		canvasContext.beginPath();
+		canvasContext.moveTo(currentx, currenty - 40);
+		canvasContext.lineTo(parentx, currenty - 80);
 		canvasContext.stroke();
 	});
 }

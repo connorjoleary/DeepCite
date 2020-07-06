@@ -1,18 +1,24 @@
-body {
-	color: #e8eaed;
+html, body {
+	margin: 0;
+	height: 100%;
 	background-color: #e8eaed;
+	color: #e8eaed;
+}
+
+body {
+	background: linear-gradient(#dedede 0%, #e8eaed 100%);
 }
 
 .canvas-element {
 	position: absolute;
-	z-index: -1;
 	/* width and height are dynamically calculated */
 }
 
 .nav-bar {
 	width: 100%;
 	height: 8em;
-	background-color: #151515;
+	position: relative;
+	color: black;
 }
 
 .nav-bar-text-wrapper {
@@ -46,30 +52,53 @@ body {
 	color: white;
 	padding: 0.5em 1em;
 	font-size: large;
+	cursor: pointer;
 }
 
 .content {
-	width: 85%;
-	margin: 2em auto 2em auto;
+	width: 100%;
+	margin: auto;
+	border-radius: 18em;
 }
 
 .generated-claim-box {
 	width: 100%;
 	justify-content: center;
-	display: inherit;
+}
+
+.generated-claim-circle {
+	width: 24em;
+	height: 24em;
+	margin: 1em auto 2em auto;
+	position: relative;
+	border-radius: 15em;
+	padding: 1.5em;
+	border-color: #7b7b7b;
+	border-style: solid;
+	border-width: 2px;
 }
 
 .generated-claim {
-	background-color: #151515;
-	width: 25em;
-	margin: 4em 0;
+	height: 100%;
+	background-color: #ab4d20;
+	color: white;
+	border-radius: 15em;
+	padding-top: 2.5em;
+	width: 100%;
+	box-shadow: 0.5em 0.5em 10px #7b7b7b;
+}
+
+.claim-content {
+	width: 100%;
+	height: 100%;
+	padding: 0 3em;
 }
 
 .generated-cite-box {
 	/* width is dynamically calculated */
 	justify-content: center;
 	display: inherit;
-	margin: 1em;
+	margin: 5em 1em;
 	height: fit-content;
 }
 
@@ -77,50 +106,110 @@ body {
 	background-color: #151515;
 	width: 25em;
 	margin: 4em 0;
+	border-radius: 2.5em;
 }
 
 .section-title {
 	width: 100%;
 	text-align: center;
-	padding: 1em;
 	font-size: large;
+	padding-bottom: 0.4em;
 }
 
 .section-content {
-	background-color: #232323;
-	padding: 1em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: block;
+}
+
+.section-content.score {
+	font-size: 17px;
+	text-align: center;
+	margin: calc(-1em - 3px) 0 0 calc(-1em - 3px);
+	width: 2.2em;
+	height: 2.2em;
+	padding-top: 0.35em;
+	border-radius: 2em;
+	border-color: #7b7b7b;
+	border-width: 2px;
+	border-style: solid;
+}
+
+/* do not display score for original claim */
+.section-content.score.hide {
+	display: none;
+}
+
+.section-content.source.claim {
+	height: calc(100% - 7.5em);
 }
 
 .section-content.source {
 	font-style: italic;
+	height: calc(100% - 1.5em);
+}
+
+.section-content.link {
+	white-space: nowrap;
+	color: #5ec9f6;
 }
 
 .tree-container {
 	width: 100%;
-	margin-top: 1em;
 	display: flex;
 	justify-content: center;
 	flex-wrap: wrap;
 }
 
 .section-content.vote-wrapper {
-	background-color: #151515;
-	padding: 0.5em;
-	width: 30%;
+	width: 40%;
 	display: flex;
+	margin-top: 1.5em;
 }
 
 .vote-button {
 	cursor: pointer;
-	width: 100%;
-	height: 2em;
 	text-align: center;
-	margin: 0 0.5em;
-	padding: 0 0.5em;
+	padding: 0 0.3em;
+	margin: 0.3em;
+	position: relative;
 }
 
 .vote-button-image {
-	width: 2em;
-	height: 2em;
+	width: 1.5em;
+	height: 1.5em;
 }
 
+.cite-content {
+	width: 23em;
+	height: 15em;
+	border-color: #7b7b7b;
+	margin: auto;
+	border-style: solid;
+	border-width: 2px;
+	border-radius: 10px;
+}
+
+.top-left-box {
+	width: 2.5em;
+	height: 2.5em;
+	position: relative;
+	z-index: 1;
+}
+
+.cite-middle-box {
+	height: calc(100% - 2.5em);
+	width: calc(100% - 2.5em);
+	margin-top: 2px;
+	margin-left: 1.25em;
+	position: relative;
+}
+
+.cite-middle-box-content {
+	width: 100%;
+	height: 100%;
+	padding: 0.8em;
+	color: white;
+	background-color: #09586b;
+	box-shadow: 0.5em 0.5em 10px #7b7b7b;
+}
