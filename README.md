@@ -54,7 +54,7 @@ Before if can connect to your local running model, update the env var `EC2_IP` t
 cd backend/aws/lambda
 python3 -m venv v-env-test
 source v-env-test/bin/activate
-pip3 install -r requirements.txt test_requirements.txt
+pip3 install -r requirements.txt -r test_requirements.txt
 gunicorn -c gunicorn_config.py wsgi
 ```
 
