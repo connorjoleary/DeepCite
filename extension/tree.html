@@ -13,6 +13,7 @@
 	<!-- Canvas Element for Lines -->
 	<canvas class="canvas-element" id="canvas-element"></canvas>
 
+	<!-- Navigation Bar -->
 	<div class="nav-bar">
 		<div class="nav-bar-text-wrapper">
 			<img class="nav-bar-logo" src="images/icon128.png" />
@@ -25,30 +26,42 @@
 			</div>
 		</div>
 	</div>
+
+	<!-- Site Content-->
 	<div class="content">
 		<div class="tree-container" id="tree-container">
 			<!-- This information is dynamically populated -->
 		</div>
 	</div>
 
-	<!-- Original Claim Component -->
+	<!-- Claim Component -->
 	<div class="generated-claim-box" style="display: none;">
-		<div class="generated-claim">
-			<div class="section-title">
-				Original Claim
+		<div class="generated-claim-circle">
+			<div class="generated-claim">
+				<div class="section-title">
+					Original Claim
+				</div>
+				<div class="claim-content">
+					<div class="section-content source claim"></div>
+					<a class="section-content link"></a>
+					<div class="section-content score hide"></div>
+				</div>
 			</div>
-			<div class="section-content source"></div>
-			<div class="section-content link"></div>
-			<div class="section-content score" style="display: none;"></div>
 		</div>
 	</div>
 
 	<!-- Cite Component -->
 	<div class="generated-cite-box" style="display: none;">
-		<div class="generated-cite">
-			<div class="section-content source"></div>
-			<div class="section-content link"></div>
-			<div class="section-content score"></div>
+		<div class="cite-content">
+			<div class="top-left-box">
+				<div class="section-content score"></div>
+			</div>
+			<div class="cite-middle-box">
+				<div class="cite-middle-box-content">
+					<div class="section-content source"></div>
+					<a class="section-content link"></a>
+				</div>
+			</div>
 			<div class="section-content vote-wrapper">
 				<div class="vote-button upvote" onclick="upvoteButtonClicked(this)">
 					<img class="vote-button-image" src="images/upvote.png" />
@@ -60,6 +73,7 @@
 		</div>
 	</div>
 
+	<!-- UI-Dependent Code -->
 	<script src="js/tree.js"></script>
 </body>
 </html>
