@@ -27,6 +27,7 @@ def deep_cite():
     try:
         tree = Tree(link, claim)
         full_pre_json['results'] = tree.response_object
+        print(tree.response_object)
 
     # handles exceptions that arise
     except Exception as e:

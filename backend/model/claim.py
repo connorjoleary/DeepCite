@@ -122,6 +122,8 @@ class Claim:
         # if len(static) < len(dynamic):
         #     return dynamic
 
+        print(static)
+
         return static
 
 
@@ -174,6 +176,8 @@ class Claim:
         if self.href == "":
             return
 
+        # the reason reddit isn't returning anything, is because the claim is not in a p tag
+
         # is wikipedia link
         if self.parent != None and  "https://en.wikipedia.org" in self.parent.href:
             citation = wiki(self.href, self.parent.href)
@@ -192,7 +196,8 @@ class Claim:
 
         # gets url
         try:
-            response = requests.get(self.href)
+            user_agent = {'User-agent': 'Mozilla/5.0'}
+            response = requests.get(self.href, headers=user_agent)
         # url is trash
         except Exception as e:
             # faulty input
