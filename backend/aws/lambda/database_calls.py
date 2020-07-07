@@ -1,7 +1,7 @@
 import boto3
 from botocore.exceptions import ClientError
 
-class database_calls():
+class DatabaseCalls():
     session = boto3.session.Session()
 
     def get_secret():
