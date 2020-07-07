@@ -5,12 +5,13 @@ import json
 from tree import Tree
 from claim import Claim, html_link, new_indention
 import exceptions as errors
+import uuid
 app = Flask(__name__)
 
 
 exceptions = [errors.MalformedLink, errors.URLError, errors.EmptyWebsite, errors.ClaimNotInLink, errors.InvalidInput]
 
-@app.route('/api/v1/deep_cite', methods=['GET', 'POST'])
+@app.route('/api/v1/deep_cite', methods=['POST'])
 def deep_cite():
 # def deep_cite(claim, link):
     content = request.get_json()
@@ -21,7 +22,7 @@ def deep_cite():
     except Exception as e:
         return jsonify({'error': 'Error 505: HTTP Verison Not Supported' })
 
-    full_pre_json = {'error': 'none', 'results': [{'source': claim, 'link': link, 'score': 100}]}
+    full_pre_json = {'error': 'none', 'results': [{'citeID': str(uuid.uuid4()), 'parentCiteID': 0, 'link': link, 'score': 1, 'source': claim}]}
 
     try:
         tree = Tree(link, claim)

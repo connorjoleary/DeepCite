@@ -1,3 +1,4 @@
+source v-env/bin/activate
 cd v-env/lib/python3.7/site-packages
 zip -r9 ${OLDPWD}/function.zip .
 cd $OLDPWD

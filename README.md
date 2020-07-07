@@ -1,6 +1,8 @@
 # DeepCite
 
-<p> Google Chrome extension that finds the source of a claim using BeautifulSoup, spaCy, and gensim libraries. Please look at documentation for implemenation details. :trollface:</p>
+<p> In a world filled with fake news and alternative facts, get the real deep sources for your information. </p>
+
+https://chrome.google.com/webstore/detail/deepcite/oibmgglhkkaigemacdkfeedffkjbpgoi?hl=en-US
 
 ## Table of Contents
 
@@ -21,9 +23,13 @@ Unfortunatly running code on AWS is not cheap and I would really appreciate any 
 | Venmo                 | @fippy24                           |
 | Paypal and Sofi Money | connor.trumpet@gmail.com           |
 
-## Setup
+## Run Locally
 
-#### Chrome
+### Extension
+
+Before it can connect to your local running lambda, update the url in `extension/js/popup.js` to be `http://localhost:8001/test/deepcite`
+
+##### Chrome
 
 1. Install Google Chrome
 2. In Chrome, navigate to `chrome://extensions/`
@@ -31,7 +37,7 @@ Unfortunatly running code on AWS is not cheap and I would really appreciate any 
 4. Then click `Load unpacked` 
 5. Select DeepCite/extension folder
 
-#### Firefox
+##### Firefox
 
 1. Install Firefox
 2. Navigate to `about:debugging`
@@ -39,22 +45,39 @@ Unfortunatly running code on AWS is not cheap and I would really appreciate any 
 4. Next click on the button `Load Temporary Add-on...`
 5. Select `DeepCite/extension/manifest.json`
 
-Once installed you can use DeepCite by clicking on the on the icon in the top right of the browser. There you can enter a link or claim and click `Cite` to run DeepCite. You can also populate the claim input by highlighting text, then right clicking and selecting _"Populate claim"_. Similiarly you can populate the link input with _"Populate link"_. 
+### Lambda
 
-## Installation for Server
-Installations and downloads required before server can funciton properly
+Before if can connect to your local running model, update the env var `EC2_IP` to be `0.0.0.0`
 
-### Downloads
-  * Google News vector space.
+##### Run
+```
+cd backend/aws/lambda
+python3 -m venv v-env-test
+source v-env-test/bin/activate
+pip3 install -r requirements.txt -r test_requirements.txt
+gunicorn -c gunicorn_config.py wsgi
+```
+
+### Model
+##### Download 
+* Google News vector space.
   	* Google's word2vec can be found here https://code.google.com/archive/p/word2vec/ but you can no longer install the source code from here.
   	* If you want to just download the Pre-trained models [recommended] then you can download it from this [google drive link](https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit) then extract it.
   	* You can also find this link from the [archive page](https://code.google.com/archive/p/word2vec/) mentioned above.
   	* Once you have your model you'll need to first create the directory `./DeepCite/backend/word_vectors` then you can copy or move the model into that folder.
   	* Note: the backend expects a specific file name so you may need to rename the file. The end result should look like this `./DeepCite/backend/word_vectors/GoogleNews-vectors-negative300.bin`
-  * Chrome driver https://sites.google.com/a/chromium.org/chromedriver/home -- in DeepCite/backend, check compatibility 
 
-<small>n Note: 'en_core_web_sm' installation is testing purposes. It has lower accurary compared to the word google vectors </small>
+##### Run
+```
+cd backend
+python3 -m venv v-env
+source v-env/bin/activate
+pip3 install -r requirements.txt
+gunicorn -c gunicorn_config.py wsgi
+```
 
+## Installation for Server
+Installations and downloads required before server can funciton properly
 
 ## Testing
 
@@ -76,12 +99,7 @@ Installations and downloads required before server can funciton properly
 
 <small>Note: connection issues make occur when webscrapping, wait a minute then run again</small>
 
-## Future Features
-* Video transcription
-* More Robust Webscrapping
-
-## Curl request for testing
-Run `gunicorn -c gunicorn_config.py wsgi` in Deepcite/backend
+## Curl request for testing model
 
 * Local testing:
 `curl -d '{"claim":"the death of Sherlock Holmes almost destroyed the magazine that had originally published the stories. When Arthur Conan Doyle killed him off in 1893, 20,000 people cancelled their subscriptions. The magazine barely survived. Its staff referred to Holmes’ death as “the dreadful event”.", "link":"http://www.bbc.com/culture/story/20160106-how-sherlock-holmes-changed-the-world"}' -H "Content-Type: application/json" -X POST http://127.0.0.1:8000/api/v1/deep_cite`
@@ -137,15 +155,20 @@ There are a couple ways to configure both the backend and the aws lambda service
       "port": "8000" ,
       "workers": "1",
       "timeout": "180"
+    },
+    "model": {
+        "similarity_cutoff": 0.67,
+        "num_claims_returned": 15,
+        "max_height": 5
     }
   },
   "aws": {
     "env": "development",
     "versions": {
       "model": "0.3",
-      "lambda": "0.1",
-      "api": "0.1",
-      "extension": "0.2"
+      "lambda": "0.2",
+      "api": "0.2",
+      "extension": "0.3"
     },
     "secret": {
       "region": "us-east-2",
@@ -172,18 +195,21 @@ There are a couple ways to configure both the backend and the aws lambda service
  GUNICORN_PORT=8000
  GUNICORN_WORKERS=1
  GUNICORN_TIMEOUT=180
+ MODEL_SIMILARITY_CUTOFF=.67
+ MODEL_NUM_CLAIMS_RETURNED=15
+ MODEL_MAX_HEIGHT=5
  EC2_IP=172.31.35.42
  EC2_PORT=8000
  SECRET_REGION=us-east-2
  SECRET_NAME=rds_deepcite_sample
  VERSIONS_MODEL=0.3
- VERSIONS_LAMBDA=0.1
- VERSIONS_API=0.1
- VERSIONS_EXTENSION=0.2
+ VERSIONS_LAMBDA=0.2
+ VERSIONS_API=0.2
+ VERSIONS_EXTENSION=0.3
  ```
 
 ## Authors
-Connor O'Leary
+Connor O'Leary, Joe Pagani, and Jake Heaser
 
 With great help from the University of Wisconsin, Madison CS506 team
 Shourya Goel, Jiayi Hu, Vinay Janardhanam, Dillon O'Leary, Noah SickLick, and Catherine Yan

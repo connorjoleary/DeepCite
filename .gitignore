@@ -2,7 +2,7 @@ node_modules/
 backend/chromedriver.exe
 .coverage
 .sources/
-v-env/
+v-env*/
 __pycache__/
 .vscode/
 *.zip

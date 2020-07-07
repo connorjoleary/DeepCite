@@ -1,0 +1,3 @@
+flask
+boto3
+gunicorn

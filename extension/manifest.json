@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name":"DeepCite",
-  "version": "0.2",
+  "version": "0.3",
   "browser_action": {
     "default_popup": "popup.html"
   },
@@ -18,7 +18,7 @@
   ],
   "content_scripts": [
     {
-      "matches": ["https://jzvkkf7p6d.execute-api.us-east-2.amazonaws.com/*"],
+      "matches": ["https://jzvkkf7p6d.execute-api.us-east-2.amazonaws.com/*", "http://localhost:8001/*"],
       "js": ["js/jquery-3.2.1.min.js"]
     }
   ]
