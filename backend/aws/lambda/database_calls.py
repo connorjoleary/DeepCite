@@ -5,7 +5,7 @@ import psycopg2
 import base64
 import json
 
-class database_calls():
+class DatabaseCalls():
 
     def get_secret(self, secret_client):
         print('grabbing secret')

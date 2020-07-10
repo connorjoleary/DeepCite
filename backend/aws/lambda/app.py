@@ -9,7 +9,6 @@ import traceback
 from create_response import respond
 import uuid
 from unittest import mock
-# from database_calls import database_calls
 
 versions = {a: str(b) for a,b in config['versions'].items()}
 
@@ -49,8 +48,8 @@ def lambda_handler(event, context):
         database_calls.grab_deepcite_entry = lambda id: []
         database_calls.record_call = lambda *x: None
     else:
-        from database_calls import database_calls
-        database_calls = database_calls()
+        from database_calls import DatabaseCalls
+        database_calls = DatabaseCalls()
 
 
     operations = {
