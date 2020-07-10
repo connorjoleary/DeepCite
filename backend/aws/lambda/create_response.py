@@ -24,13 +24,13 @@ def respond(response_size, res=None):
         }
     elif response_size == 'large':
         return {
-            'statusCode': 200,
-            'body': res.body
+            'statusCode': '200',
+            'body': json.dumps(res)
         }
     elif response_size == 'small':
         return {
-            'statusCode': 200,
-            'body': trim_response(**res)
+            'statusCode': '200',
+            'body': json.dumps(trim_response(**res))
         }
 
     return {

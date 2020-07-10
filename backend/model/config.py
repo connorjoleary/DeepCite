@@ -38,7 +38,7 @@ DEFAULT = {
     },
     'MODEL': {
         'SIMILARITY_CUTOFF': .67,
-        'NUM_CLAIMS_RETURNED': 15,
+        'NUM_CLAIMS_RETURNED': 5,
         'MAX_HEIGHT': 5
     }
 }

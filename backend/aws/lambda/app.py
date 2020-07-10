@@ -3,7 +3,6 @@ import requests
 import psycopg2
 import sys
 import base64
-from dataclasses import dataclass
 import time
 from lambda_config import config
 import traceback
@@ -41,6 +40,7 @@ def load_payload(event):
 
 
 def lambda_handler(event, context):
+
     start = time.time()
 
     if event.get('test', False):
@@ -79,11 +79,16 @@ def lambda_handler(event, context):
         base_id = response['results'][0]['citeID']
 
     time_elapsed = time.time()-start
-    database_calls.record_call(base_id, id, user_id, stage, response, time_elapsed, versions)
 
-    response = respond(payload.get('response_size', 'small'), response)
-    print(response)
-    return response
+    lambda_response = respond(payload.get('response_size', 'small'), response)
+    print(lambda_response)
+    try:
+        database_calls.record_call(new_submission, base_id, user_id, stage, lambda_response['statusCode'], response, time_elapsed, versions)
+    except Exception as e:
+        print("unable to store call")
+        traceback.print_tb(e.__traceback__)
+        print(e)
+    return lambda_response
 
 # body = "{\"id\": \"fdaeasfsd\", \"resonse_size\": \"small\", \"claim\":\"the death of Sherlock Holmes almost destroyed the magazine thries. When Arthur Conan Doyle killed him off in 1893, 20,000 people cancelled their subscriptions. The magazine barely survived. Its staff referred to Holmes’ death as “the dreadful event”.\", \"link\":\"http://www.bbc.com/culture/story/20160106-how-sherlock-holmes-changed-the-world\"}"
 # print(lambda_handler({"isBase64Encoded": False, "body": body, "requestContext": {"http": {"method": "POST", "sourceIp": "dfsds"}, "stage": "dev", }},0))

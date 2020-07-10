@@ -1,10 +1,13 @@
 import boto3
 from botocore.exceptions import ClientError
+from lambda_config import config
+import psycopg2
+import base64
+import json
 
 class DatabaseCalls():
-    session = boto3.session.Session()
 
-    def get_secret():
+    def get_secret(self, secret_client):
         print('grabbing secret')
         try:
             get_secret_value_response = secret_client.get_secret_value(
@@ -22,13 +25,14 @@ class DatabaseCalls():
                 secret = base64.b64decode(get_secret_value_response['SecretBinary'])
         return secret
 
-    def __init__():
+    def __init__(self):
         # Create a Secrets Manager client
+        session = boto3.session.Session()
         secret_client = session.client(
             service_name='secretsmanager',
             region_name=config['secret']['region']
         )
-        secret = get_secret()
+        secret = self.get_secret(secret_client)
         self.conn = None
         try:
             secret = json.loads(secret)
@@ -41,23 +45,23 @@ class DatabaseCalls():
 
     def grab_deepcite_entry(self, id):
         try:
-            cur = conn.cursor()
+            cur = self.conn.cursor()
             cur.execute("SELECT response FROM deepcite_call where id = %s", (id)) #potentially this could just be a search by source claim and link and run for everything
-            responses = conn.fetchall()
+            responses = self.conn.fetchall()
         except psycopg2.OperationalError as e:
             print("ERROR: Unexpected error: Could commit to database instance.")
             print(e)
             responses = []
         return responses
 
-    def record_call(self, base_id, id, user_id, stage, response, time_elapsed, versions):
+    def record_call(self, new_submission, base_id, user_id, stage, status_code, response, time_elapsed, versions):
         try:
-            cur = conn.cursor()
+            cur = self.conn.cursor()
             if new_submission:
-                cur.execute("INSERT INTO deepcite_retrieval (id,user_id,stage,status_code,response_time_elapsed,current_versions) VALUES (%s, %s, %s, %s, %s, %s)", (base_id, id, user_id, stage, response['statusCode'], time_elapsed, json.dumps(versions)))
+                cur.execute("INSERT INTO deepcite_call (id,user_id,stage,status_code,response,response_time_elapsed,current_versions) VALUES (%s, %s, %s, %s, %s, %s, %s)", (base_id, user_id, stage, status_code, json.dumps(response), time_elapsed, json.dumps(versions)))
             else:
-                cur.execute("INSERT INTO deepcite_call (id,user_id,stage,status_code,response,response_time_elapsed,current_versions) VALUES (%s, %s, %s, %s, %s, %s, %s)", (base_id, id, user_id, stage, response['statusCode'], response['body'], time_elapsed, json.dumps(versions)))
-            conn.commit()
+                cur.execute("INSERT INTO deepcite_retrieval (id,user_id,stage,status_code,response_time_elapsed,current_versions) VALUES (%s, %s, %s, %s, %s, %s)", (base_id, user_id, stage, status_code, time_elapsed, json.dumps(versions)))
+            self.conn.commit()
         except psycopg2.OperationalError as e:
             print("ERROR: Unexpected error: Could commit to database instance.")
             print(e)
