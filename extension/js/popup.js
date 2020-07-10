@@ -1,4 +1,4 @@
-const url = "https://jzvkkf7p6d.execute-api.us-east-2.amazonaws.com/prod/deepcite";
+const url = "https://jzvkkf7p6d.execute-api.us-east-2.amazonaws.com/dev/deepcite";
 //const url = "http://localhost:5000/api/v1/deep_cite";
 //const url = "http://localhost:5000/";
 var ajax = null;
@@ -119,7 +119,7 @@ $(document).ready(() => {
 		console.log(JSON.stringify(data));
 		sendToServer(data); //perform some operations
 
-		var delay = 180000; //180000 is a 3 minute timeout
+		var delay = 1440000; //180000 is a 3 minute timeout
 		timeout = this.setTimeout(function () {
 			ajax.abort();
 			chrome.storage.local.set({ 'state': 0 }, function () {
