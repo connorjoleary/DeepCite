@@ -20,7 +20,7 @@ def test_lambda():
     body = json.dumps({"claim": claim, "link": link, "id": id, "response_size": response_size})
     response = lambda_handler({"test": True, "isBase64Encoded": False, "body": body, "requestContext": {"http": {"method": "POST", "sourceIp": "0.0.0.0"}, "stage": "dev", }},0)
 
-    return json.dumps(response['body'])
+    return response['body']
 
 
 if __name__ == '__main__':
