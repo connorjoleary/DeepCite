@@ -1,6 +1,5 @@
 const url = "https://jzvkkf7p6d.execute-api.us-east-2.amazonaws.com/dev/deepcite";
-//const url = "http://localhost:5000/api/v1/deep_cite";
-//const url = "http://localhost:5000/";
+//const url = "http://localhost:8001/test/deepcite";
 var ajax = null;
 var timeout = null;
 
