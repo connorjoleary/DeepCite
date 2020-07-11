@@ -11,6 +11,7 @@ import os
 import queue as q
 from config import config
 import uuid
+import json
 
 CWD_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
@@ -103,7 +104,7 @@ class Claim:
      
      # returns the p tags found in link
      # accounts for dynamically loaded html
-    def get_p_tags(self, response):
+    def get_page_text(self, response):
 
         # dynamic html
         # commented out for testing
@@ -121,8 +122,6 @@ class Claim:
         # commented out for testing
         # if len(static) < len(dynamic):
         #     return dynamic
-
-        print(static)
 
         return static
 
@@ -176,7 +175,6 @@ class Claim:
         if self.href == "":
             return
 
-        # the reason reddit isn't returning anything, is because the claim is not in a p tag
 
         # is wikipedia link
         if self.parent != None and  "https://en.wikipedia.org" in self.parent.href:
@@ -195,8 +193,8 @@ class Claim:
                 return 
 
         # gets url
+        user_agent = {'User-agent': 'Mozilla/5.0'}
         try:
-            user_agent = {'User-agent': 'Mozilla/5.0'}
             response = requests.get(self.href, headers=user_agent)
         # url is trash
         except Exception as e:
@@ -209,13 +207,14 @@ class Claim:
 
         # marked site as visited
         self.visited.append(self.href)
-        text_raw = self.get_p_tags(response)
+
+        text_raw = self.get_page_text(response)
         
-         # Exception that the child of one claim has no valid sentences, then add its parent to the leaf list.
+        # Exception that the child of one claim has no valid sentences, then add its parent to the leaf list.
         if len(text_raw) < 6:
             # Terminate the scraper and parse the parent node to the leaf list
             # unable to obtain infomation from website
-            if self.parent == None:
+            if self.parent == None and 'reddit.com' not in self.href:
                 raise error.EmptyWebsite('Unable to obtain infomation from the website.' + \
                             new_indention(html_link(self.href) + ' could contain the following errors: Error404, Error403, Error500, or content of site cannot be obtained.'))
             return 
@@ -229,6 +228,15 @@ class Claim:
                         continue
             else:
                 ref2text[unit.text] = ""
+
+        if 'reddit.com' in self.href:
+            try:
+                response = requests.get(self.href+'.json', headers=user_agent)
+                page_info = json.loads(response.text)
+            except Exception as e:
+                page_info = {}
+            post_info = page_info[0]['data']['children'][0]['data'] #this need to be throughaly tested
+            ref2text[post_info['title']]= post_info['url']
 
         # get tokenizer values
         scores = self.set_cand(ref2text)
