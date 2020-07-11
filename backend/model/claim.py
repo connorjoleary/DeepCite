@@ -235,8 +235,16 @@ class Claim:
                 page_info = json.loads(response.text)
             except Exception as e:
                 page_info = {}
-            post_info = page_info[0]['data']['children'][0]['data'] #this need to be throughaly tested
-            ref2text[post_info['title']]= post_info['url']
+            if type(page_info) == list:
+                page_info = page_info[0] # page_info[0]['data']['children'][0]['data'] #this need to be throughaly tested
+            
+            if page_info.get('kind') == 'Listing':
+                posts = page_info['data']['children']
+                for post in posts:
+                    if post.get('kind') == 't3':
+                        post = post.get('data', {})
+                        if 'url' in post and 'title' in post:
+                            ref2text[post['title']]= post['url']
 
         # get tokenizer values
         scores = self.set_cand(ref2text)
