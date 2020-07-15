@@ -143,7 +143,8 @@ class Claim:
             try:
                 if ref2text[words] != "":  # if there is a link
                     self.child.append(Claim(ref2text[words], words, scores[i], (self.height +1), self)) # does ref2text allow for multiple links
-                self.child.append(Claim("", words, scores[i], (self.height +1), self))
+                else:
+                    self.child.append(Claim("", words, scores[i], (self.height +1), self))
 
             # tokenizer returned a sentence
             except KeyError:
@@ -246,7 +247,7 @@ class Claim:
                         post = post.get('data', {})
                         if 'url' in post and 'title' in post:
                             if post['url']!= self.href:
-                                ref2text[post['title']]= post['url']
+                                ref2text[post['title']] = post['url']
 
         # get tokenizer values
         scores = self.set_cand(ref2text)
