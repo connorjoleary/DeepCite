@@ -53,7 +53,7 @@ def lambda_handler(event, context):
 
 
     operations = {
-        'POST': lambda x, database_calls: grab_response(database_calls, **x) if 'id' in x else call_deepcite(**x)
+        'POST': lambda x, database_calls: grab_response(database_calls, **x) if x.get('id') is not None else call_deepcite(**x)
     }
     operation = event['requestContext']['http']['method']
     

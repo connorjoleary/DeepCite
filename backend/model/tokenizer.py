@@ -106,13 +106,20 @@ def predict(claim, text) : #TODO: this doesn't take into account the original cl
     k = config['model']['num_claims_returned']
     for i in range(k):
         if best_paragraph.similarity > best_sentence.similarity: #&& if already contained in a sentence in predict
-            predict.append((claim, text[best_paragraph.index], best_paragraph.similarity))
+            if len([True for prediction in predict if prediction[0] in text[best_paragraph.index]]) > 0: # There is already part of the top paragraph being returned
+                i = i-1
+            else:
+                predict.append((text[best_paragraph.index], best_paragraph.similarity))
             if paragraph_queue.not_empty:
                 best_paragraph = paragraph_queue.get()
             else:
                 best_paragraph = Paragraph(0, -10)
         else:
-            predict.append((claim,sentences[best_sentence.index], best_sentence.similarity))
+            if len([True for prediction in predict if sentences[best_sentence.index] in prediction[0]]) > 0: # There is already part of the top paragraph being returned
+                i = i-1
+            else:
+                predict.append((sentences[best_sentence.index], best_sentence.similarity))
+
             if paragraph_queue.not_empty:
                 best_sentence = sentence_queue.get()
             else:
