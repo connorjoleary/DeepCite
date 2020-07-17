@@ -1,5 +1,3 @@
-// const test_url = "http://localhost:8001/test/deepcite";
-
 // Initialize the Amazon Cognito credentials provider
 AWS.config.region = 'us-east-2'; // Region
 AWS.config.credentials = new AWS.CognitoIdentityCredentials({
@@ -7,11 +5,6 @@ AWS.config.credentials = new AWS.CognitoIdentityCredentials({
 });
 var lambda = new AWS.Lambda();
 const stageValue = 'dev'
-var ipValue = null;
-$.getJSON('https://api.ipify.org?format=jsonp&callback=?', function(data) {
-	console.log(JSON.stringify(data, null, 2));
-	ipValue = data.ip;
-});
 
 var timeout = null;
 
@@ -166,9 +159,16 @@ function serverOffline() {
 	});
 }
 
-function callLambda(claimValue, linkValue) {
+async function grab_ip() {
+	const response = await fetch('http://api.ipify.org/?format=json');
+    const data = await response.json();
+    return data.ip;
+}
 
-	data = {
+async function callLambda(claimValue, linkValue) {
+	var ipValue = await grab_ip();
+
+	var data = {
 		claim: claimValue,
 		link: linkValue,
 		ip: ipValue,
@@ -179,7 +179,7 @@ function callLambda(claimValue, linkValue) {
 	// Code used to run locally
 	// ajax = $.ajax({
 	// 	type: "POST",
-	// 	url: test_url, // where the post request gets sent to (backend server address)
+	// 	url: "http://localhost:8001/test/deepcite", // where the post request gets sent to (backend server address)
 	// 	success: dataReceived, // callback function on success
 	// 	error: serverOffline, // function if failed to connect to server
 	// 	contentType: "application/json", // exprected data type of the returned data
