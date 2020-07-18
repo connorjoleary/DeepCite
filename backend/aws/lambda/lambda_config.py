@@ -33,7 +33,7 @@ DEFAULT = {
         'NAME': "rds_deepcite_sample",
     },
     'VERSIONS': {
-        'MODEL': 0.3,
+        'MODEL': 0.4,
         'LAMBDA': 0.2,
         'API': 0.2,
         'EXTENSION': 0.4,
