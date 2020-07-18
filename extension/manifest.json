@@ -16,6 +16,7 @@
   "permissions": [
     "storage"
   ],
+  "content_security_policy": "script-src 'self' https://sdk.amazonaws.com/js/aws-sdk-2.713.0.min.js https://api.ipify.org?format=jsonp; object-src 'self'",
   "content_scripts": [
     {
       "matches": ["https://jzvkkf7p6d.execute-api.us-east-2.amazonaws.com/*", "http://localhost:8001/*"],

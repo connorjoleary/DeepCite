@@ -27,7 +27,7 @@ Unfortunatly running code on AWS is not cheap and I would really appreciate any 
 
 ### Extension
 
-Before it can connect to your local running lambda, update the url in `extension/js/popup.js` to be `http://localhost:8001/test/deepcite`
+Before it can connect to your local running lambda, update the call to use ajax instead of aws lambda
 
 ##### Chrome
 
