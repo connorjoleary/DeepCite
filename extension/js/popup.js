@@ -1,6 +1,11 @@
-const url = "https://jzvkkf7p6d.execute-api.us-east-2.amazonaws.com/dev/deepcite";
-//const url = "http://localhost:8001/test/deepcite";
-var ajax = null;
+// Initialize the Amazon Cognito credentials provider
+AWS.config.region = 'us-east-2'; // Region
+AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+    IdentityPoolId: 'us-east-2:3f1e82e0-3867-4fcd-8c0c-fd641d949c83',
+});
+var lambda = new AWS.Lambda();
+const stageValue = 'dev'
+
 var timeout = null;
 
 if (!deepCite) {
@@ -111,12 +116,7 @@ $(document).ready(() => {
 		disableCiteActions();
 
 		event.preventDefault();
-		data = {
-			claim: claimValue,
-			link: linkValue
-		};
-		console.log(JSON.stringify(data));
-		sendToServer(data); //perform some operations
+		callLambda(claimValue, linkValue); //perform some operations
 
 		var delay = 1440000; //180000 is a 3 minute timeout
 		timeout = this.setTimeout(function () {
@@ -159,15 +159,44 @@ function serverOffline() {
 	});
 }
 
-function sendToServer(data) {
-	ajax = $.ajax({
-		type: "POST",
-		url: url, // where the post request gets sent to (backend server address)
-		success: dataReceived, // callback function on success
-		error: serverOffline, // function if failed to connect to server
-		contentType: "application/json", // exprected data type of the returned data
-		data: JSON.stringify(data) // send the data json as a string
-	});
+async function grab_ip() {
+	const response = await fetch('http://api.ipify.org/?format=json');
+    const data = await response.json();
+    return data.ip;
+}
+
+async function callLambda(claimValue, linkValue) {
+	var ipValue = await grab_ip();
+
+	var data = {
+		claim: claimValue,
+		link: linkValue,
+		ip: ipValue,
+		stage: stageValue
+	};
+	console.log(JSON.stringify(data));
+
+	// Code used to run locally
+	// ajax = $.ajax({
+	// 	type: "POST",
+	// 	url: "http://localhost:8001/test/deepcite", // where the post request gets sent to (backend server address)
+	// 	success: dataReceived, // callback function on success
+	// 	error: serverOffline, // function if failed to connect to server
+	// 	contentType: "application/json", // exprected data type of the returned data
+	// 	data: JSON.stringify(data) // send the data json as a string
+	// });
+
+	lambda.invoke({
+		FunctionName: 'deepcite',
+		Payload: JSON.stringify(data)
+	}, function(err, data) {
+		if (err) {
+			console.log(err, err.stack);
+			showErrorWindowWithMessage(err);
+		} else {
+			dataReceived(data)
+		}
+	})
 }
 
 function dataReceived(data) {
@@ -181,7 +210,13 @@ function dataReceived(data) {
 	// cancel timeout
 	clearTimeout(timeout)
 
-	var response = JSON.parse(data);
+	try{
+		var response = JSON.parse(data.Payload);
+	} catch (err) {
+		console.log(err)
+		console.log('unable to parse: '+ JSON.stringify(data))
+		showErrorWindowWithMessage('Unable to parse response');
+	}
 	if (!response) {
 		return;
 	}

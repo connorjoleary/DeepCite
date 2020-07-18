@@ -27,7 +27,7 @@ Unfortunatly running code on AWS is not cheap and I would really appreciate any 
 
 ### Extension
 
-Before it can connect to your local running lambda, update the url in `extension/js/popup.js` to be `http://localhost:8001/test/deepcite`
+Before it can connect to your local running lambda, update the call to use ajax instead of aws lambda
 
 ##### Chrome
 
@@ -168,7 +168,7 @@ There are a couple ways to configure both the backend and the aws lambda service
       "model": "0.3",
       "lambda": "0.2",
       "api": "0.2",
-      "extension": "0.3"
+      "extension": "0.4"
     },
     "secret": {
       "region": "us-east-2",
@@ -205,7 +205,7 @@ There are a couple ways to configure both the backend and the aws lambda service
  VERSIONS_MODEL=0.3
  VERSIONS_LAMBDA=0.2
  VERSIONS_API=0.2
- VERSIONS_EXTENSION=0.3
+ VERSIONS_EXTENSION=0.4
  ```
 
 ## Authors

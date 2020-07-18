@@ -32,13 +32,6 @@ def grab_response(database_calls, id, claim, link, **kwargs):
         new_submission=False
         return responses[0] #not sure if i need json loads
 
-def load_payload(event):
-    if 'body' in event:
-        body = event.get('body')
-        return json.loads(base64.b64decode(body)) if event['isBase64Encoded'] else json.loads(body)
-    raise('No body in payload')
-
-
 def lambda_handler(event, context):
 
     start = time.time()
@@ -50,29 +43,21 @@ def lambda_handler(event, context):
     else:
         from database_calls import DatabaseCalls
         database_calls = DatabaseCalls()
-
-
-    operations = {
-        'POST': lambda x, database_calls: grab_response(database_calls, **x) if x.get('id') is not None else call_deepcite(**x)
-    }
-    operation = event['requestContext']['http']['method']
     
     print(event)
-    stage = event['requestContext']['stage']
+    stage = event['stage']
 
-    if operation in operations:
-        try:
-            payload = load_payload(event)
-            response = operations[operation](payload, database_calls)
-        except Exception as e:
-            traceback.print_tb(e.__traceback__)
-            print(e)
-            response = e
-    else:
-        response = Exception(f'Unsupported method "{operation}"')
-        payload = {}
+    try:
+        if event.get('id') is not None:
+            response = grab_response(database_calls, **event)
+        else:
+            response = call_deepcite(**event)
+    except Exception as e:
+        traceback.print_tb(e.__traceback__)
+        print(e)
+        response = e
 
-    user_id = event['requestContext']['http']['sourceIp']
+    user_id = event['ip']
     if isinstance(response, Exception):
         base_id = str(uuid.uuid4())
     else:
@@ -80,7 +65,7 @@ def lambda_handler(event, context):
 
     time_elapsed = time.time()-start
 
-    lambda_response = respond(payload.get('response_size', 'small'), response)
+    lambda_response = respond(event.get('response_size', 'small'), response)
     print(lambda_response)
     try:
         database_calls.record_call(new_submission, base_id, user_id, stage, lambda_response['statusCode'], response, time_elapsed, versions)
