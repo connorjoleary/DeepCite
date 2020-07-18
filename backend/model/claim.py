@@ -11,6 +11,7 @@ import os
 import queue as q
 from config import config
 import uuid
+import json
 
 CWD_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
@@ -69,17 +70,17 @@ class Claim:
         cl_dict['score'] = self.score
         return cl_dict
 
-    # this changes what link is associated with what claim,
-    # making the frontend look nicer
-    def to_claim_parent_link_dict(self):
-        cl_dict = {}
-        cl_dict['source'] = self.text
-        if (self.parent != None):
-            cl_dict['link'] = self.parent.href
-        else:
-            cl_dict['link'] = ""
-        cl_dict['score'] = self.score
-        return cl_dict
+    # # this changes what link is associated with what claim,
+    # # making the frontend look nicer
+    # def to_claim_parent_link_dict(self):
+    #     cl_dict = {}
+    #     cl_dict['source'] = self.text
+    #     if (self.parent != None):
+    #         cl_dict['link'] = self.parent.href
+    #     else:
+    #         cl_dict['link'] = ""
+    #     cl_dict['score'] = self.score
+    #     return cl_dict
     
     def excep_handle(self):
         if self.parent != None:
@@ -92,7 +93,6 @@ class Claim:
                 raise error.MalformedLink(self.href +' is malformed\n.' + new_indention("Make sure to include, \'https\\\\\', and \'.com/.org/.edu/...\'"))
             return False
 
-        
         # Cycle Detection
         if self.href in self.visited and self.parent != None:
             # Terminate the scraper and parse the parent node to the leaf list
@@ -103,7 +103,7 @@ class Claim:
      
      # returns the p tags found in link
      # accounts for dynamically loaded html
-    def get_p_tags(self, response):
+    def get_page_text(self, response):
 
         # dynamic html
         # commented out for testing
@@ -131,8 +131,8 @@ class Claim:
         texts = [] 
         scores = []
         for text in cand:
-            texts.append(text[1])
-            scores.append(text[2])
+            texts.append(text[0])
+            scores.append(text[1])
         self.cand = texts
         return scores
 
@@ -141,12 +141,12 @@ class Claim:
         # iterates through texts to check if there is a link associtated with text
         for i, words in enumerate(self.cand):
             try:
-                if ref2text[words] != "" and self.height < Claim.maxheight:  # if there is no link and the tree can get bigger
+                if ref2text[words] != "":  # if there is a link
                     self.child.append(Claim(ref2text[words], words, scores[i], (self.height +1), self)) # does ref2text allow for multiple links
-                elif self.height < Claim.maxheight:
+                else:
                     self.child.append(Claim("", words, scores[i], (self.height +1), self))
 
-            # tokenizer returned a sentence            
+            # tokenizer returned a sentence
             except KeyError:
                 ref_key = ""
                 # looks for paragraph that the sentence is in 
@@ -173,6 +173,8 @@ class Claim:
         ref2text = {}
         if self.href == "":
             return
+        elif self.height >= Claim.maxheight:
+            return
 
         # is wikipedia link
         if self.parent != None and  "https://en.wikipedia.org" in self.parent.href:
@@ -186,13 +188,14 @@ class Claim:
         # not wikipedia link
         else:
             # no errors
-            if not self.excep_handle():
+            if not self.excep_handle(): # why does this only run if not in wikipedia?
                 self.score = self.parent.score
                 return 
 
         # gets url
+        user_agent = {'User-agent': 'Mozilla/5.0'}
         try:
-            response = requests.get(self.href)
+            response = requests.get(self.href, headers=user_agent)
         # url is trash
         except Exception as e:
             # faulty input
@@ -204,26 +207,47 @@ class Claim:
 
         # marked site as visited
         self.visited.append(self.href)
-        text_raw = self.get_p_tags(response)
+
+        text_raw = self.get_page_text(response)
         
-         # Exception that the child of one claim has no valid sentences, then add its parent to the leaf list.
+        # Exception that the child of one claim has no valid sentences, then add its parent to the leaf list.
         if len(text_raw) < 6:
             # Terminate the scraper and parse the parent node to the leaf list
             # unable to obtain infomation from website
-            if self.parent == None:
+            if self.parent == None and 'reddit.com' not in self.href:
                 raise error.EmptyWebsite('Unable to obtain infomation from the website.' + \
                             new_indention(html_link(self.href) + ' could contain the following errors: Error404, Error403, Error500, or content of site cannot be obtained.'))
-            return 
+            return
 
         for unit in text_raw:
             if len(unit.findAll('a')) > 0:
                 for ref in unit.findAll('a'):
                     try:
-                        ref2text[unit.text] = ref['href']
+                        if ref['href'] != self.href:
+                            ref2text[unit.text] = ref['href'] # doesn't this just take the last link in a piece of text?
                     except KeyError:
                         continue
             else:
                 ref2text[unit.text] = ""
+
+        # If the claim is on reddit, the title and link of the posts are not in p tags. To get around this we read its json
+        if 'reddit.com' in self.href:
+            try:
+                response = requests.get(self.href+'.json', headers=user_agent)
+                page_info = json.loads(response.text)
+            except Exception as e:
+                page_info = {}
+            if type(page_info) == list:
+                page_info = page_info[0]
+
+            if page_info.get('kind') == 'Listing':
+                posts = page_info['data']['children']
+                for post in posts:
+                    if post.get('kind') == 't3':
+                        post = post.get('data', {})
+                        if 'url' in post and 'title' in post:
+                            if post['url']!= self.href:
+                                ref2text[post['title']] = post['url']
 
         # get tokenizer values
         scores = self.set_cand(ref2text)

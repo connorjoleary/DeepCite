@@ -48,7 +48,7 @@ def lambda_handler(event, context):
     stage = event['stage']
 
     try:
-        if 'id' in event:
+        if event.get('id') is not None:
             response = grab_response(database_calls, **event)
         else:
             response = call_deepcite(**event)

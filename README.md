@@ -64,12 +64,12 @@ gunicorn -c gunicorn_config.py wsgi
   	* Google's word2vec can be found here https://code.google.com/archive/p/word2vec/ but you can no longer install the source code from here.
   	* If you want to just download the Pre-trained models [recommended] then you can download it from this [google drive link](https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit) then extract it.
   	* You can also find this link from the [archive page](https://code.google.com/archive/p/word2vec/) mentioned above.
-  	* Once you have your model you'll need to first create the directory `./DeepCite/backend/word_vectors` then you can copy or move the model into that folder.
+  	* Once you have your model you'll need to first create the directory `./DeepCite/backend/model/word_vectors` then you can copy or move the model into that folder.
   	* Note: the backend expects a specific file name so you may need to rename the file. The end result should look like this `./DeepCite/backend/word_vectors/GoogleNews-vectors-negative300.bin`
 
 ##### Run
 ```
-cd backend
+cd backend/model
 python3 -m venv v-env
 source v-env/bin/activate
 pip3 install -r requirements.txt
@@ -165,7 +165,7 @@ There are a couple ways to configure both the backend and the aws lambda service
   "aws": {
     "env": "development",
     "versions": {
-      "model": "0.3",
+      "model": "0.4",
       "lambda": "0.2",
       "api": "0.2",
       "extension": "0.4"
@@ -202,7 +202,7 @@ There are a couple ways to configure both the backend and the aws lambda service
  EC2_PORT=8000
  SECRET_REGION=us-east-2
  SECRET_NAME=rds_deepcite_sample
- VERSIONS_MODEL=0.3
+ VERSIONS_MODEL=0.4
  VERSIONS_LAMBDA=0.2
  VERSIONS_API=0.2
  VERSIONS_EXTENSION=0.4
