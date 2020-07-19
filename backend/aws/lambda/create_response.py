@@ -18,22 +18,13 @@ def trim_response(error, results):
 
 def respond(response_size, res=None):
     if isinstance(res, Exception):
-        return {
-            'statusCode': '400',
-            'body': error_results_response_format(res.args[0], None)
-        }
+        return error_results_response_format(res.args[0], None)
+        
     elif response_size == 'large':
-        return {
-            'statusCode': '200',
-            'body': json.dumps(res)
-        }
-    elif response_size == 'small':
-        return {
-            'statusCode': '200',
-            'body': json.dumps(trim_response(**res))
-        }
+        return res
 
-    return {
-        'statusCode': '400',
-        'body': error_results_response_format('response_size is not recognized', None)
-    }
+    elif response_size == 'small':
+        return trim_response(**res)
+
+    return error_results_response_format('response_size is not recognized', None)
+
