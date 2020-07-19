@@ -1,26 +1,13 @@
-from flask import Flask, jsonify
-from flask import request
 from config import config
 import json
 from tree import Tree
 from claim import Claim, html_link, new_indention
 import exceptions as errors
 import uuid
-app = Flask(__name__)
-
 
 exceptions = [errors.MalformedLink, errors.URLError, errors.EmptyWebsite, errors.ClaimNotInLink, errors.InvalidInput]
 
-@app.route('/api/v1/deep_cite', methods=['POST'])
-def deep_cite():
-    content = request.get_json()
-    try:
-        claim = sanitize_claim(content['claim'])
-        link = sanitize_link(content['link'])
-    except Exception as e:
-        return jsonify({'error': 'Error 505: HTTP Verison Not Supported' })
-
-# def deep_cite(claim, link):
+def deep_cite(claim, link):
     full_pre_json = {'error': 'none', 'results': [{'citeID': str(uuid.uuid4()), 'parentCiteID': 0, 'link': link, 'score': 1, 'source': claim}]}
 
     try:
@@ -66,6 +53,5 @@ def sanitize_link(link):
 
     return sanitized.strip()
 
-if __name__ == "__main__":
-    # deep_cite(**{"claim":"6 years after resigning, Nixon testified on behalf of former FBI assistant director Mark Felt at Felts own trial, and gave money to Felts defense fund. In 2005 Felt revealed he had been Deep Throat, Bob Woodwards source while breaking the Watergate scandal that led to Nixons resignation", "link":"https://www.reddit.com/r/todayilearned/comments/gzwlp6/til_6_years_after_resigning_nixon_testified_on/"})
-    app.run(host=config['server']['host'], port=config['server']['port'])
+# if __name__ == "__main__":
+#     deep_cite(**{"claim":"6 years after resigning, Nixon testified on behalf of former FBI assistant director Mark Felt at Felts own trial, and gave money to Felts defense fund. In 2005 Felt revealed he had been Deep Throat, Bob Woodwards source while breaking the Watergate scandal that led to Nixons resignation", "link":"https://www.reddit.com/r/todayilearned/comments/gzwlp6/til_6_years_after_resigning_nixon_testified_on/"})

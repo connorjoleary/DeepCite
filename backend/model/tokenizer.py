@@ -1,5 +1,4 @@
 import spacy
-from gensim.models import KeyedVectors
 from spacy.parts_of_speech import  PUNCT, PROPN
 from spacy.lang.en import English
 from spacy.tokenizer import Tokenizer
@@ -7,9 +6,10 @@ from config import config
 import queue as q
 import os
 
-gn_model = KeyedVectors.load_word2vec_format(config['gn_path'], binary=True)
-nlp = spacy.blank('en')
-nlp.vocab.vectors = spacy.vocab.Vectors(data=gn_model.vectors, keys=gn_model.index2word)
+# gn_model = KeyedVectors.load_word2vec_format(config['gn_path'], binary=True)
+# nlp = spacy.blank('en')
+# nlp.vocab.vectors = spacy.vocab.Vectors(data=gn_model.vectors, keys=gn_model.index2word)
+nlp = spacy.load('./word_vectors/googlenews.model/')
 
 #nlp = spacy.load('en_core_web_sm')
 

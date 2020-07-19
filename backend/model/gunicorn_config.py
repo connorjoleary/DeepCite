@@ -1,5 +1,4 @@
-from config import config as file_config
 
-bind = file_config['gunicorn']['bind']
-workers = file_config['gunicorn']['workers'] 
-timeout = file_config['gunicorn']['timeout']
+bind = '0.0.0.0:8000'
+workers = 1
+timeout = 3*60

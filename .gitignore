@@ -11,7 +11,7 @@ see_json.json
 *.pem 
 commands.txt
 Pipfile*
-model-dependencies/*
+model-dependencies/
 
 #Ignore environment configs
 deep-cite-config.json
