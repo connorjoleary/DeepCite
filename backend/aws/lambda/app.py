@@ -68,7 +68,7 @@ def lambda_handler(event, context):
     lambda_response = respond(event.get('response_size', 'small'), response)
     print(lambda_response)
     try:
-        database_calls.record_call(new_submission, base_id, user_id, stage, lambda_response['statusCode'], response, time_elapsed, versions)
+        database_calls.record_call(new_submission, base_id, user_id, stage, 200, response, time_elapsed, versions) # TODO:figure out status code
     except Exception as e:
         print("unable to store call")
         traceback.print_tb(e.__traceback__)
