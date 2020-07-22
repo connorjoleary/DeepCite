@@ -1,4 +1,4 @@
-# DeepCite
+# DeepCite ![version](https://img.shields.io/badge/version-2.0.0-blue)
 
 <p> In a world filled with fake news and alternative facts, get the real deep sources for your information. </p>
 
@@ -11,6 +11,7 @@ https://chrome.google.com/webstore/detail/deepcite/oibmgglhkkaigemacdkfeedffkjbp
 * [Installation](#installation)
 * [Testing](#testing)
 * [Configuration](#configuration)
+* [For Maintainers](#for_maintainers)
 * [Authors](#authors)
 
 ## Contributions
@@ -207,6 +208,25 @@ There are a couple ways to configure both the backend and the aws lambda service
  VERSIONS_API=0.2
  VERSIONS_EXTENSION=0.4
  ```
+
+## For Maintainers eyes only :eyes:
+
+#### Version Control
+
+It's not really the responsiblity of contributors to manange the CHANGELOG and/or version control. Also adding the version control to PR's can lead to needless conflicts. After a PR is merged it is a good idea to see if the CHANGELOG needs to be updated. If the CHANGELOG needs to be updated then the version should also be updated. For our version control we follow [semantic verisoning standards](https://semver.org/), which follows the general format: `MAJOR.MINOR.PATCH`. So after you have updated the CHANGELOG but before you staged your commits, here is how to update the version:
+```bash
+$ git commit -m "Updated the CHANGELOG"
+$ git tag -a 'v2.0.1' -m 'patch update 2.0.1'
+# then update the npm package.json
+$ cd extensions/ && npm version from-git
+# then your gonna also need to update manifest.json so ...
+$ vim manifest.json
+# then update "version": "2.0.1", and next commit these changes
+$ git add package.json package-lock.json manifest.json
+$ git commit -m "versioning"
+# Finally push the changes and push the new tags
+$ git push --follow-tags
+```
 
 ## Authors
 Connor O'Leary, Joe Pagani, and Jake Heaser
