@@ -1,5 +1,4 @@
 import spacy
-from spacy.parts_of_speech import  PUNCT, PROPN
 from spacy.lang.en import English
 from spacy.tokenizer import Tokenizer
 from config import config
@@ -11,7 +10,13 @@ import os
 # nlp.vocab.vectors = spacy.vocab.Vectors(data=gn_model.vectors, keys=gn_model.index2word)
 nlp = spacy.load('./word_vectors/googlenews.model/')
 
-#nlp = spacy.load('en_core_web_sm')
+def maybe_download(model, dest):
+    save_path = Path(dest) / model
+    dirname = model.split('-')[0]
+    return save_path / dirname / model
+
+model_path = maybe_download('googlenews.model', '/mnt/word_vectors')
+nlp = spacy.load(model_path)
 
 def custom_tokenizer(nlp):
 
