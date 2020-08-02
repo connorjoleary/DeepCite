@@ -23,7 +23,8 @@ def deep_cite(claim, link):
             full_pre_json['error'] = str('Error 500: Internal Server Error ' + str(e) + "."  + \
                         new_indention("Please add your error to " + link + " with the corresponding claim and link."))
 
-    return jsonify(full_pre_json)
+    print(full_pre_json)
+    return full_pre_json
 
 def check_instance(e):
     for error in exceptions:
@@ -53,5 +54,5 @@ def sanitize_link(link):
 
     return sanitized.strip()
 
-# if __name__ == "__main__":
-#     deep_cite(**{"claim":"6 years after resigning, Nixon testified on behalf of former FBI assistant director Mark Felt at Felts own trial, and gave money to Felts defense fund. In 2005 Felt revealed he had been Deep Throat, Bob Woodwards source while breaking the Watergate scandal that led to Nixons resignation", "link":"https://www.reddit.com/r/todayilearned/comments/gzwlp6/til_6_years_after_resigning_nixon_testified_on/"})
+if __name__ == "__main__":
+    deep_cite(**{"claim":"6 years after resigning, Nixon testified on behalf of former FBI assistant director Mark Felt at Felts own trial, and gave money to Felts defense fund. In 2005 Felt revealed he had been Deep Throat, Bob Woodwards source while breaking the Watergate scandal that led to Nixons resignation", "link":"https://www.reddit.com/r/todayilearned/comments/gzwlp6/til_6_years_after_resigning_nixon_testified_on/"})

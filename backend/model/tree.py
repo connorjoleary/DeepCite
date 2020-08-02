@@ -16,7 +16,7 @@ class ClaimPath(object):
         return not (self.totscore < other.totscore)
     def __repr__(self):
         return "claim path: " + [claim.to_claim_link_dict() for claim in self.claims] + " total score: " + str(self.totscore)
-    
+
 
 class Tree:
     def __init__(self, url, claim):
