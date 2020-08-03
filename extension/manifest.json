@@ -1,17 +1,19 @@
 {
   "manifest_version": 2,
-  "name":"DeepCite",
+  "name": "DeepCite",
   "version": "2.0.0",
   "browser_action": {
     "default_popup": "popup.html"
   },
-  "icons": { "16": "images/icon16.png",
+  "icons": {
+    "16": "images/icon16.png",
     "48": "images/icon48.png",
-   "128": "images/icon128.png" 
+    "128": "images/icon128.png"
   },
-
   "background": {
-    "scripts": ["js/background.js"]
+    "scripts": [
+      "js/background.js"
+    ]
   },
   "permissions": [
     "storage"
@@ -19,8 +21,12 @@
   "content_security_policy": "script-src 'self' https://sdk.amazonaws.com/js/aws-sdk-2.713.0.min.js https://api.ipify.org; object-src 'self'",
   "content_scripts": [
     {
-      "matches": ["http://localhost:8001/*"],
-      "js": ["js/jquery-3.2.1.min.js"]
+      "matches": [
+        "http://localhost:8001/*"
+      ],
+      "js": [
+        "js/jquery-3.2.1.min.js"
+      ]
     }
   ]
 }
