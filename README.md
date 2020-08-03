@@ -211,20 +211,35 @@ There are a couple ways to configure both the backend and the aws lambda service
 
 ## For Maintainers eyes only :eyes:
 
-#### Version Control
+#### Semantic Versioning Policy
 
-It's not really the responsiblity of contributors to manange the CHANGELOG and/or version control. Also adding the version control to PR's can lead to needless conflicts. After a PR is merged it is a good idea to see if the CHANGELOG needs to be updated. If the CHANGELOG needs to be updated then the version should also be updated. For our version control we follow [semantic verisoning standards](https://semver.org/), which follows the general format: `MAJOR.MINOR.PATCH`. So after you have updated the CHANGELOG but before you staged your commits, here is how to update the version:
+It's not really the responsiblity of contributors to manange the CHANGELOG and/or version numbers. Also adding the version number to PR's can lead to needless conflicts. After a PR is merged it is a good idea to see if the CHANGELOG needs to be updated. If the CHANGELOG needs to be updated then the extension version should also be updated. For our version control we follow [semantic verisoning standards](https://semver.org/), which follows the general format: `MAJOR.MINOR.PATCH`.
+
+ * **Patch:** increase when you make backwards compatible bug fixes.
+ * **Minor:** increase when you add functionality in a backwards compatible manner and set _patch_ to 0.
+ * **Major:** when you make incompatible API changes and set _patch_ and _minor_ to 0.
+
+There are multiple services in this repo and each has there own version number. Luckily there is a shell script in the `scripts/` that makes updating the version for each service very simple.
+
+ * The script itself is pretty self explanitory for example if you just added functionality _(so a minor update)_ to the `model` you can update its version like so:
+
 ```bash
-$ git commit -m "Updated the CHANGELOG"
-$ git tag -a 'v2.0.1' -m 'patch update 2.0.1'
-# then update the npm package.json
-$ cd extensions/ && npm version from-git
-# then your gonna also need to update manifest.json so ...
-$ vim manifest.json
-# then update "version": "2.0.1", and next commit these changes
-$ git add package.json package-lock.json manifest.json
-$ git commit -m "versioning"
-# Finally push the changes and push the new tags
+$ cd scripts/
+$ ./semver.sh minor model
+```
+
+ * There are also some git options so if you fix a bug in lambda and you want the version number to be committed then do this:
+
+```bash
+$ cd scripts/
+$ ./semver.sh patch lambda commit
+```
+
+ * Note: in this case the commit message will be "lambda patch update" and in general these auto commit messages follow this format `"$SERVICE $ACTION update"`
+
+**NOTE:** Our git tags are associated with the `extension` version number so if you update the extension version number a git tag will be added. This means that when you end up pushing your changes don't forget to push the tags like so:
+
+```bash
 $ git push --follow-tags
 ```
 
