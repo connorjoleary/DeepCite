@@ -1,0 +1,20 @@
+{
+  "ENV": "development",
+  "EC2": {
+    "IP": "172.31.35.42",
+    "PORT": "8000"
+  },
+  "SECRET": {
+    "REGION": "us-east-2",
+    "NAME": "rds_deepcite_sample"
+  },
+  "VERSIONS": {
+    "MODEL": "0.4.0",
+    "LAMBDA": "0.2.0",
+    "API": "0.2.0",
+    "EXTENSION": "2.0.0"
+  },
+  "RESPONSE": {
+    "NUM_BEST_RETURNED": "3"
+  }
+}

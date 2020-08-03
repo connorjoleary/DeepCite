@@ -22,26 +22,10 @@ else:
 config['file_path'] = config_file
 config['cwd'] = CWD
 
-DEFAULT = {
-    'ENV': 'development',
-    'LANGUAGE': 'en',
-    'GN_PATH': os.path.join(CWD, 'word_vectors', 'GoogleNews-vectors-negative300.bin'),
-    'SERVER': {
-        'HOST': '0.0.0.0',
-        'PORT': 5000,
-    },
-    'GUNICORN': {
-        'HOST': '0.0.0.0',
-        'PORT': 8000,
-        'WORKERS': 1,
-        'TIMEOUT': 3 * 60,
-    },
-    'MODEL': {
-        'SIMILARITY_CUTOFF': .67,
-        'NUM_CLAIMS_RETURNED': 5,
-        'MAX_HEIGHT': 5
-    }
-}
+with open('defaults.json', 'r') as f:
+    DEFAULT = json.load(f)
+
+DEFAULT['GN_PATH'] = os.path.join(CWD, 'word_vectors', 'GoogleNews-vectors-negative300.bin')
 
 config['env'] = config.get('env') or env.get('ENV') or DEFAULT['ENV']
 config['language'] = config.get('language') or env.get('LANGUAGE') or DEFAULT['LANGUAGE']
