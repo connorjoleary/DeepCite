@@ -12,7 +12,7 @@
     "MODEL": "0.4.0",
     "LAMBDA": "0.2.0",
     "API": "0.2.0",
-    "EXTENSION": "2.0.0"
+    "EXTENSION": "1.1.0"
   },
   "RESPONSE": {
     "NUM_BEST_RETURNED": "3"
