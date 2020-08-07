@@ -1,4 +1,4 @@
-# DeepCite ![version](https://img.shields.io/badge/version-2.0.0-blue)
+# DeepCite ![extension](https://img.shields.io/badge/extension-1.1.0-blue)
 
 <p> In a world filled with fake news and alternative facts, get the real deep sources for your information. </p>
 
