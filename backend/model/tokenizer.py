@@ -6,10 +6,13 @@ from config import config
 import queue as q
 import os
 
-# gn_model = KeyedVectors.load_word2vec_format(config['gn_path'], binary=True)
-# nlp = spacy.blank('en')
-# nlp.vocab.vectors = spacy.vocab.Vectors(data=gn_model.vectors, keys=gn_model.index2word)
-nlp = spacy.load('./word_vectors/googlenews.model/')
+# TODO: Allow to run locally
+model_path = '/mnt/word2vec/googlenews.model/'
+try:
+    nlp = spacy.load(model_path)
+except:
+    print(os.listdir('/mnt/word2vec/'))
+    exit(1)
 
 def custom_tokenizer(nlp):
 

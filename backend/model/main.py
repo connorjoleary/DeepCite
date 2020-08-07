@@ -7,7 +7,10 @@ import uuid
 
 exceptions = [errors.MalformedLink, errors.URLError, errors.EmptyWebsite, errors.ClaimNotInLink, errors.InvalidInput]
 
-def deep_cite(claim, link):
+def deep_cite(event, context):
+    claim = event['claim']
+    link = event['link']
+    print('started')
     full_pre_json = {'error': 'none', 'results': [{'citeID': str(uuid.uuid4()), 'parentCiteID': 0, 'link': link, 'score': 1, 'source': claim}]}
 
     try:
@@ -54,5 +57,5 @@ def sanitize_link(link):
 
     return sanitized.strip()
 
-if __name__ == "__main__":
-    deep_cite(**{"claim":"6 years after resigning, Nixon testified on behalf of former FBI assistant director Mark Felt at Felts own trial, and gave money to Felts defense fund. In 2005 Felt revealed he had been Deep Throat, Bob Woodwards source while breaking the Watergate scandal that led to Nixons resignation", "link":"https://www.reddit.com/r/todayilearned/comments/gzwlp6/til_6_years_after_resigning_nixon_testified_on/"})
+# if __name__ == "__main__":
+#     deep_cite(**{"claim":"6 years after resigning, Nixon testified on behalf of former FBI assistant director Mark Felt at Felts own trial, and gave money to Felts defense fund. In 2005 Felt revealed he had been Deep Throat, Bob Woodwards source while breaking the Watergate scandal that led to Nixons resignation", "link":"https://www.reddit.com/r/todayilearned/comments/gzwlp6/til_6_years_after_resigning_nixon_testified_on/"})
