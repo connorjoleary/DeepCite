@@ -3,7 +3,7 @@
     "test": "mocha"
   },
   "name": "deepcite",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "CS 506",
   "main": "test/test.js",
   "directories": {

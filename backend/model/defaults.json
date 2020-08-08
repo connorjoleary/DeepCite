@@ -1,0 +1,19 @@
+{
+    "ENV": "development",
+    "LANGUAGE": "en",
+    "SERVER": {
+        "HOST": "0.0.0.0",
+        "PORT": "5000"
+    },
+    "GUNICORN": {
+        "HOST": "0.0.0.0",
+        "PORT": "8000",
+        "WORKERS": "1",
+        "TIMEOUT": "180"
+    },
+    "MODEL": {
+        "SIMILARITY_CUTOFF": "0.67",
+        "NUM_CLAIMS_RETURNED": "5",
+        "MAX_HEIGHT": "5"
+    }
+}
