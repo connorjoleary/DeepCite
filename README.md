@@ -1,4 +1,4 @@
-# DeepCite
+# DeepCite ![extension](https://img.shields.io/badge/extension-1.1.0-blue)
 
 <p> In a world filled with fake news and alternative facts, get the real deep sources for your information. </p>
 
@@ -11,6 +11,7 @@ https://chrome.google.com/webstore/detail/deepcite/oibmgglhkkaigemacdkfeedffkjbp
 * [Installation](#installation)
 * [Testing](#testing)
 * [Configuration](#configuration)
+* [For Maintainers](#for_maintainers)
 * [Authors](#authors)
 
 ## Contributions
@@ -201,6 +202,40 @@ There are a couple ways to configure both the backend and the aws lambda service
  VERSIONS_API=0.2
  VERSIONS_EXTENSION=0.4
  ```
+
+## For Maintainers eyes only :eyes:
+
+#### Semantic Versioning Policy
+
+It's not really the responsiblity of contributors to manange the CHANGELOG and/or version numbers. Also adding the version number to PR's can lead to needless conflicts. After a PR is merged it is a good idea to see if the CHANGELOG needs to be updated. If the CHANGELOG needs to be updated then the extension version should also be updated. For our version control we follow [semantic verisoning standards](https://semver.org/), which follows the general format: `MAJOR.MINOR.PATCH`.
+
+ * **Patch:** increase when you make backwards compatible bug fixes.
+ * **Minor:** increase when you add functionality in a backwards compatible manner and set _patch_ to 0.
+ * **Major:** when you make incompatible API changes and set _patch_ and _minor_ to 0.
+
+There are multiple services in this repo and each has there own version number. Luckily there is a shell script in the `scripts/` that makes updating the version for each service very simple.
+
+ * The script itself is pretty self explanitory for example if you just added functionality _(so a minor update)_ to the `model` you can update its version like so:
+
+```bash
+$ cd scripts/
+$ ./semver.sh minor model
+```
+
+ * There are also some git options so if you fix a bug in lambda and you want the version number to be committed then do this:
+
+```bash
+$ cd scripts/
+$ ./semver.sh patch lambda commit
+```
+
+ * Note: in this case the commit message will be "lambda patch update" and in general these auto commit messages follow this format `"$SERVICE $ACTION update"`
+
+**NOTE:** Our git tags are associated with the `extension` version number so if you update the extension version number a git tag will be added. This means that when you end up pushing your changes don't forget to push the tags like so:
+
+```bash
+$ git push --follow-tags
+```
 
 ## Authors
 Connor O'Leary, Joe Pagani, and Jake Heaser
