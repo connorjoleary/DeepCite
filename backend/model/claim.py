@@ -1,9 +1,5 @@
-from bs4 import BeautifulSoup
-# from selenium import webdriver
 import exceptions as error
-import requests
 import tokenizer
-from wiki_scraper import wiki
 import sys
 import io
 import re
@@ -12,8 +8,10 @@ import queue as q
 from config import config
 import uuid
 import json
+import boto3
 
 CWD_FOLDER = os.path.dirname(os.path.abspath(__file__))
+lambda_client = boto3.client('lambda')
 
 regex = re.compile(
     r'^(?:http|ftp)s?://' # http:// or https://
@@ -99,30 +97,6 @@ class Claim:
             return False
         
         return True
-     
-     
-     # returns the p tags found in link
-     # accounts for dynamically loaded html
-    def get_page_text(self, response):
-
-        # dynamic html
-        # commented out for testing
-        # op = webdriver.ChromeOptions()
-        # op.add_argument('headless')
-        # driver = webdriver.Chrome(executable_path= CWD_FOLDER + '/chromedriver.exe',options=op)
-        # driver.get(self.href)  
-        # js_soup = BeautifulSoup(driver.page_source, "html.parser")
-        # dynamic = js_soup.findAll('p')
-
-        # static html
-        soup = BeautifulSoup(response.text, 'html.parser')
-        static = soup.findAll('p')
-
-        # commented out for testing
-        # if len(static) < len(dynamic):
-        #     return dynamic
-
-        return static
 
 
     # calls tokenizer and gets potential sources to claim
@@ -170,84 +144,30 @@ class Claim:
 
     def parse_child(self):
         # Do nothing if there is a cycle
-        ref2text = {}
         if self.href == "":
             return
         elif self.height >= Claim.maxheight:
             return
 
-        # is wikipedia link
-        if self.parent != None and  "https://en.wikipedia.org" in self.parent.href:
-            citation = wiki(self.href, self.parent.href)
-            if citation == None:
-                self.href = self.parent.href + self.href
-                self.score = self.parent.score
-                return
-            else:
-                self.href = citation
-        # not wikipedia link
-        else:
-            # no errors
-            if not self.excep_handle(): # why does this only run if not in wikipedia?
-                self.score = self.parent.score
-                return 
+        # no errors
+        if not self.excep_handle():
+            self.score = self.parent.score
+            return 
 
-        # gets url
-        user_agent = {'User-agent': 'Mozilla/5.0'}
-        try:
-            response = requests.get(self.href, headers=user_agent)
-        # url is trash
-        except Exception as e:
-            # faulty input
-            if self.parent == None:
-                raise error.URLError('Unable to reach URL: ' + html_link(self.href))
-            # create leaf
-            return
-        
+        ref2text = lambda_client.invoke(
+            FunctionName = 'arn:aws:lambda:eu-west-1:890277245818:function:ChildFunction',
+            InvocationType = 'RequestResponse',
+            Payload = json.dumps({'website': self.href})
+        )
 
         # marked site as visited
         self.visited.append(self.href)
 
-        text_raw = self.get_page_text(response)
-        
-        # Exception that the child of one claim has no valid sentences, then add its parent to the leaf list.
-        if len(text_raw) < 6:
-            # Terminate the scraper and parse the parent node to the leaf list
-            # unable to obtain infomation from website
-            if self.parent == None and 'reddit.com' not in self.href:
-                raise error.EmptyWebsite('Unable to obtain infomation from the website.' + \
-                            new_indention(html_link(self.href) + ' could contain the following errors: Error404, Error403, Error500, or content of site cannot be obtained.'))
+        if ref2text == Error:
+            raise ref2text
+        elif len(ref2text) == 0:
             return
 
-        for unit in text_raw:
-            if len(unit.findAll('a')) > 0:
-                for ref in unit.findAll('a'):
-                    try:
-                        if ref['href'] != self.href:
-                            ref2text[unit.text] = ref['href'] # doesn't this just take the last link in a piece of text?
-                    except KeyError:
-                        continue
-            else:
-                ref2text[unit.text] = ""
-
-        # If the claim is on reddit, the title and link of the posts are not in p tags. To get around this we read its json
-        if 'reddit.com' in self.href:
-            try:
-                response = requests.get(self.href+'.json', headers=user_agent)
-                page_info = json.loads(response.text)
-            except Exception as e:
-                page_info = {}
-            if type(page_info) == list:
-                page_info = page_info[0]
-
-            if page_info.get('kind') == 'Listing':
-                posts = page_info['data']['children']
-                for post in posts:
-                    if post.get('kind') == 't3':
-                        post = post.get('data', {})
-                        if 'url' in post and 'title' in post:
-                            if post['url']!= self.href:
-                                ref2text[post['title']] = post['url']
 
         # get tokenizer values
         scores = self.set_cand(ref2text)
