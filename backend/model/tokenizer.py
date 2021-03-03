@@ -1,5 +1,4 @@
 import spacy
-from gensim.models import KeyedVectors
 from spacy.parts_of_speech import  PUNCT, PROPN
 from spacy.lang.en import English
 from spacy.tokenizer import Tokenizer
@@ -7,11 +6,7 @@ from config import config
 import queue as q
 import os
 
-gn_model = KeyedVectors.load_word2vec_format(config['gn_path'], binary=True)
-nlp = spacy.blank('en')
-nlp.vocab.vectors = spacy.vocab.Vectors(data=gn_model.vectors, keys=gn_model.index2word)
-
-#nlp = spacy.load('en_core_web_sm')
+nlp = spacy.load('en_core_web_lg')
 
 def custom_tokenizer(nlp):
 
@@ -26,7 +21,6 @@ def custom_tokenizer(nlp):
                      prefix_search = prefixes_re.search, 
                      infix_finditer = infix_re.finditer, suffix_search = suffix_re.search,
                      token_match=None)
-
 
 
 nlp.tokenizer = custom_tokenizer(nlp)
