@@ -12,8 +12,8 @@
         "TIMEOUT": "180"
     },
     "MODEL": {
-        "SIMILARITY_CUTOFF": "0.67",
-        "NUM_CLAIMS_RETURNED": "5",
-        "MAX_HEIGHT": "5"
+        "SIMILARITY_CUTOFF": 0.67,
+        "NUM_CLAIMS_RETURNED": 5,
+        "MAX_HEIGHT": 5
     }
 }
