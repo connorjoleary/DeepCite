@@ -22,26 +22,8 @@ else:
 config['file_path'] = config_file
 config['cwd'] = CWD
 
-DEFAULT = {
-    'ENV': 'development',
-    'EC2': {
-        'IP': '172.31.35.42',
-        'PORT': 8000,
-    },
-    'SECRET': {
-        'REGION': "us-east-2",
-        'NAME': "rds_deepcite_sample",
-    },
-    'VERSIONS': {
-        'MODEL': 0.4,
-        'LAMBDA': 0.2,
-        'API': 0.2,
-        'EXTENSION': 0.4,
-    },
-    'RESPONSE': {
-        'NUM_BEST_RETURNED': 3
-    }
-}
+with open('defaults.json', 'r') as f:
+    DEFAULT = json.load(f)
 
 config['env'] = config.get('env') or env.get('ENV') or DEFAULT['ENV']
 
