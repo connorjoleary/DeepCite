@@ -1,3 +1,4 @@
+CREATE EXTENSION "uuid-ossp";
 CREATE table deepcite_call(
     id UUID NOT NULL DEFAULT uuid_generate_v1(),
     user_id text,

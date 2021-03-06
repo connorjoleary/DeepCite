@@ -1,4 +1,4 @@
-from app import lambda_handler
+from main import lambda_handler
 import json
 
 from flask import Flask, jsonify, request
