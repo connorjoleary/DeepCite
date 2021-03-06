@@ -33,6 +33,10 @@ ec2['port'] = ec2.get('port') or env.get('EC2_PORT') or DEFAULT['EC2']['PORT']
 ec2['url'] = ec2.get('url') or env.get('EC2_URL') or f"http://{ec2['ip']}:{ec2['port']}/api/v1/deep_cite"
 config['ec2'] = ec2
 
+cloudrun = config.get('CLOUDRUN', {})
+cloudrun['url'] = cloudrun.get('url') or env.get('CLOUDRUN_URL') or DEFAULT['CLOUDRUN']['URL']
+config['CLOUDRUN'] = cloudrun
+
 secret = config.get('secret', {})
 secret['region'] = secret.get('region') or env.get('SECRET_REGION') or DEFAULT['SECRET']['REGION']
 secret['name'] = secret.get('name') or env.get('SECRET_NAME') or DEFAULT['SECRET']['NAME']
