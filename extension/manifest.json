@@ -18,11 +18,12 @@
   "permissions": [
     "storage"
   ],
-  "content_security_policy": "script-src 'self' https://sdk.amazonaws.com/js/aws-sdk-2.713.0.min.js https://api.ipify.org; object-src 'self'",
+  "content_security_policy": "script-src 'self' http://localhost:8001/test/deepcite; object-src 'self'",
   "content_scripts": [
     {
       "matches": [
-        "http://localhost:8001/*"
+        "http://localhost:8001/*",
+        "https://us-central1-deepcite-306405.cloudfunctions.net/deepcite/*"
       ],
       "js": [
         "js/jquery-3.2.1.min.js"

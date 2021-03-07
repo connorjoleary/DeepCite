@@ -1,9 +1,7 @@
-// Initialize the Amazon Cognito credentials provider
-AWS.config.region = 'us-east-2'; // Region
-AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-    IdentityPoolId: 'us-east-2:3f1e82e0-3867-4fcd-8c0c-fd641d949c83',
-});
-var lambda = new AWS.Lambda();
+const url = "https://us-central1-deepcite-306405.cloudfunctions.net/deepcite";
+//const url = "http://localhost:5000/api/v1/deep_cite";
+//const url = "http://localhost:5000/";
+var ajax = null;
 const stageValue = 'dev'
 
 var timeout = null;
@@ -116,7 +114,7 @@ $(document).ready(() => {
 		disableCiteActions();
 
 		event.preventDefault();
-		callLambda(claimValue, linkValue); //perform some operations
+		sendToServer(claimValue, linkValue); //perform some operations
 
 		var delay = 1440000; //180000 is a 3 minute timeout
 		timeout = this.setTimeout(function () {
@@ -165,7 +163,7 @@ async function grab_ip() {
     return data.ip;
 }
 
-async function callLambda(claimValue, linkValue) {
+async function sendToServer(claimValue, linkValue) {
 	var ipValue = await grab_ip();
 
 	var data = {
@@ -177,26 +175,26 @@ async function callLambda(claimValue, linkValue) {
 	console.log(JSON.stringify(data));
 
 	// Code used to run locally
+	// data['test']=true
 	// ajax = $.ajax({
 	// 	type: "POST",
 	// 	url: "http://localhost:8001/test/deepcite", // where the post request gets sent to (backend server address)
+	// 	crossDomain: true,
 	// 	success: dataReceived, // callback function on success
 	// 	error: serverOffline, // function if failed to connect to server
-	// 	contentType: "application/json", // exprected data type of the returned data
+	// 	contentType: "application/json",
 	// 	data: JSON.stringify(data) // send the data json as a string
 	// });
 
-	lambda.invoke({
-		FunctionName: 'deepcite',
-		Payload: JSON.stringify(data)
-	}, function(err, data) {
-		if (err) {
-			console.log(err, err.stack);
-			showErrorWindowWithMessage(err);
-		} else {
-			dataReceived(data)
-		}
-	})
+	ajax = $.ajax({
+		type: "POST",
+		url: url, // where the post request gets sent to (backend server address)
+		crossDomain: true,
+		success: dataReceived, // callback function on success
+		error: serverOffline, // function if failed to connect to server
+		contentType: "application/json",
+		data: JSON.stringify(data) // send the data json as a string
+	});
 }
 
 function dataReceived(data) {
@@ -205,21 +203,13 @@ function dataReceived(data) {
 	});
 	chrome.storage.local.set({ 'state': 1 }, function () {
 		console.log('Data received');
+		console.log(data)
 	});
 
 	// cancel timeout
 	clearTimeout(timeout)
-
-	try{
-		var response = JSON.parse(data.Payload);
-	} catch (err) {
-		console.log(err)
-		console.log('unable to parse: '+ JSON.stringify(data))
-		showErrorWindowWithMessage('Unable to parse response');
-	}
-	if (!response) {
-		return;
-	}
+	
+	response = data
 
 	//prints errors:
 	if (!!response.error && response.error !== "none") {
