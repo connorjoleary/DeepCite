@@ -175,26 +175,26 @@ async function sendToServer(claimValue, linkValue) {
 	console.log(JSON.stringify(data));
 
 	// Code used to run locally
-	// data['test']=true
-	// ajax = $.ajax({
-	// 	type: "POST",
-	// 	url: "http://localhost:8001/test/deepcite", // where the post request gets sent to (backend server address)
-	// 	crossDomain: true,
-	// 	success: dataReceived, // callback function on success
-	// 	error: serverOffline, // function if failed to connect to server
-	// 	contentType: "application/json",
-	// 	data: JSON.stringify(data) // send the data json as a string
-	// });
-
+	data['test']=true
 	ajax = $.ajax({
 		type: "POST",
-		url: url, // where the post request gets sent to (backend server address)
+		url: "http://localhost:8001/test/deepcite", // where the post request gets sent to (backend server address)
 		crossDomain: true,
 		success: dataReceived, // callback function on success
 		error: serverOffline, // function if failed to connect to server
 		contentType: "application/json",
 		data: JSON.stringify(data) // send the data json as a string
 	});
+
+	// ajax = $.ajax({
+	// 	type: "POST",
+	// 	url: url, // where the post request gets sent to (backend server address)
+	// 	crossDomain: true,
+	// 	success: dataReceived, // callback function on success
+	// 	error: serverOffline, // function if failed to connect to server
+	// 	contentType: "application/json",
+	// 	data: JSON.stringify(data) // send the data json as a string
+	// });
 }
 
 function dataReceived(data) {

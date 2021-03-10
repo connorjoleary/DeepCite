@@ -10,7 +10,7 @@ def test_lambda():
     response = lambda_handler(request)
     print(response)
 
-    return json.dumps(response)
+    return response
 
 
 if __name__ == '__main__':
