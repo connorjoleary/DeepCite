@@ -200,7 +200,7 @@ There are a couple ways to configure both the backend and the aws lambda service
  VERSIONS_MODEL=0.6.0
  VERSIONS_LAMBDA=0.3.0
  VERSIONS_API=0.3.0
- VERSIONS_EXTENSION=0.4
+ VERSIONS_EXTENSION=1.1.0
  ```
 
 ## For Maintainers eyes only :eyes:
