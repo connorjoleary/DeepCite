@@ -1,0 +1,19 @@
+{"aws":{
+    "label": "aws deepcite",
+    "host": "deepcite.ckbyp3nhsmiu.us-east-2.rds.amazonaws.com",
+    "user": "postgres",
+    "port": 5432,
+    "ssl": true,
+    "database": "postgres",
+    "password": "B5RNHJMZE4ZBAT3N4K37"
+  },
+  "gcp": {
+    "label": "gcp deepcite",
+    "host": "35.226.116.208",
+    "user": "postgres",
+    "port": 5432,
+    "ssl": true,
+    "database": "postgres",
+    "password": "fnuFkbpKckdsxBBf"
+  }
+}
