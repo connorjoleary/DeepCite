@@ -4,17 +4,20 @@
     "IP": "172.31.35.42",
     "PORT": "8000"
   },
+  "CLOUDRUN": {
+    "URL": "https://deepcite-model-mt56qhm4pa-uc.a.run.app"
+  },
   "SECRET": {
     "REGION": "us-east-2",
     "NAME": "rds_deepcite_sample"
   },
   "VERSIONS": {
-    "MODEL": "0.5.0",
-    "LAMBDA": "0.2.0",
-    "API": "0.2.0",
+    "MODEL": "0.6.0",
+    "LAMBDA": "0.3.0",
+    "API": "0.3.0",
     "EXTENSION": "1.1.0"
   },
   "RESPONSE": {
-    "NUM_BEST_RETURNED": "3"
+    "NUM_BEST_RETURNED": 3
   }
 }

@@ -1,6 +1,5 @@
 import json
 import requests
-import psycopg2
 import sys
 import base64
 import time
@@ -18,8 +17,9 @@ print('Loading function')
 
 def call_deepcite(claim, link, **kwargs):
     # private ip address of ec2
-    response = requests.post(url=config['ec2']['url'], json={"claim": claim, "link": link})
+    response = requests.post(url=config['CLOUDRUN']['url']+'/api/v1/deep_cite', json={"claim": claim, "link": link})
     new_submission = True
+    print(response)
     return json.loads(response.text)
 
 def grab_response(database_calls, id, claim, link, **kwargs):
@@ -32,8 +32,8 @@ def grab_response(database_calls, id, claim, link, **kwargs):
         new_submission=False
         return responses[0] #not sure if i need json loads
 
-def lambda_handler(event, context):
-
+def lambda_handler(event):
+    event = event.get_json(silent=True)
     start = time.time()
 
     if event.get('test', False):
@@ -75,5 +75,5 @@ def lambda_handler(event, context):
         print(e)
     return lambda_response
 
-# body = "{\"id\": \"fdaeasfsd\", \"resonse_size\": \"small\", \"claim\":\"the death of Sherlock Holmes almost destroyed the magazine thries. When Arthur Conan Doyle killed him off in 1893, 20,000 people cancelled their subscriptions. The magazine barely survived. Its staff referred to Holmes’ death as “the dreadful event”.\", \"link\":\"http://www.bbc.com/culture/story/20160106-how-sherlock-holmes-changed-the-world\"}"
-# print(lambda_handler({"isBase64Encoded": False, "body": body, "requestContext": {"http": {"method": "POST", "sourceIp": "dfsds"}, "stage": "dev", }},0))
+# body = "{\"ip\": \"127.0.0.1\", \"stage\": \"test\", \"id\": \""+str(uuid.uuid4())+"\", \"resonse_size\": \"small\", \"claim\":\"the death of Sherlock Holmes almost destroyed the magazine thries. When Arthur Conan Doyle killed him off in 1893, 20,000 people cancelled their subscriptions. The magazine barely survived. Its staff referred to Holmes’ death as “the dreadful event”.\", \"link\":\"http://www.bbc.com/culture/story/20160106-how-sherlock-holmes-changed-the-world\"}"
+# print(lambda_handler(json.loads(body), None))#{"isBase64Encoded": False, "body": body, "requestContext": {"http": {"method": "POST", "sourceIp": "dfsds"}, "stage": "dev", }},0))

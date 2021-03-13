@@ -1,0 +1,10 @@
+Dockerfile
+README.md
+v-env
+v-env-test
+word_vectors
+*.pyc
+*.pyo
+*.pyd
+__pycache__
+.pytest_cache

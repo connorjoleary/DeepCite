@@ -56,7 +56,7 @@ cd backend/aws/lambda
 python3 -m venv v-env-test
 source v-env-test/bin/activate
 pip3 install -r requirements.txt -r test_requirements.txt
-gunicorn -c gunicorn_config.py wsgi
+gunicorn -c gunicorn_config.py wsgi:app
 ```
 
 ### Model
@@ -99,7 +99,7 @@ Installations and downloads required before server can funciton properly
 * Local testing:
 `curl -d '{"claim":"the death of Sherlock Holmes almost destroyed the magazine that had originally published the stories. When Arthur Conan Doyle killed him off in 1893, 20,000 people cancelled their subscriptions. The magazine barely survived. Its staff referred to Holmes’ death as “the dreadful event”.", "link":"http://www.bbc.com/culture/story/20160106-how-sherlock-holmes-changed-the-world"}' -H "Content-Type: application/json" -X POST http://127.0.0.1:8000/api/v1/deep_cite`
 * Server Testing:
-`curl -d '{"claim":"the death of Sherlock Holmes almost destroyed the magazine that had originally published the stories. When Arthur Conan Doyle killed him off in 1893, 20,000 people cancelled their subscriptions. The magazine barely survived. Its staff referred to Holmes’ death as “the dreadful event”.", "link":"http://www.bbc.com/culture/story/20160106-how-sherlock-holmes-changed-the-world"}' -H "Content-Type: application/json" -X POST https://jzvkkf7p6d.execute-api.us-east-2.amazonaws.com/dev/deepcite`
+`curl -d '{"claim":"the death of Sherlock Holmes almost destroyed the magazine that had originally published the stories. When Arthur Conan Doyle killed him off in 1893, 20,000 people cancelled their subscriptions. The magazine barely survived. Its staff referred to Holmes’ death as “the dreadful event”.", "link":"http://www.bbc.com/culture/story/20160106-how-sherlock-holmes-changed-the-world"}' -H "Content-Type: application/json" -X POST https://deepcite-model-mt56qhm4pa-uc.a.run.app/api/v1/deep_cite`
 
 ## Reporting Bugs
 
@@ -197,10 +197,10 @@ There are a couple ways to configure both the backend and the aws lambda service
  EC2_PORT=8000
  SECRET_REGION=us-east-2
  SECRET_NAME=rds_deepcite_sample
- VERSIONS_MODEL=0.4
- VERSIONS_LAMBDA=0.2
- VERSIONS_API=0.2
- VERSIONS_EXTENSION=0.4
+ VERSIONS_MODEL=0.6.0
+ VERSIONS_LAMBDA=0.3.0
+ VERSIONS_API=0.3.0
+ VERSIONS_EXTENSION=1.1.0
  ```
 
 ## For Maintainers eyes only :eyes:
