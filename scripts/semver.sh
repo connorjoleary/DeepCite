@@ -108,7 +108,7 @@ if [ -n "$ACTION" ]; then
     if [ -n "$SERVICE" ]; then
         python3 backend_versions.py version "$ACTION" "$SERVICE" -f
         if [ -n "$GITOPTS" ]; then
-            git add ../backend/aws/lambda/defaults.json
+            git add ../backend/lambda/defaults.json
             [ "$GITOPTS" =  "commit" ] && git commit -m "$SERVICE $ACTION update"
         fi
     else

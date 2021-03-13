@@ -3,7 +3,7 @@ import argparse
 import json
 import os
 
-DEFAULT_FPATH = os.path.join(os.getcwd(), '..', 'backend', 'aws', 'lambda', 'defaults.json') 
+DEFAULT_FPATH = os.path.join(os.getcwd(), '..', 'backend', 'lambda', 'defaults.json') 
 PACKAGE_FPATH = os.path.join(os.getcwd(), '..', 'extension','package.json')
 MANIFEST_FPATH = os.path.join(os.getcwd(), '..', 'extension', 'manifest.json') 
 

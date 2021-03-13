@@ -16,7 +16,7 @@ Pipfile*
 #Ignore environment configs
 deep-cite-config.json
 *.env
-backend/aws/rds/database_config.json
+backend/rds/database_config.json
 
 #Ignore thumbnails created by Windows
 Thumbs.db

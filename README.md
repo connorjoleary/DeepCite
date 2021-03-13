@@ -16,7 +16,7 @@ https://chrome.google.com/webstore/detail/deepcite/oibmgglhkkaigemacdkfeedffkjbp
 
 ## Contributions
 
-Unfortunatly running code on AWS is not cheap and I would really appreciate any support you could give to see this project flourish.
+Unfortunatly running code is not cheap and I would really appreciate any support you could give to see this project flourish.
 
 | website               | payment address                    |
 |-----------------------|------------------------------------|
@@ -28,7 +28,7 @@ Unfortunatly running code on AWS is not cheap and I would really appreciate any 
 
 ### Extension
 
-Before it can connect to your local running lambda, update the call to use ajax instead of aws lambda
+Before it can connect to your local running lambda, update the call to talk to local host
 
 ##### Chrome
 
@@ -52,7 +52,7 @@ Before if can connect to your local running model, update the env var `EC2_IP` t
 
 ##### Run
 ```
-cd backend/aws/lambda
+cd backend/lambda
 python3 -m venv v-env-test
 source v-env-test/bin/activate
 pip3 install -r requirements.txt -r test_requirements.txt
