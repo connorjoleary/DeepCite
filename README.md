@@ -4,6 +4,9 @@
 
 https://chrome.google.com/webstore/detail/deepcite/oibmgglhkkaigemacdkfeedffkjbpgoi?hl=en-US
 
+Join the discussion here:
+https://discord.gg/rQKkx5p6Cw
+
 ## Table of Contents
 
 * [Contributions](#contributions)
