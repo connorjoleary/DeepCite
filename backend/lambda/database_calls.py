@@ -75,11 +75,13 @@ class DatabaseCalls():
         try:
             with self.conn.connect() as cur:
 
-                responses = cur.execute(f"SELECT response FROM deepcite_call where id = '{id}'") #potentially this could just be a search by source claim and link and run for everything
+                responses = cur.execute(f"SELECT response FROM deepcite_call where id = '{id}'").fetchall() #potentially this could just be a search by source claim and link and run for everything
+                responses = [res[0] for res in responses]
         except Exception as e:
             print("ERROR: Unexpected error: Could not select from database instance.")
             print(e)
             responses = []
+        print("Deepcite entry responses:", responses)
         return responses
 
     def record_call(self, new_submission, base_id, user_id, stage, status_code, response, time_elapsed, versions):
