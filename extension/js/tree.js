@@ -13,9 +13,32 @@ deepCite.canvasElement = document.getElementById("canvas-element");
 
 // initialization function
 function init() {
-	// this function will be replaced by getData, an ajax call that will gather data from the server.
-	var testData = generateTestData();
-	populateDataIntoTree(testData);
+	// var data = generateTestData();
+	var data = gatherData();
+	// populateDataIntoTree(data);
+}
+
+function gatherData() {
+	chrome.storage.local.get(['state'], function (result) {
+		let state = result.state;
+		console.log(state);
+
+		if (state == 0) {
+			chrome.storage.local.get(['claimField'], function (result) {
+				console.log('Value currently is ' + result.claimField);
+				deepCite.formClaimInput.value = result.claimField;
+			});
+			chrome.storage.local.get(['linkField'], function (result) {
+				console.log('Value currently is ' + result.linkField);
+				deepCite.formLinkInput.value = result.linkField;
+			});
+		} else if (state == 1) {
+			chrome.storage.local.get(['lastData'], function (result) {
+				populateDataIntoTree(result.lastData.results);
+			})
+		}
+	});
+	
 }
 
 function generateTestData() {

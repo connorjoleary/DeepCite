@@ -16,7 +16,8 @@
     ]
   },
   "permissions": [
-    "storage"
+    "storage",
+    "tabs"
   ],
   "content_security_policy": "script-src 'self' http://localhost:8001/test/deepcite; object-src 'self'",
   "content_scripts": [

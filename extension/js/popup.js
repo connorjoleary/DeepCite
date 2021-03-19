@@ -92,6 +92,9 @@ $(document).ready(() => {
 		chrome.tabs.create({ url: $(this).attr('href') });
 		return false;
 	});
+	$('#btnview-source-tree').on('click', function () {
+		viewSourceTree();
+	});
 	// we cannot strictly call functions with an onclick attribute from an html tag, so we must create ids for each button separately
 	$('#btnback-citation').on('click', function () {
 		newCitationButtonClicked();
@@ -245,6 +248,11 @@ function newCitationButtonClicked() {
 		console.log('Initialized extention state');
 	});
 	showDeepCiteWindow();
+}
+
+function viewSourceTree() {
+	let url = chrome.runtime.getURL("tree.html");
+	chrome.tabs.create({ url });
 }
 
 function populateCitationResults(results) {
