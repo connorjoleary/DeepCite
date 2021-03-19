@@ -202,7 +202,7 @@ async function sendToServer(claimValue, linkValue) {
 
 function sort_response(results) {
 	results.sort(function (a, b) {
-		return ((a.score >= b.score) ? -1 : 1);
+		return b.score-a.score
 	})
 
 	return results.slice(0, num_results_displayed);
@@ -267,7 +267,7 @@ function populateCitationResults(results) {
 		}
 		resultSectionHtml += `
 					<div class="form-field">
-						<div class="result-text">Score: ${result.score}</div>
+						<div class="result-text">Score: ${Math.floor(result.score*100)}</div>
 						<div class="result-text">"${result.source}"</div>
 						<a href="${result.link}" class="result-link">${result.link}</a>
 					</div>

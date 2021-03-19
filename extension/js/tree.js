@@ -244,10 +244,10 @@ function populateDataIntoCiteBox(citeBox, data) {
 	linkNode.innerText = data.link;
 	linkNode.href = data.link;
 	// score node changes color depending on the score
-	scoreNode.innerText = data.score;
-	scoreNode.style.backgroundColor = getBackgroundColorByScore(data.score, 1);
-	scoreNode.style.color = getTextColorByScore(data.score);
-	scoreNode.style.borderColor = getBackgroundColorByScore(data.score, /* multiplier */ 0.7);
+	scoreNode.innerText = Math.floor(data.score*100);
+	scoreNode.style.backgroundColor = getBackgroundColorByScore(Math.floor(data.score*100), 1);
+	scoreNode.style.color = getTextColorByScore(Math.floor(data.score*100));
+	scoreNode.style.borderColor = getBackgroundColorByScore(Math.floor(data.score*100), /* multiplier */ 0.7);
 
 	return citeBox;
 }
