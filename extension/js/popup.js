@@ -3,7 +3,7 @@ const url = "https://us-central1-deepcite-306405.cloudfunctions.net/deepcite";
 //const url = "http://localhost:5000/";
 var ajax = null;
 const stageValue = 'dev'
-
+const num_results_displayed = 5
 var timeout = null;
 
 if (!deepCite) {
@@ -197,6 +197,15 @@ async function sendToServer(claimValue, linkValue) {
 	// });
 }
 
+function sort_response(results) {
+	results.sort(function (a, b) {
+		return ((a.score >= b.score) ? -1 : 1);
+	})
+
+	return results.slice(0, num_results_displayed);
+}
+
+
 function dataReceived(data) {
 	chrome.storage.local.set({ 'lastData': data }, () => {
 		console.log('Initialized previous data variable');
@@ -219,7 +228,8 @@ function dataReceived(data) {
 		showCitationWindow();
 		//for each item in data returned, populate results
 		if (!!response.results && !!response.results.length) {
-			populateCitationResults(response.results);
+			displayed_response = sort_response(response.results)
+			populateCitationResults(displayed_response);
 		}
 	}
 }
@@ -249,6 +259,7 @@ function populateCitationResults(results) {
 		}
 		resultSectionHtml += `
 					<div class="form-field">
+						<div class="result-text">Score: ${result.score}</div>
 						<div class="result-text">"${result.source}"</div>
 						<a href="${result.link}" class="result-link">${result.link}</a>
 					</div>
