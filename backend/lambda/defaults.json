@@ -13,9 +13,9 @@
   },
   "VERSIONS": {
     "MODEL": "0.6.0",
-    "LAMBDA": "0.3.0",
+    "LAMBDA": "0.4.0",
     "API": "0.3.0",
-    "EXTENSION": "1.1.0"
+    "EXTENSION": "1.2.0"
   },
   "RESPONSE": {
     "NUM_BEST_RETURNED": 3
