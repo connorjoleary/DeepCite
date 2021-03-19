@@ -23,16 +23,12 @@ function gatherData() {
 		let state = result.state;
 		console.log(state);
 
-		if (state == 0) {
-			chrome.storage.local.get(['claimField'], function (result) {
-				console.log('Value currently is ' + result.claimField);
-				deepCite.formClaimInput.value = result.claimField;
-			});
-			chrome.storage.local.get(['linkField'], function (result) {
-				console.log('Value currently is ' + result.linkField);
-				deepCite.formLinkInput.value = result.linkField;
-			});
-		} else if (state == 1) {
+		if (state == 1) {
+			chrome.storage.local.get(['lastData'], function (result) {
+				populateDataIntoTree(result.lastData.results);
+			})
+		} else {
+			console.log("WARN: State not accepted");
 			chrome.storage.local.get(['lastData'], function (result) {
 				populateDataIntoTree(result.lastData.results);
 			})
