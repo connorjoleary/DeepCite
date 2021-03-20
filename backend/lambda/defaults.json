@@ -16,8 +16,5 @@
     "LAMBDA": "0.4.0",
     "API": "0.4.0",
     "EXTENSION": "1.2.0"
-  },
-  "RESPONSE": {
-    "NUM_BEST_RETURNED": 3
   }
 }

@@ -3,7 +3,7 @@ const url = "https://us-central1-deepcite-306405.cloudfunctions.net/deepcite";
 //const url = "http://localhost:5000/";
 var ajax = null;
 const stageValue = 'dev'
-const num_results_displayed = 5
+const num_results_displayed = 4
 var timeout = null;
 
 if (!deepCite) {
