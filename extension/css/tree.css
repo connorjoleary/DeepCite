@@ -147,6 +147,7 @@ body {
 .section-content.source {
 	font-style: italic;
 	height: calc(100% - 1.5em);
+	overflow-y: auto;
 }
 
 .section-content.link {

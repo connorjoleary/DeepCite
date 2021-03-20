@@ -48,7 +48,3 @@ versions['lambda'] = versions.get('lambda') or env.get('VERSIONS_LAMBDA') or DEF
 versions['api'] = versions.get('api') or env.get('VERSIONS_API') or DEFAULT['VERSIONS']['API']
 versions['extension'] = versions.get('extension') or env.get('VERSIONS_EXTENSION') or DEFAULT['VERSIONS']['EXTENSION']
 config['versions'] = versions
-
-response = config.get('response', {})
-response['num_best_returned'] = response.get('num_best_returned') or env.get('RESPONSE_NUM_BEST_RETURNED') or DEFAULT['RESPONSE']['NUM_BEST_RETURNED']
-config['response'] = response

@@ -13,9 +13,28 @@ deepCite.canvasElement = document.getElementById("canvas-element");
 
 // initialization function
 function init() {
-	// this function will be replaced by getData, an ajax call that will gather data from the server.
-	var testData = generateTestData();
-	populateDataIntoTree(testData);
+	// var data = generateTestData();
+	var data = gatherData();
+	// populateDataIntoTree(data);
+}
+
+function gatherData() {
+	chrome.storage.local.get(['state'], function (result) {
+		let state = result.state;
+		console.log(state);
+
+		if (state == 1) {
+			chrome.storage.local.get(['lastData'], function (result) {
+				populateDataIntoTree(result.lastData.results);
+			})
+		} else {
+			console.log("WARN: State not accepted");
+			chrome.storage.local.get(['lastData'], function (result) {
+				populateDataIntoTree(result.lastData.results);
+			})
+		}
+	});
+	
 }
 
 function generateTestData() {
@@ -225,10 +244,10 @@ function populateDataIntoCiteBox(citeBox, data) {
 	linkNode.innerText = data.link;
 	linkNode.href = data.link;
 	// score node changes color depending on the score
-	scoreNode.innerText = data.score;
-	scoreNode.style.backgroundColor = getBackgroundColorByScore(data.score, 1);
-	scoreNode.style.color = getTextColorByScore(data.score);
-	scoreNode.style.borderColor = getBackgroundColorByScore(data.score, /* multiplier */ 0.7);
+	scoreNode.innerText = Math.floor(data.score*100);
+	scoreNode.style.backgroundColor = getBackgroundColorByScore(Math.floor(data.score*100), 1);
+	scoreNode.style.color = getTextColorByScore(Math.floor(data.score*100));
+	scoreNode.style.borderColor = getBackgroundColorByScore(Math.floor(data.score*100), /* multiplier */ 0.7);
 
 	return citeBox;
 }

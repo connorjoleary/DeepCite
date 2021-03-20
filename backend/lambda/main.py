@@ -15,6 +15,8 @@ new_submission = True
 
 print('Loading function')
 
+# TODO: why are the stored events scored with 1 (ex id:b39a196c-da57-46b6-8d4d-03ff88b62fbb)
+
 def call_deepcite(claim, link, **kwargs):
     # private ip address of ec2
     response = requests.post(url=config['CLOUDRUN']['url']+'/api/v1/deep_cite', json={"claim": claim, "link": link})
@@ -48,6 +50,7 @@ def lambda_handler(event):
     stage = event['stage']
 
     try:
+        # instead of matching on id, this should match on cached calls
         if event.get('id') is not None:
             response = grab_response(database_calls, **event)
         else:
@@ -57,6 +60,8 @@ def lambda_handler(event):
         print(e)
         response = e
 
+    print('Deepcite response:', response)
+
     user_id = event['ip']
     if isinstance(response, Exception):
         base_id = str(uuid.uuid4())
@@ -65,8 +70,8 @@ def lambda_handler(event):
 
     time_elapsed = time.time()-start
 
-    lambda_response = respond(event.get('response_size', 'small'), response)
-    print(lambda_response)
+    lambda_response = respond(response)
+    print('lambda response:', lambda_response)
     try:
         database_calls.record_call(new_submission, base_id, user_id, stage, 200, response, time_elapsed, versions) # TODO:figure out status code
     except Exception as e:
@@ -75,5 +80,5 @@ def lambda_handler(event):
         print(e)
     return lambda_response
 
-# body = "{\"ip\": \"127.0.0.1\", \"stage\": \"test\", \"id\": \""+str(uuid.uuid4())+"\", \"resonse_size\": \"small\", \"claim\":\"the death of Sherlock Holmes almost destroyed the magazine thries. When Arthur Conan Doyle killed him off in 1893, 20,000 people cancelled their subscriptions. The magazine barely survived. Its staff referred to Holmes’ death as “the dreadful event”.\", \"link\":\"http://www.bbc.com/culture/story/20160106-how-sherlock-holmes-changed-the-world\"}"
-# print(lambda_handler(json.loads(body), None))#{"isBase64Encoded": False, "body": body, "requestContext": {"http": {"method": "POST", "sourceIp": "dfsds"}, "stage": "dev", }},0))
+# body = "{\"ip\": \"127.0.0.1\", \"test\": true, \"stage\": \"dev\", \"id\": \""+str(uuid.uuid4())+"\", \"resonse_size\": \"small\", \"claim\":\"the death of Sherlock Holmes almost destroyed the magazine thries. When Arthur Conan Doyle killed him off in 1893, 20,000 people cancelled their subscriptions. The magazine barely survived. Its staff referred to Holmes’ death as “the dreadful event”.\", \"link\":\"http://www.bbc.com/culture/story/20160106-how-sherlock-holmes-changed-the-world\"}"
+# print(lambda_handler(json.loads(body)))#{"isBase64Encoded": False, "body": body, "requestContext": {"http": {"method": "POST", "sourceIp": "dfsds"}, "stage": "dev", }},0))

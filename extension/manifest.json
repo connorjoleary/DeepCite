@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "DeepCite",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "browser_action": {
     "default_popup": "popup.html"
   },
@@ -16,7 +16,8 @@
     ]
   },
   "permissions": [
-    "storage"
+    "storage",
+    "tabs"
   ],
   "content_security_policy": "script-src 'self' http://localhost:8001/test/deepcite; object-src 'self'",
   "content_scripts": [

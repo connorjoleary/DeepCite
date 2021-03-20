@@ -3,7 +3,7 @@ const url = "https://us-central1-deepcite-306405.cloudfunctions.net/deepcite";
 //const url = "http://localhost:5000/";
 var ajax = null;
 const stageValue = 'dev'
-
+const num_results_displayed = 4
 var timeout = null;
 
 if (!deepCite) {
@@ -91,6 +91,9 @@ $(document).ready(() => {
 	$('body').on('click', 'a', function () {
 		chrome.tabs.create({ url: $(this).attr('href') });
 		return false;
+	});
+	$('#btnview-source-tree').on('click', function () {
+		viewSourceTree();
 	});
 	// we cannot strictly call functions with an onclick attribute from an html tag, so we must create ids for each button separately
 	$('#btnback-citation').on('click', function () {
@@ -197,6 +200,15 @@ async function sendToServer(claimValue, linkValue) {
 	// });
 }
 
+function sort_response(results) {
+	results.sort(function (a, b) {
+		return b.score-a.score
+	})
+
+	return results.slice(0, num_results_displayed);
+}
+
+
 function dataReceived(data) {
 	chrome.storage.local.set({ 'lastData': data }, () => {
 		console.log('Initialized previous data variable');
@@ -219,7 +231,8 @@ function dataReceived(data) {
 		showCitationWindow();
 		//for each item in data returned, populate results
 		if (!!response.results && !!response.results.length) {
-			populateCitationResults(response.results);
+			displayed_response = sort_response(response.results)
+			populateCitationResults(displayed_response);
 		}
 	}
 }
@@ -237,6 +250,11 @@ function newCitationButtonClicked() {
 	showDeepCiteWindow();
 }
 
+function viewSourceTree() {
+	let url = chrome.runtime.getURL("tree.html");
+	chrome.tabs.create({ url });
+}
+
 function populateCitationResults(results) {
 	results.forEach((result, i) => {
 		var resultSectionHtml = `<div class="form-section">`;
@@ -249,6 +267,7 @@ function populateCitationResults(results) {
 		}
 		resultSectionHtml += `
 					<div class="form-field">
+						<div class="result-text">Score: ${Math.floor(result.score*100)}</div>
 						<div class="result-text">"${result.source}"</div>
 						<a href="${result.link}" class="result-link">${result.link}</a>
 					</div>
