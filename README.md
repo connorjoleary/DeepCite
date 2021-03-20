@@ -199,7 +199,7 @@ There are a couple ways to configure both the backend and the aws lambda service
  SECRET_NAME=rds_deepcite_sample
  VERSIONS_MODEL=0.6.0
  VERSIONS_LAMBDA=0.4.0
- VERSIONS_API=0.3.0
+ VERSIONS_API=0.4.0
  VERSIONS_EXTENSION=1.2.0
  ```
 
