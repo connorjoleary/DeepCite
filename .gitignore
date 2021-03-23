@@ -9,7 +9,6 @@ __pycache__/
 word_vectors/
 see_json.json
 *.pem 
-commands.txt
 Pipfile*
 *.csv
 
@@ -49,3 +48,4 @@ _ReSharper*/
 .vs/
 #Nuget packages folder
 packages/
+extension/js/format.json
