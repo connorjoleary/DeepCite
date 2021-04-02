@@ -105,19 +105,7 @@ $(document).ready(() => {
 
 	//populate claim and link from storage
 	$('#linxerForm').on('submit', (event) => {
-
-		var claimValue = event.target["0"].value;
-		var linkValue = event.target["1"].value;
-
-		// wait for both fields to be filled out
-		if (!claimValue || !linkValue) {
-			return;
-		}
-
-		disableCiteActions();
-
-		event.preventDefault();
-		sendToServer(claimValue, linkValue); //perform some operations
+		submitClaim(event.target["0"].value, event.target["1"].value)
 
 		var delay = 1440000; //180000 is a 3 minute timeout
 		timeout = this.setTimeout(function () {
@@ -128,6 +116,52 @@ $(document).ready(() => {
 		}, delay);
 	});
 })
+
+function submitClaim(claimValue, linkValue) {
+
+	// wait for both fields to be filled out
+	if (!claimValue || !linkValue) {
+		return;
+	}
+
+	disableCiteActions();
+
+	// event.preventDefault();
+	sendToServer(claimValue, linkValue); //perform some operations
+
+	// TODO make sure there is a way to reload the extension if it errors
+	// var delay = 1440000; //180000 is a 3 minute timeout
+	// timeout = this.setTimeout(function () {
+	// 	ajax.abort();
+	// 	chrome.storage.local.set({ 'state': 0 }, function () {
+	// 		console.log('Initialized extention state');
+	// 	});
+	// }, delay);
+}
+
+chrome.contextMenus.create({
+	title: "Cite this text",
+	contexts:["selection"],  // ContextType
+	onclick: newCitationFromSelection // A callback function
+   });
+
+function newCitationFromSelection(info, tab) {
+	claim = info.selectionText;
+	link = info.pageUrl;
+
+	chrome.storage.local.set({ 'claimField': claim }, function () {
+		console.log('Rightclick claim set to:', claim);
+	});
+	chrome.storage.local.set({ 'linkField': link }, function () {
+		console.log('Rightclick link set to:', link);
+	});
+	chrome.storage.local.set({ 'state': 0 }, function () {
+		console.log('Initialized extention state');
+	});
+	
+	submitClaim(claim, link)
+}
+
 
 function disableCiteActions() {
 	deepCite.formClaimInput.readOnly = true;
