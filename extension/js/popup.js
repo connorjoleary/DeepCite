@@ -105,7 +105,6 @@ $(document).ready(() => {
 
 	//populate claim and link from storage
 	$('#linxerForm').on('submit', (event) => {
-
 		var claimValue = event.target["0"].value;
 		var linkValue = event.target["1"].value;
 
