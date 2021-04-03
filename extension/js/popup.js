@@ -139,30 +139,6 @@ function submitClaim(claimValue, linkValue) {
 	// }, delay);
 }
 
-chrome.contextMenus.create({
-	title: "Cite this text",
-	contexts:["selection"],  // ContextType
-	onclick: newCitationFromSelection // A callback function
-   });
-
-function newCitationFromSelection(info, tab) {
-	claim = info.selectionText;
-	link = info.pageUrl;
-
-	chrome.storage.local.set({ 'claimField': claim }, function () {
-		console.log('Rightclick claim set to:', claim);
-	});
-	chrome.storage.local.set({ 'linkField': link }, function () {
-		console.log('Rightclick link set to:', link);
-	});
-	chrome.storage.local.set({ 'state': 0 }, function () {
-		console.log('Initialized extention state');
-	});
-	
-	submitClaim(claim, link)
-}
-
-
 function disableCiteActions() {
 	deepCite.formClaimInput.readOnly = true;
 	deepCite.formLinkInput.readOnly = true;
