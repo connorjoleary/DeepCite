@@ -14,11 +14,11 @@ chrome.runtime.onInstalled.addListener(function () {
         console.log('Initialized previous data variable');
     });
 
-    // chrome.contextMenus.create({
-    //     title: "Cite this text",
-    //     contexts:["selection"],  // ContextType
-    //     onclick: newCitationFromSelection // A callback function
-    //    });
+    chrome.contextMenus.create({
+        title: "Cite this text",
+        contexts:["selection"],  // ContextType
+        onclick: newCitationFromSelection // A callback function
+       });
 });
 
 function newCitationFromSelection(info) {
