@@ -12,7 +12,6 @@ Join the discussion here:
 
 * [Donate](#donate)
 * [Run Locally](#run-locally)
-* [Installation](#installation)
 * [Testing](#testing)
 * [Configuration](#configuration)
 * [Maintainers](#for-maintainers-eyes-only-eyes)
@@ -74,9 +73,6 @@ source v-env/bin/activate
 pip3 install -r requirements.txt
 gunicorn -c gunicorn_config.py wsgi
 ```
-
-## Installation for Server
-Installations and downloads required before server can funciton properly
 
 ## Testing
 
