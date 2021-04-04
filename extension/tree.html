@@ -8,6 +8,7 @@
 	<link href="css/tree.css" rel="stylesheet">
 
 	<script src="js/jquery-3.2.1.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
 </head>
 <body>
 	<!-- Canvas Element for Lines -->
@@ -20,7 +21,7 @@
 			<span class="nav-bar-deep">Deep</span><span class="nav-bar-cite">Cite</span>
 			<span>Source Tree</span>
 			<div class="nav-button-wrapper">
-				<div class="button-donate" onclick="donateButtonClicked()">
+				<div class="button-donate">
 					Donate
 				</div>
 			</div>
@@ -63,11 +64,8 @@
 				</div>
 			</div>
 			<div class="section-content vote-wrapper">
-				<div class="vote-button upvote" onclick="upvoteButtonClicked(this)">
-					<img class="vote-button-image" src="images/upvote.png" />
-				</div>
-				<div class="vote-button downvote" onclick="downvoteButtonClicked(this)">
-					<img class="vote-button-image" src="images/downvote.png" />
+				<div class="vote-button upvote" id="vote-button">
+					Source?
 				</div>
 			</div>
 		</div>
