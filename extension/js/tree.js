@@ -2,6 +2,11 @@
  *	DeepCite Source Tree page 
 */
 
+const url = "https://us-central1-deepcite-306405.cloudfunctions.net/deepcite";
+const stageValue = "dev";
+var timeout = null;
+var baseId = null;
+
 if (!deepCite) {
 	var deepCite = {};
 }
@@ -10,6 +15,10 @@ deepCite.citeComponent = document.getElementsByClassName("generated-cite-box")[0
 deepCite.claimComponent = document.getElementsByClassName("generated-claim-box")[0];
 deepCite.treeContainer = document.getElementById("tree-container");
 deepCite.canvasElement = document.getElementById("canvas-element");
+deepCite.donateButton = document.getElementsByClassName('button-donate')[0];
+
+// Unable to use onclick in HTML: https://stackoverflow.com/questions/36324333/refused-to-execute-inline-event-handler-because-it-violates-csp-sandbox
+deepCite.donateButton.addEventListener("click", donateButtonClicked);
 
 // initialization function
 function init() {
@@ -28,6 +37,7 @@ function gatherData() {
 				populateDataIntoTree(result.lastData.results);
 			})
 		} else {
+			// TODO make this actually do something different
 			console.log("WARN: State not accepted");
 			chrome.storage.local.get(['lastData'], function (result) {
 				populateDataIntoTree(result.lastData.results);
@@ -88,22 +98,77 @@ function generateTestData() {
 
 function donateButtonClicked() {
 	console.log("donate clicked");
+	chrome.tabs.create({ url: "https://github.com/connorjoleary/DeepCite/tree/connor-prod-stuff#contributions" });
 }
 
-function upvoteButtonClicked(element) {
+async function grab_ip() {
+	const response = await fetch('http://api.ipify.org/?format=json');
+    const data = await response.json();
+    return data.ip;
+}
+
+async function upvoteButtonClicked(event) {
+	var ipValue = await grab_ip();
+
+	var element = event.srcElement
 	var citeID = findClosestCiteID(element);
+
+	data = {type: "source",
+			ip: ipValue,
+			sourceId: citeID,
+			baseId: baseId,
+			stage: stageValue}
 	console.log("upvote clicked on citeID " + citeID);
+
+	// disable button
+	element.classList.add("btn-disabled");
+	element.innerText = "Sending...";
+
+	// Submit feedback
+	// Code used to run locally
+	data['test']=true
+	ajax = $.ajax({
+		type: "POST",
+		url: "http://localhost:8001/test/deepcite", // where the post request gets sent to (backend server address)
+		crossDomain: true,
+		success: dataReceived(element), // callback function on success
+		error: serverOffline, // function if failed to connect to server
+		contentType: "application/json",
+		timeout: 60000, //1 minute timeout
+		data: JSON.stringify(data) // send the data json as a string
+	});
+
+	// ajax = $.ajax({
+	// 	type: "POST",
+	// 	url: url, // where the post request gets sent to (backend server address)
+	// 	crossDomain: true,
+	// 	success: dataReceived(element), // callback function on success
+	// 	error: serverOffline, // function if failed to connect to server
+	// 	contentType: "application/json",
+	// 	data: JSON.stringify(data) // send the data json as a string
+	// });
 }
 
-function downvoteButtonClicked(element) {
-	var citeID = findClosestCiteID(element);
-	console.log("downvote clicked on citeID " + citeID);
+function serverOffline() {
+	var serverOfflineErrorMessage = "Error 503: Cannot Connect to Server.";
+	console.log(serverOfflineErrorMessage)
+
+	element.innerText = "error";
+}
+
+function dataReceived(element, data) {
+	response = data
+
+	console.log("Returned data:", data)
+
+	element.innerText = "Recorded!";
+	element.style.color = "#45ff45";
 }
 
 function findClosestCiteID(element) {
 	var citeBox = element.closest(".generated-cite-box");
 	if (!!citeBox) {
-		return parseInt(citeBox.id);
+		return citeBox.id;
 	}
 	// return null if nothing is found
 }
@@ -112,7 +177,7 @@ function populateDataIntoTree(data) {
 	var clonedCiteBox, populatedCiteBox, groupedData, sortedGroupedData;
 	var rowCiteCount = 1;
 	// first, we need to group our citations by parentCiteID
-	groupedData = groupCiteData(data); 
+	groupedData = groupCiteData(data);
 	// next, we want to sort our data so the flow chart is clean after drawing lines
 	sortedGroupedData = sortCiteData(groupedData);
 	// then, we need to create cite/claim boxes for each item and put them in the correct row
@@ -123,10 +188,16 @@ function populateDataIntoTree(data) {
 				// this is our parent node
 				clonedCiteBox = deepCite.claimComponent.cloneNode(true);
 				populatedCiteBox = populateDataIntoCiteBox(clonedCiteBox, item);
+				baseId = item["citeID"];
 			}
 			else {
 				clonedCiteBox = deepCite.citeComponent.cloneNode(true);
 				populatedCiteBox = populateDataIntoCiteBox(clonedCiteBox, item);
+
+				// This would be better to do once when the original is created, but idk where that is
+				var voteNode = populatedCiteBox.getElementsByClassName("vote-button")[0];
+				voteNode.addEventListener("click", upvoteButtonClicked);
+				
 				// calculate box width by checking the rowCiteCount value. 4em is 2em padding on left and right of all cite boxes
 				populatedCiteBox.style = "width: calc(" + (100 / rowCiteCount) + "% - 4em);";
 			}
