@@ -98,7 +98,7 @@ function generateTestData() {
 
 function donateButtonClicked() {
 	console.log("donate clicked");
-	chrome.tabs.create({ url: "https://github.com/connorjoleary/DeepCite/tree/connor-prod-stuff#donate" });
+	chrome.tabs.create({ url: "https://github.com/connorjoleary/DeepCite#contributions" });
 }
 
 async function grab_ip() {
