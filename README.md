@@ -1,11 +1,12 @@
-# DeepCite ![extension](https://img.shields.io/badge/extension-1.2.0-blue)
+# DeepCite ![extension](https://img.shields.io/badge/extension-1.3.0-blue)
 
 <p> In a world filled with fake news and alternative facts, get the real deep sources for your information. </p>
 
 https://chrome.google.com/webstore/detail/deepcite/oibmgglhkkaigemacdkfeedffkjbpgoi?hl=en-US
 
 Join the discussion here:
-https://discord.gg/rQKkx5p6Cw
+![Discord Banner 2](https://discordapp.com/api/guilds/726491103381028884/widget.png?style=banner2)
+<!-- https://discord.gg/rQKkx5p6Cw -->
 
 ## Table of Contents
 
@@ -203,7 +204,7 @@ There are a couple ways to configure both the backend and the aws lambda service
  VERSIONS_MODEL=0.6.0
  VERSIONS_LAMBDA=0.4.0
  VERSIONS_API=0.4.0
- VERSIONS_EXTENSION=1.2.0
+ VERSIONS_EXTENSION=1.3.0
  ```
 
 ## For Maintainers eyes only :eyes:
