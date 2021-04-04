@@ -10,15 +10,15 @@ Join the discussion here:
 
 ## Table of Contents
 
-* [Contributions](#contributions)
-* [Setup](#setup)
+* [Donate](#donate)
+* [Run Locally](#run-locally)
 * [Installation](#installation)
 * [Testing](#testing)
 * [Configuration](#configuration)
-* [For Maintainers](#for_maintainers)
+* [Maintainers](#for-maintainers-eyes-only-eyes)
 * [Authors](#authors)
 
-## Contributions
+## Donate
 
 Unfortunatly running code is not cheap and I would really appreciate any support you could give to see this project flourish.
 
