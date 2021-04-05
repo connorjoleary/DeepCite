@@ -1,8 +1,4 @@
-const url = "https://us-central1-deepcite-306405.cloudfunctions.net/deepcite";
-//const url = "http://localhost:5000/api/v1/deep_cite";
-//const url = "http://localhost:5000/";
 var ajax = null;
-const stageValue = 'dev'
 const num_results_displayed = 4
 var timeout = null;
 
@@ -178,25 +174,16 @@ async function sendToServer(claimValue, linkValue) {
 
 	// Code used to run locally
 	data['test']=true
+
 	ajax = $.ajax({
 		type: "POST",
-		url: "http://localhost:8001/test/deepcite", // where the post request gets sent to (backend server address)
+		url: url, // where the post request gets sent to (backend server address)
 		crossDomain: true,
 		success: dataReceived, // callback function on success
 		error: serverOffline, // function if failed to connect to server
 		contentType: "application/json",
 		data: JSON.stringify(data) // send the data json as a string
 	});
-
-	// ajax = $.ajax({
-	// 	type: "POST",
-	// 	url: url, // where the post request gets sent to (backend server address)
-	// 	crossDomain: true,
-	// 	success: dataReceived, // callback function on success
-	// 	error: serverOffline, // function if failed to connect to server
-	// 	contentType: "application/json",
-	// 	data: JSON.stringify(data) // send the data json as a string
-	// });
 }
 
 function sort_response(results) {

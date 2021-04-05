@@ -2,8 +2,6 @@
  *	DeepCite Source Tree page 
 */
 
-const url = "https://us-central1-deepcite-306405.cloudfunctions.net/deepcite";
-const stageValue = "dev";
 var timeout = null;
 var baseId = null;
 
@@ -125,11 +123,13 @@ async function upvoteButtonClicked(event) {
 	element.innerText = "Sending...";
 
 	// Submit feedback
+
 	// Code used to run locally
 	data['test']=true
+
 	ajax = $.ajax({
 		type: "POST",
-		url: "http://localhost:8001/test/deepcite", // where the post request gets sent to (backend server address)
+		url: url, // where the post request gets sent to (backend server address)
 		crossDomain: true,
 		success: dataReceived(element), // callback function on success
 		error: serverOffline, // function if failed to connect to server
@@ -137,16 +137,6 @@ async function upvoteButtonClicked(event) {
 		timeout: 60000, //1 minute timeout
 		data: JSON.stringify(data) // send the data json as a string
 	});
-
-	// ajax = $.ajax({
-	// 	type: "POST",
-	// 	url: url, // where the post request gets sent to (backend server address)
-	// 	crossDomain: true,
-	// 	success: dataReceived(element), // callback function on success
-	// 	error: serverOffline, // function if failed to connect to server
-	// 	contentType: "application/json",
-	// 	data: JSON.stringify(data) // send the data json as a string
-	// });
 }
 
 function serverOffline() {
