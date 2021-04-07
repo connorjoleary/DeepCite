@@ -173,7 +173,7 @@ async function sendToServer(claimValue, linkValue) {
 	console.log(JSON.stringify(data));
 
 	// Code used to run locally
-	data['test'] = true
+	// data['test'] = true
 
 	ajax = $.ajax({
 		type: "POST",
