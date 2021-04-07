@@ -1,6 +1,4 @@
-const url = "https://us-central1-deepcite-306405.cloudfunctions.net/deepcite";
 var ajax = null;
-const stageValue = 'prod'
 const num_results_displayed = 4
 var timeout = null;
 
@@ -103,7 +101,6 @@ $(document).ready(() => {
 
 	//populate claim and link from storage
 	$('#linxerForm').on('submit', (event) => {
-
 		var claimValue = event.target["0"].value;
 		var linkValue = event.target["1"].value;
 
@@ -160,8 +157,8 @@ function serverOffline() {
 
 async function grab_ip() {
 	const response = await fetch('http://api.ipify.org/?format=json');
-    const data = await response.json();
-    return data.ip;
+	const data = await response.json();
+	return data.ip;
 }
 
 async function sendToServer(claimValue, linkValue) {
@@ -176,16 +173,7 @@ async function sendToServer(claimValue, linkValue) {
 	console.log(JSON.stringify(data));
 
 	// Code used to run locally
-	// data['test']=true
-	// ajax = $.ajax({
-	// 	type: "POST",
-	// 	url: "http://localhost:8001/test/deepcite", // where the post request gets sent to (backend server address)
-	// 	crossDomain: true,
-	// 	success: dataReceived, // callback function on success
-	// 	error: serverOffline, // function if failed to connect to server
-	// 	contentType: "application/json",
-	// 	data: JSON.stringify(data) // send the data json as a string
-	// });
+	data['test'] = true
 
 	ajax = $.ajax({
 		type: "POST",
@@ -200,7 +188,7 @@ async function sendToServer(claimValue, linkValue) {
 
 function sort_response(results) {
 	results.sort(function (a, b) {
-		return b.score-a.score
+		return b.score - a.score
 	})
 
 	return results.slice(0, num_results_displayed);
@@ -218,7 +206,7 @@ function dataReceived(data) {
 
 	// cancel timeout
 	clearTimeout(timeout)
-	
+
 	response = data
 
 	//prints errors:
@@ -265,7 +253,7 @@ function populateCitationResults(results) {
 		}
 		resultSectionHtml += `
 					<div class="form-field">
-						<div class="result-text">Score: ${Math.floor(result.score*100)}</div>
+						<div class="result-text">Score: ${Math.floor(result.score * 100)}</div>
 						<div class="result-text">"${result.source}"</div>
 						<a href="${result.link}" class="result-link">${result.link}</a>
 					</div>

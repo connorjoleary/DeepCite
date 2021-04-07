@@ -94,3 +94,12 @@ class DatabaseCalls():
         except Exception as e:
             print("ERROR: Unexpected error: Could not commit to database instance.")
             print(e)
+
+    def record_source(self, base_id, source_id, user_id, stage, versions):
+        try:
+            with self.conn.connect() as cur:
+                cur.execute("INSERT INTO source_label (base_id, source_id, user_id, stage, current_versions) VALUES (%s, %s, %s, %s, %s)", (base_id, source_id, user_id, stage, json.dumps(versions)))
+
+        except Exception as e:
+            print("ERROR: Unexpected error: Could not commit to database instance.")
+            print(e)
