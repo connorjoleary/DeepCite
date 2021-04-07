@@ -32,7 +32,7 @@ def grab_response(database_calls, id, claim, link, **kwargs):
         return call_deepcite(claim, link)
     else:
         new_submission=False
-        return responses[0] #not sure if i need json loads
+        return responses[0] #not sure if I need json loads
 
 def lambda_handler(event):
     event = event.get_json(silent=True)
@@ -42,12 +42,31 @@ def lambda_handler(event):
         database_calls = mock.Mock()
         database_calls.grab_deepcite_entry = lambda id: []
         database_calls.record_call = lambda *x: None
+        database_calls.record_source = lambda *x: None
     else:
         from database_calls import DatabaseCalls
         database_calls = DatabaseCalls()
     
     print(event)
     stage = event['stage']
+    user_id = event['ip']
+
+    if event.get('type') == "source":
+        source_id = event.get('sourceId')
+        base_id = event.get('baseId')
+        
+        results = f"The source: {source_id} for base id: {base_id} has been noted"
+        error = None
+        try:
+            database_calls.record_source(base_id, source_id, user_id, stage, versions)
+        except Exception as e:
+            print("Unable to store source")
+            traceback.print_tb(e.__traceback__)
+            print(e)
+            error = e
+            results = None
+
+        return {'error': error, 'results': results}
 
     try:
         # instead of matching on id, this should match on cached calls
@@ -62,7 +81,6 @@ def lambda_handler(event):
 
     print('Deepcite response:', response)
 
-    user_id = event['ip']
     if isinstance(response, Exception):
         base_id = str(uuid.uuid4())
     else:

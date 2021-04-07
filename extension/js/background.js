@@ -15,7 +15,7 @@ chrome.runtime.onInstalled.addListener(function () {
     });
 
     chrome.contextMenus.create({
-        title: "Cite this text",
+        title: "Autofill Deepcite",
         contexts:["selection"],  // ContextType
         onclick: newCitationFromSelection // A callback function
        });

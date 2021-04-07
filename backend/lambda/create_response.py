@@ -8,5 +8,5 @@ def error_results_response_format(error, results):
 def respond(res=None):
     if isinstance(res, Exception):
         return error_results_response_format(res.args[0], None)
-        
+
     return res

@@ -1,8 +1,4 @@
-const url = "https://us-central1-deepcite-306405.cloudfunctions.net/deepcite";
-//const url = "http://localhost:5000/api/v1/deep_cite";
-//const url = "http://localhost:5000/";
 var ajax = null;
-const stageValue = 'dev'
 const num_results_displayed = 4
 var timeout = null;
 
@@ -161,8 +157,8 @@ function serverOffline() {
 
 async function grab_ip() {
 	const response = await fetch('http://api.ipify.org/?format=json');
-    const data = await response.json();
-    return data.ip;
+	const data = await response.json();
+	return data.ip;
 }
 
 async function sendToServer(claimValue, linkValue) {
@@ -177,31 +173,22 @@ async function sendToServer(claimValue, linkValue) {
 	console.log(JSON.stringify(data));
 
 	// Code used to run locally
-	data['test']=true
+	data['test'] = true
+
 	ajax = $.ajax({
 		type: "POST",
-		url: "http://localhost:8001/test/deepcite", // where the post request gets sent to (backend server address)
+		url: url, // where the post request gets sent to (backend server address)
 		crossDomain: true,
 		success: dataReceived, // callback function on success
 		error: serverOffline, // function if failed to connect to server
 		contentType: "application/json",
 		data: JSON.stringify(data) // send the data json as a string
 	});
-
-	// ajax = $.ajax({
-	// 	type: "POST",
-	// 	url: url, // where the post request gets sent to (backend server address)
-	// 	crossDomain: true,
-	// 	success: dataReceived, // callback function on success
-	// 	error: serverOffline, // function if failed to connect to server
-	// 	contentType: "application/json",
-	// 	data: JSON.stringify(data) // send the data json as a string
-	// });
 }
 
 function sort_response(results) {
 	results.sort(function (a, b) {
-		return b.score-a.score
+		return b.score - a.score
 	})
 
 	return results.slice(0, num_results_displayed);
@@ -219,7 +206,7 @@ function dataReceived(data) {
 
 	// cancel timeout
 	clearTimeout(timeout)
-	
+
 	response = data
 
 	//prints errors:
@@ -266,7 +253,7 @@ function populateCitationResults(results) {
 		}
 		resultSectionHtml += `
 					<div class="form-field">
-						<div class="result-text">Score: ${Math.floor(result.score*100)}</div>
+						<div class="result-text">Score: ${Math.floor(result.score * 100)}</div>
 						<div class="result-text">"${result.source}"</div>
 						<a href="${result.link}" class="result-link">${result.link}</a>
 					</div>
