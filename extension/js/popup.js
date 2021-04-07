@@ -157,8 +157,8 @@ function serverOffline() {
 
 async function grab_ip() {
 	const response = await fetch('http://api.ipify.org/?format=json');
-    const data = await response.json();
-    return data.ip;
+	const data = await response.json();
+	return data.ip;
 }
 
 async function sendToServer(claimValue, linkValue) {
@@ -173,7 +173,7 @@ async function sendToServer(claimValue, linkValue) {
 	console.log(JSON.stringify(data));
 
 	// Code used to run locally
-	data['test']=true
+	data['test'] = true
 
 	ajax = $.ajax({
 		type: "POST",
@@ -188,7 +188,7 @@ async function sendToServer(claimValue, linkValue) {
 
 function sort_response(results) {
 	results.sort(function (a, b) {
-		return b.score-a.score
+		return b.score - a.score
 	})
 
 	return results.slice(0, num_results_displayed);
@@ -206,7 +206,7 @@ function dataReceived(data) {
 
 	// cancel timeout
 	clearTimeout(timeout)
-	
+
 	response = data
 
 	//prints errors:
@@ -253,7 +253,7 @@ function populateCitationResults(results) {
 		}
 		resultSectionHtml += `
 					<div class="form-field">
-						<div class="result-text">Score: ${Math.floor(result.score*100)}</div>
+						<div class="result-text">Score: ${Math.floor(result.score * 100)}</div>
 						<div class="result-text">"${result.source}"</div>
 						<a href="${result.link}" class="result-link">${result.link}</a>
 					</div>

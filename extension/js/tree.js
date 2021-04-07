@@ -42,7 +42,7 @@ function gatherData() {
 			})
 		}
 	});
-	
+
 }
 
 function generateTestData() {
@@ -72,7 +72,7 @@ function generateTestData() {
 					enforcedMaximumChildrenBool = true;
 				}
 			}
-		}		
+		}
 		text = "";
 		// get a random amount of text
 		randomTextCount = (Math.floor(Math.random() * 10) + 1);
@@ -101,8 +101,8 @@ function donateButtonClicked() {
 
 async function grab_ip() {
 	const response = await fetch('http://api.ipify.org/?format=json');
-    const data = await response.json();
-    return data.ip;
+	const data = await response.json();
+	return data.ip;
 }
 
 async function upvoteButtonClicked(event) {
@@ -111,11 +111,13 @@ async function upvoteButtonClicked(event) {
 	var element = event.srcElement
 	var citeID = findClosestCiteID(element);
 
-	data = {type: "source",
-			ip: ipValue,
-			sourceId: citeID,
-			baseId: baseId,
-			stage: stageValue}
+	data = {
+		type: "source",
+		ip: ipValue,
+		sourceId: citeID,
+		baseId: baseId,
+		stage: stageValue
+	}
 	console.log("upvote clicked on citeID " + citeID);
 
 	// disable button
@@ -125,7 +127,7 @@ async function upvoteButtonClicked(event) {
 	// Submit feedback
 
 	// Code used to run locally
-	data['test']=true
+	data['test'] = true
 
 	ajax = $.ajax({
 		type: "POST",
@@ -187,7 +189,7 @@ function populateDataIntoTree(data) {
 				// This would be better to do once when the original is created, but idk where that is
 				var voteNode = populatedCiteBox.getElementsByClassName("vote-button")[0];
 				voteNode.addEventListener("click", upvoteButtonClicked);
-				
+
 				// calculate box width by checking the rowCiteCount value. 4em is 2em padding on left and right of all cite boxes
 				populatedCiteBox.style = "width: calc(" + (100 / rowCiteCount) + "% - 4em);";
 			}
@@ -305,10 +307,10 @@ function populateDataIntoCiteBox(citeBox, data) {
 	linkNode.innerText = data.link;
 	linkNode.href = data.link;
 	// score node changes color depending on the score
-	scoreNode.innerText = Math.floor(data.score*100);
-	scoreNode.style.backgroundColor = getBackgroundColorByScore(Math.floor(data.score*100), 1);
-	scoreNode.style.color = getTextColorByScore(Math.floor(data.score*100));
-	scoreNode.style.borderColor = getBackgroundColorByScore(Math.floor(data.score*100), /* multiplier */ 0.7);
+	scoreNode.innerText = Math.floor(data.score * 100);
+	scoreNode.style.backgroundColor = getBackgroundColorByScore(Math.floor(data.score * 100), 1);
+	scoreNode.style.color = getTextColorByScore(Math.floor(data.score * 100));
+	scoreNode.style.borderColor = getBackgroundColorByScore(Math.floor(data.score * 100), /* multiplier */ 0.7);
 
 	return citeBox;
 }
