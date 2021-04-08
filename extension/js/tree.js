@@ -99,12 +99,6 @@ function donateButtonClicked() {
 	chrome.tabs.create({ url: "https://github.com/connorjoleary/DeepCite#contributions" });
 }
 
-async function grab_ip() {
-	const response = await fetch('http://api.ipify.org/?format=json');
-	const data = await response.json();
-	return data.ip;
-}
-
 async function upvoteButtonClicked(event) {
 	var ipValue = await grab_ip();
 
