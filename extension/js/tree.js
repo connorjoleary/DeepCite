@@ -299,7 +299,9 @@ function populateDataIntoCiteBox(citeBox, data) {
 
 	sourceNode.innerText = `"` + data.source + `"`;
 	linkNode.innerText = data.link;
-	linkNode.href = data.link;
+	
+	console.log(`changing ${data.link} into ${data.link.split('#')[0]+'#:~:text='+escape(data.source.toLowerCase().trim())}`)
+	linkNode.href = data.link.split('#')[0]+'#:~:text='+escape(data.source.toLowerCase().trim());
 	// score node changes color depending on the score
 	scoreNode.innerText = Math.floor(data.score * 100);
 	scoreNode.style.backgroundColor = getBackgroundColorByScore(Math.floor(data.score * 100), 1);

@@ -245,11 +245,12 @@ function populateCitationResults(results) {
 		if (i == 1) {
 			resultSectionHtml += `<div class="form-group-title">We Found</div>`;
 		}
+		console.log(`changing ${result.link} into ${result.link.split('#')[0]+'#:~:text='+escape(result.source.toLowerCase().trim())}`)
 		resultSectionHtml += `
 					<div class="form-field">
 						<div class="result-text">Score: ${Math.floor(result.score * 100)}</div>
 						<div class="result-text">"${result.source}"</div>
-						<a href="${result.link}" class="result-link">${result.link}</a>
+						<a href="${result.link.split('#')[0]+'#:~:text='+escape(result.source.toLowerCase().trim())}" class="result-link">${result.link.split('#')[0]}</a>
 					</div>
 				</div>
 				`;
