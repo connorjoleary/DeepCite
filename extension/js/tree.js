@@ -127,7 +127,7 @@ async function upvoteButtonClicked(event) {
 	// Submit feedback
 
 	// Code used to run locally
-	data['test'] = true
+	// data['test'] = true
 
 	ajax = $.ajax({
 		type: "POST",
