@@ -6,6 +6,8 @@ https://chrome.google.com/webstore/detail/deepcite/oibmgglhkkaigemacdkfeedffkjbp
 
 Join the discussion here:
 
+https://discord.gg/wr7uMAdWGz
+
 ![Discord Banner 2](https://discordapp.com/api/guilds/726491103381028884/widget.png?style=banner2)
 
 ## Table of Contents
