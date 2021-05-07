@@ -1,3 +1,0 @@
-
-# Grab the password for accessing the database (need access to deepcite GCP project to use)
-gcloud secrets versions access 1 --secret="deepcite_db"
