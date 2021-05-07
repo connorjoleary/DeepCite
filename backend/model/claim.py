@@ -177,7 +177,10 @@ class Claim:
         elif self.height >= Claim.maxheight:
             return
 
-        parent_host = urlparse(self.parent.href).hostname
+        try:
+            parent_host = urlparse(self.parent.href).hostname
+        except AttributeError as error:
+            parent_host = ''
         host = urlparse(self.href).hostname
 
         # is wikipedia link

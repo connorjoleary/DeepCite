@@ -19,7 +19,7 @@ def deep_cite():
         claim = sanitize_claim(content['claim'])
         link = sanitize_link(content['link'])
     except Exception as e:
-        return jsonify({'error': 'Error 505: HTTP Verison Not Supported' })
+        return jsonify({'error': 'Error 505: claim or link cannot be sanitized' })
 
 # def deep_cite(claim, link):
     full_pre_json = {'error': 'none', 'results': [{'citeID': str(uuid.uuid4()), 'parentCiteID': 0, 'link': link, 'score': 1, 'source': claim}]}
