@@ -12,6 +12,7 @@ import queue as q
 from config import config
 import uuid
 import json
+from urllib.parse import urlparse
 
 CWD_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
@@ -176,8 +177,11 @@ class Claim:
         elif self.height >= Claim.maxheight:
             return
 
+        parent_host = urlparse(self.parent.href).hostname
+        host = urlparse(self.href).hostname
+
         # is wikipedia link
-        if self.parent != None and  "https://en.wikipedia.org" in self.parent.href:
+        if self.parent != None and parent_host.endswith(".wikipedia.org"):
             citation = wiki(self.href, self.parent.href)
             if citation == None:
                 self.href = self.parent.href + self.href
@@ -214,7 +218,7 @@ class Claim:
         if len(text_raw) < 6:
             # Terminate the scraper and parse the parent node to the leaf list
             # unable to obtain infomation from website
-            if self.parent == None and 'reddit.com' not in self.href:
+            if self.parent == None and not host.endswith(".reddit.com"):
                 raise error.EmptyWebsite('Unable to obtain infomation from the website.' + \
                             new_indention(html_link(self.href) + ' could contain the following errors: Error404, Error403, Error500, or content of site cannot be obtained.'))
             return
@@ -231,7 +235,7 @@ class Claim:
                 ref2text[unit.text] = ""
 
         # If the claim is on reddit, the title and link of the posts are not in p tags. To get around this we read its json
-        if 'reddit.com' in self.href:
+        if host.endswith(".reddit.com"):
             try:
                 response = requests.get(self.href+'.json', headers=user_agent)
                 page_info = json.loads(response.text)
