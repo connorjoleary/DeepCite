@@ -4,3 +4,7 @@ async function grab_ip() {
 	return data.ip;
 }
 
+function useTextFragment(url, text) {
+	return url.split('#')[0]+'#:~:text='+escape(text.toLowerCase().trim())
+}
+
