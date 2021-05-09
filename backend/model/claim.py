@@ -181,9 +181,8 @@ class Claim:
             parent_host = urlparse(self.parent.href).hostname
         except AttributeError as error:
             parent_host = ''
-        host = urlparse(self.href).hostname
 
-        # is wikipedia link
+        # is wikipedia link then change score and href
         if self.parent != None and parent_host.endswith(".wikipedia.org"):
             citation = wiki(self.href, self.parent.href)
             if citation == None:
@@ -198,6 +197,8 @@ class Claim:
             if not self.excep_handle(): # why does this only run if not in wikipedia?
                 self.score = self.parent.score
                 return 
+        
+        host = urlparse(self.href).hostname
 
         # gets url
         user_agent = {'User-agent': 'Mozilla/5.0'}
