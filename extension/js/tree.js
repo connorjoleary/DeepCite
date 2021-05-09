@@ -99,12 +99,6 @@ function donateButtonClicked() {
 	chrome.tabs.create({ url: "https://github.com/connorjoleary/DeepCite#donate" });
 }
 
-async function grab_ip() {
-	const response = await fetch('http://api.ipify.org/?format=json');
-	const data = await response.json();
-	return data.ip;
-}
-
 async function upvoteButtonClicked(event) {
 	var ipValue = await grab_ip();
 
@@ -305,7 +299,10 @@ function populateDataIntoCiteBox(citeBox, data) {
 
 	sourceNode.innerText = `"` + data.source + `"`;
 	linkNode.innerText = data.link;
-	linkNode.href = data.link;
+	
+	var newLink = useTextFragment(data.link, data.source)
+	console.log(`changing ${data.link} into ${newLink}`)
+	linkNode.href = newLink;
 	// score node changes color depending on the score
 	scoreNode.innerText = Math.floor(data.score * 100);
 	scoreNode.style.backgroundColor = getBackgroundColorByScore(Math.floor(data.score * 100), 1);

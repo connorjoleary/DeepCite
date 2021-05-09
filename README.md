@@ -1,4 +1,4 @@
-# DeepCite ![extension](https://img.shields.io/badge/extension-1.3.0-blue)
+# DeepCite ![extension](https://img.shields.io/badge/extension-1.4.0-blue)
 
 <p> In a world filled with fake news and alternative facts, get the real deep sources for your information. </p>
 
@@ -162,10 +162,10 @@ There are a couple ways to configure both the backend and the aws lambda service
   "aws": {
     "env": "development",
     "versions": {
-      "model": "0.6.0",
+      "model": "0.7.0",
       "lambda": "0.6.0",
       "api": "0.4.0",
-      "extension": "1.3.0"
+      "extension": "1.4.0"
     },
     "secret": {
       "region": "us-east-2",
@@ -199,10 +199,10 @@ There are a couple ways to configure both the backend and the aws lambda service
  EC2_PORT=8000
  SECRET_REGION=us-east-2
  SECRET_NAME=rds_deepcite_sample
- VERSIONS_MODEL=0.6.0
+ VERSIONS_MODEL=0.7.0
  VERSIONS_LAMBDA=0.6.0
  VERSIONS_API=0.4.0
- VERSIONS_EXTENSION=1.3.0
+ VERSIONS_EXTENSION=1.4.0
  ```
 
 ## For Maintainers eyes only :eyes:
