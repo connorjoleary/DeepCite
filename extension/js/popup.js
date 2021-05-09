@@ -155,12 +155,6 @@ function serverOffline() {
 	});
 }
 
-async function grab_ip() {
-	const response = await fetch('http://api.ipify.org/?format=json');
-	const data = await response.json();
-	return data.ip;
-}
-
 async function sendToServer(claimValue, linkValue) {
 	var ipValue = await grab_ip();
 
@@ -251,11 +245,13 @@ function populateCitationResults(results) {
 		if (i == 1) {
 			resultSectionHtml += `<div class="form-group-title">We Found</div>`;
 		}
+		var newLink = useTextFragment(result.link, result.source)
+		console.log(`changing ${result.link} into ${newLink}`)
 		resultSectionHtml += `
 					<div class="form-field">
 						<div class="result-text">Score: ${Math.floor(result.score * 100)}</div>
 						<div class="result-text">"${result.source}"</div>
-						<a href="${result.link}" class="result-link">${result.link}</a>
+						<a href="${newLink}" class="result-link">${result.link.split('#')[0]}</a>
 					</div>
 				</div>
 				`;
