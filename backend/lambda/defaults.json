@@ -5,7 +5,7 @@
     "PORT": "8000"
   },
   "CLOUDRUN": {
-    "URL": "http://127.0.0.1:8000"
+    "URL": "https://deepcite-model-mt56qhm4pa-uc.a.run.app"
   },
   "SECRET": {
     "REGION": "us-east-2",
