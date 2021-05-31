@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
-# from selenium import webdriver
+from bs4.element import Comment
+from selenium import webdriver
 import exceptions as error
 import requests
 import tokenizer
@@ -101,29 +102,44 @@ class Claim:
         
         return True
      
+    def tag_visible(self, element):
+        if element.parent.name in ['style', 'script', 'head', 'title', 'meta', '[document]']:
+            return False
+        if isinstance(element, Comment):
+            return False
+        return True
      
      # returns the p tags found in link
      # accounts for dynamically loaded html
     def get_page_text(self, response):
 
         # dynamic html
-        # commented out for testing
-        # op = webdriver.ChromeOptions()
-        # op.add_argument('headless')
-        # driver = webdriver.Chrome(executable_path= CWD_FOLDER + '/chromedriver.exe',options=op)
-        # driver.get(self.href)  
-        # js_soup = BeautifulSoup(driver.page_source, "html.parser")
+        op = webdriver.ChromeOptions()
+        op.add_argument('headless')
+        driver = webdriver.Chrome(executable_path= CWD_FOLDER + '/chromedriver_win32/chromedriver.exe',options=op)
+        driver.get(self.href)
+        js_soup = BeautifulSoup(driver.page_source, "html.parser")
         # dynamic = js_soup.findAll('p')
+        dynamic = list(filter(self.tag_visible, js_soup.findAll()))
 
         # static html
         soup = BeautifulSoup(response.text, 'html.parser')
-        static = soup.findAll('p')
+        # texts = soup.findAll()
+        # static = list(filter(self.tag_visible, texts))
+        static = soup.find_all('p')
+
+        # Get the leafs of nested HTML tags and only the ones with text
+        [d.text for d in soup.findAll() if not d.find() and d.text]
+
+        #equivilant to list(soup._all_strings())
+
+        text = soup.get_text()
 
         # commented out for testing
         # if len(static) < len(dynamic):
         #     return dynamic
 
-        return static
+        return static #dynamic
 
 
     # calls tokenizer and gets potential sources to claim
@@ -177,9 +193,9 @@ class Claim:
         elif self.height >= Claim.maxheight:
             return
 
-        try:
+        if self.parent:
             parent_host = urlparse(self.parent.href).hostname
-        except AttributeError as error:
+        else:
             parent_host = ''
 
         # is wikipedia link then change score and href
