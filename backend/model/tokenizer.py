@@ -5,6 +5,7 @@ from spacy.tokenizer import Tokenizer
 from config import config
 import queue as q
 import os
+import unicodedata
 
 nlp = spacy.load('en_core_web_lg')
 
@@ -73,6 +74,7 @@ def sentence_parsing(text):
 # text - the text of the article, preferably paragraph by paragraph
 def predict(claim, text) : #TODO: this doesn't take into account the original claim, this happens in beam_search in Tree, but it might be better here
     paragraph_queue = q.PriorityQueue()
+    text = [unicodedata.normalize('NFKD', paragraph) for paragraph in text]
 
     clean_claim = preprocessing(nlp(claim))
     doc1 = nlp(clean_claim)
