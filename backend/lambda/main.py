@@ -24,15 +24,37 @@ def call_deepcite(claim, link, **kwargs):
     print(response)
     return json.loads(response.text)
 
-def grab_response(database_calls, id, claim, link, **kwargs):
-    responses = database_calls.grab_deepcite_entry(id)
+def grab_response(database_calls, claim, link, **kwargs):
+    responses = database_calls.grab_deepcite_entry(id) if 'id' in kwargs else database_calls.check_repeat(claim, link, versions)
 
-    if len(responses) != 1:
+    if len(responses) == 0:
         print('There were {} responses returned for the uuid {}'.format(len(responses), id))
         return call_deepcite(claim, link)
     else:
         new_submission=False
         return responses[0] #not sure if I need json loads
+
+def record_call(response, start, database_calls, user_id, stage, cached_response):
+
+    # TODO deal with cached_response
+
+    print('Deepcite response:', response)
+
+    if isinstance(response, Exception):
+        base_id = str(uuid.uuid4())
+    else:
+        base_id = response['results'][0]['citeID']
+
+    time_elapsed = time.time()-start
+
+    lambda_response = respond(response)
+    try:
+        database_calls.record_call(new_submission, base_id, user_id, stage, 200, response, time_elapsed, versions) # TODO:figure out status code
+    except Exception as e:
+        print("unable to store call")
+        traceback.print_tb(e.__traceback__)
+        print(e)
+    return lambda_response
 
 def lambda_handler(event):
     event = event.get_json(silent=True)
@@ -68,35 +90,9 @@ def lambda_handler(event):
 
         return {'error': error, 'results': results}
 
-    try:
-        # instead of matching on id, this should match on cached calls
-        if event.get('id') is not None:
-            response = grab_response(database_calls, **event)
-        else:
-            response = call_deepcite(**event)
-    except Exception as e:
-        traceback.print_tb(e.__traceback__)
-        print(e)
-        response = e
+    response = grab_response(database_calls, **event)
 
-    print('Deepcite response:', response)
-
-    if isinstance(response, Exception):
-        base_id = str(uuid.uuid4())
-    else:
-        base_id = response['results'][0]['citeID']
-
-    time_elapsed = time.time()-start
-
-    lambda_response = respond(response)
-    print('lambda response:', lambda_response)
-    try:
-        database_calls.record_call(new_submission, base_id, user_id, stage, 200, response, time_elapsed, versions) # TODO:figure out status code
-    except Exception as e:
-        print("unable to store call")
-        traceback.print_tb(e.__traceback__)
-        print(e)
-    return lambda_response
+    return record_call(response, start, database_calls, user_id, stage, cached_response)
 
 # body = "{\"ip\": \"127.0.0.1\", \"test\": true, \"stage\": \"dev\", \"id\": \""+str(uuid.uuid4())+"\", \"resonse_size\": \"small\", \"claim\":\"the death of Sherlock Holmes almost destroyed the magazine thries. When Arthur Conan Doyle killed him off in 1893, 20,000 people cancelled their subscriptions. The magazine barely survived. Its staff referred to Holmes’ death as “the dreadful event”.\", \"link\":\"http://www.bbc.com/culture/story/20160106-how-sherlock-holmes-changed-the-world\"}"
 # print(lambda_handler(json.loads(body)))#{"isBase64Encoded": False, "body": body, "requestContext": {"http": {"method": "POST", "sourceIp": "dfsds"}, "stage": "dev", }},0))

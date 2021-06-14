@@ -76,6 +76,19 @@ class DatabaseCalls():
             print("ERROR: Unexpected error: Could not commit to database instance.")
             print(e)
 
+    def check_repeat(self, claim, link, versions):
+        try:
+            with self.conn.connect() as cur:
+                return cur.execute("""SELECT response FROM deepcite_call WHERE
+                current_versions @> %s::json AND
+                response->'results'->0->>'link'=%s AND
+                response->'results'->0->>'source'~*%s""", (json.dumps(versions), link, claim))
+        except Exception as e:
+            print("ERROR: Unexpected error: Could not commit to database instance.")
+            print(e)
+
+        return []
+
     def record_source(self, base_id, source_id, user_id, stage, versions):
         try:
             with self.conn.connect() as cur:
