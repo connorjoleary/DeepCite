@@ -78,7 +78,7 @@ class DatabaseCalls():
     def record_call(self, existing_id, base_id, user_id, stage, status_code, response, time_elapsed, versions):
         try:
             with self.conn.connect() as cur:
-                if existing_id==None: # This is a new entry
+                if existing_id is None: # This is a new entry
                     cur.execute("INSERT INTO deepcite_call (id,user_id,stage,status_code,response,response_time_elapsed,current_versions) VALUES (%s, %s, %s, %s, %s, %s, %s)", (base_id, user_id, stage, status_code, json.dumps(response), time_elapsed, json.dumps(versions)))
                 else:
                     cur.execute("INSERT INTO deepcite_retrieval (id,user_id,deepcite_call_id,stage,status_code,response_time_elapsed,current_versions) VALUES (%s, %s, %s, %s, %s, %s, %s)", (base_id, user_id, existing_id, stage, status_code, time_elapsed, json.dumps(versions)))

@@ -4,7 +4,16 @@ async function grab_ip() {
 	return data.ip;
 }
 
+// example use: Häagen-Dazs
+const normalizeString = (str) => {
+	return (str || '')
+		.normalize('NFKD')
+		.replace(/\s+/g, ' ')
+		.replace(/[\u0300-\u036f]/g, '')
+		.toLowerCase();
+  };
+
 function useTextFragment(url, text) {
-	return url.split('#')[0]+'#:~:text='+escape(text.toLowerCase().trim())
+	return url.split('#')[0]+'#:~:text='+encodeURIComponent(normalizeString(text).trim())
 }
 
