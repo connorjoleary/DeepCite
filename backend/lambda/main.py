@@ -11,8 +11,6 @@ from unittest import mock
 
 versions = {a: str(b) for a,b in config['versions'].items()}
 
-new_submission = True
-
 print('Loading function')
 
 # TODO: why are the stored events scored with 1 (ex id:b39a196c-da57-46b6-8d4d-03ff88b62fbb)
@@ -20,19 +18,39 @@ print('Loading function')
 def call_deepcite(claim, link, **kwargs):
     # private ip address of ec2
     response = requests.post(url=config['CLOUDRUN']['url']+'/api/v1/deep_cite', json={"claim": claim, "link": link})
-    new_submission = True
     print(response)
     return json.loads(response.text)
 
-def grab_response(database_calls, id, claim, link, **kwargs):
-    responses = database_calls.grab_deepcite_entry(id)
+def grab_response(database_calls, claim, link, **kwargs):
+    responses = database_calls.grab_deepcite_entry(id) if 'id' in kwargs else database_calls.check_repeat(claim, link, versions)
 
-    if len(responses) != 1:
-        print('There were {} responses returned for the uuid {}'.format(len(responses), id))
-        return call_deepcite(claim, link)
+    print(f'There were {len(responses)} responses returned')
+    if len(responses) == 0:
+        return (call_deepcite(claim, link), None)
     else:
-        new_submission=False
-        return responses[0] #not sure if I need json loads
+        existing_id = responses[0][0]
+        existing_response = responses[0][1]
+        return (existing_response, existing_id) #not sure if I need json loads
+
+def record_call(response, start, database_calls, user_id, stage, existing_id):
+
+    print('Deepcite response:', response)
+
+    if isinstance(response, Exception):
+        base_id = str(uuid.uuid4())
+    else:
+        base_id = response['results'][0]['citeID']
+
+    time_elapsed = time.time()-start
+
+    lambda_response = respond(response)
+    try:
+        database_calls.record_call(existing_id, base_id, user_id, stage, 200, response, time_elapsed, versions) # TODO:figure out status code
+    except Exception as e:
+        print("unable to store call")
+        traceback.print_tb(e.__traceback__)
+        print(e)
+    return lambda_response
 
 def lambda_handler(event):
     event = event.get_json(silent=True)
@@ -68,35 +86,11 @@ def lambda_handler(event):
 
         return {'error': error, 'results': results}
 
-    try:
-        # instead of matching on id, this should match on cached calls
-        if event.get('id') is not None:
-            response = grab_response(database_calls, **event)
-        else:
-            response = call_deepcite(**event)
-    except Exception as e:
-        traceback.print_tb(e.__traceback__)
-        print(e)
-        response = e
+    response, existing_id = grab_response(database_calls, **event)
 
-    print('Deepcite response:', response)
+    return record_call(response, start, database_calls, user_id, stage, existing_id)
 
-    if isinstance(response, Exception):
-        base_id = str(uuid.uuid4())
-    else:
-        base_id = response['results'][0]['citeID']
-
-    time_elapsed = time.time()-start
-
-    lambda_response = respond(response)
-    print('lambda response:', lambda_response)
-    try:
-        database_calls.record_call(new_submission, base_id, user_id, stage, 200, response, time_elapsed, versions) # TODO:figure out status code
-    except Exception as e:
-        print("unable to store call")
-        traceback.print_tb(e.__traceback__)
-        print(e)
-    return lambda_response
-
+# body = "{\"ip\": \"127.0.0.1\", \"test\": false, \"stage\": \"dev\", \"resonse_size\": \"small\", \"claim\":\"That the first novel featuring time travel was written in 1733. It is set 1997 and tells of a future where the world becomes dominated by the Jesuits. Because it was written before the industrial revolution, there is no depicted technological advancement between the authors time and the future\", \"link\":\"https://www.reddit.com/r/todayilearned/comments/nz68d1/til_that_the_first_novel_featuring_time_travel\"}"
 # body = "{\"ip\": \"127.0.0.1\", \"test\": true, \"stage\": \"dev\", \"id\": \""+str(uuid.uuid4())+"\", \"resonse_size\": \"small\", \"claim\":\"the death of Sherlock Holmes almost destroyed the magazine thries. When Arthur Conan Doyle killed him off in 1893, 20,000 people cancelled their subscriptions. The magazine barely survived. Its staff referred to Holmes’ death as “the dreadful event”.\", \"link\":\"http://www.bbc.com/culture/story/20160106-how-sherlock-holmes-changed-the-world\"}"
+
 # print(lambda_handler(json.loads(body)))#{"isBase64Encoded": False, "body": body, "requestContext": {"http": {"method": "POST", "sourceIp": "dfsds"}, "stage": "dev", }},0))
