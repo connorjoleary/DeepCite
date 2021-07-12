@@ -24,7 +24,7 @@ def call_deepcite(claim, link, **kwargs):
 def grab_response(database_calls, claim, link, **kwargs):
     responses = database_calls.grab_deepcite_entry(id) if 'id' in kwargs else database_calls.check_repeat(claim, link, versions)
 
-    print('There were {} responses returned'.format(len(responses)))
+    print(f'There were {len(responses)} responses returned')
     if len(responses) == 0:
         return (call_deepcite(claim, link), None)
     else:
