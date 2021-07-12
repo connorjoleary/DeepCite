@@ -5,9 +5,6 @@ pkill gunicorn
 
 python3 -m venv v-env
 
-*** Make sure to swich off of dev ***
-zip -r deepcite_extension.zip extension
-
 scp -i "~/DeepCite.pem" -r /mnt/c/Users/conno/Documents/GitHub/DeepCite/backend/model/v-env-test/lib64/python3.7/site-packages/en_core_web_lg/ ec2-user@ec2-18-222-119-231.us-east-2.compute.amazonaws.com:
 sudo mv /usr/local/lib/python3.7/site-packages/en_core_web_lg /mnt/efs/fs1/
 
@@ -19,7 +16,10 @@ gcloud sql connect deepcite --user=postgres
 https://chrome.google.com/webstore/devconsole/48556bdc-768a-4c11-9f1c-d7a96bf9737f?hl=en
 
 format json
-shift+alt+f 
+shift+alt+f
+
+# update chrome extension
+zip -r deepcite_extension.zip extension
 
 # update cloud functions code
 rm function.zip
