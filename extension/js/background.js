@@ -14,11 +14,12 @@ chrome.runtime.onInstalled.addListener(function () {
         console.log('Initialized previous data variable');
     });
 
-    chrome.contextMenus.create({
-        title: "Autofill Deepcite",
-        contexts:["selection"],  // ContextType
-        onclick: newCitationFromSelection // A callback function
-       });
+});
+
+chrome.contextMenus.create({
+    title: "Autofill Deepcite",
+    contexts:["selection"],  // ContextType
+    onclick: newCitationFromSelection // A callback function
 });
 
 function newCitationFromSelection(info) {
