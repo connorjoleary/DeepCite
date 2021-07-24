@@ -27,16 +27,15 @@ class Tree:
         inilist = []
         inilist.append(self.tree_root)
         self.queue.put(ClaimPath(inilist, 1))
-        self.best_queue = q.PriorityQueue() # This can likly be deleted
         self.beam_search(self.tree_root)
 
-    # This function multiplies the cild scores by the parents
+    # This function multiplies the child scores by the parents... which isn't great
     def beam_search(self,root):
         #root = Node(claim.href, claim.text, claim.score)
         #jumps.append(root)
         recover_paths = []
         if len(root.child) == 0:
-            return
+            return #TODO
         while self.queue.not_empty:
             cand_path = self.queue.get()
             if root in cand_path.claims:
@@ -54,12 +53,3 @@ class Tree:
 
         for path in recover_paths:
             self.queue.put(path)
-      
-    # May be removed soon, but unsure at this point
-    # def get_best_path(self):
-    #     best_path = self.queue.get()
-    #     # nodes = [claim.to_claim_link_dict() for claim in best_path.claims]
-    #     nodes = [claim.to_claim_parent_link_dict() for claim in best_path.claims]
-        
-    #     return nodes
-

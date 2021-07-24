@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import requests
 import re
 
+
 def wiki(url, parent):
     session = requests.Session()
     if url[:10] =="#cite_note":
@@ -13,8 +14,6 @@ def wiki(url, parent):
         findReferences = bsObj.find('ol', {'class': 'references'})
         href = BeautifulSoup(str(findReferences), "html.parser")
         links = [a["href"] for a in href.find_all("a", href=True)]
-
-
 
         linkdict = {}
         for i,link in enumerate(links):

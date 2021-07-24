@@ -3,12 +3,11 @@ from flask import request
 from config import config
 import json
 from tree import Tree
-from claim import Claim, html_link, new_indention
+from claim import html_link, new_indention
 import exceptions as errors
 import uuid
 import traceback
 app = Flask(__name__)
-
 
 exceptions = [errors.MalformedLink, errors.URLError, errors.EmptyWebsite, errors.ClaimNotInLink, errors.InvalidInput]
 

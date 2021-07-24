@@ -38,10 +38,9 @@ class Claim:
     def __init__(self, href, text, score=1, height=0, parent=None):
         super(Claim, self).__init__()
         self.id = str(uuid.uuid4())
-        # hrefs : several reference links, which is a list of str
         # text : the text of the claim
         # child: a list of claims
-        # score: matching score computed by nlp algorithm.
+        # score: matching score computed by nlp algorithm
         # parent: a instance of Claim class.
         # visited: a list to store all the hrefs for cycle detection.
         if href == '' or text == '':
@@ -54,8 +53,12 @@ class Claim:
         self.score = score
         self.height = height
         self.visited = []
-        self.parse_child()
-        self.realscore = 0
+        parse_result = self.parse_child()
+
+        # If there was some issue with the website
+        if parse_result:
+            self.text = parse_result
+            self.score = 0
         self.jumps = []
         
         # Add field cand and score to the parent so that children can work correctly
@@ -86,7 +89,6 @@ class Claim:
     def excep_handle(self):
         if self.parent != None:
             self.visited = self.parent.visited
-            self.realscore = self.parent.score
         
         # malformed link
         if re.match(regex, self.href) is None:
@@ -102,26 +104,12 @@ class Claim:
         return True
      
      
-     # returns the p tags found in link
-     # accounts for dynamically loaded html
+    # returns the p tags found in link
     def get_page_text(self, response):
-
-        # dynamic html
-        # commented out for testing
-        # op = webdriver.ChromeOptions()
-        # op.add_argument('headless')
-        # driver = webdriver.Chrome(executable_path= CWD_FOLDER + '/chromedriver.exe',options=op)
-        # driver.get(self.href)  
-        # js_soup = BeautifulSoup(driver.page_source, "html.parser")
-        # dynamic = js_soup.findAll('p')
 
         # static html
         soup = BeautifulSoup(response.text, 'html.parser')
         static = soup.findAll('p')
-
-        # commented out for testing
-        # if len(static) < len(dynamic):
-        #     return dynamic
 
         return static
 
@@ -173,9 +161,9 @@ class Claim:
         # Do nothing if there is a cycle
         ref2text = {}
         if self.href == "":
-            return
+            return #TODO
         elif self.height >= Claim.maxheight:
-            return
+            return #TODO
 
         try:
             parent_host = urlparse(self.parent.href).hostname
@@ -188,7 +176,7 @@ class Claim:
             if citation == None:
                 self.href = self.parent.href + self.href
                 self.score = self.parent.score
-                return
+                return #TODO
             else:
                 self.href = citation
         # not wikipedia link
@@ -196,8 +184,9 @@ class Claim:
             # no errors
             if not self.excep_handle(): # why does this only run if not in wikipedia?
                 self.score = self.parent.score
-                return 
+                return #TODO
         
+
         host = urlparse(self.href).hostname
 
         # gets url
@@ -210,7 +199,7 @@ class Claim:
             if self.parent == None:
                 raise error.URLError('Unable to reach URL: ' + html_link(self.href))
             # create leaf
-            return
+            return #TODO
         
 
         # marked site as visited
@@ -225,7 +214,7 @@ class Claim:
             if self.parent == None and not host.endswith(".reddit.com"):
                 raise error.EmptyWebsite('Unable to obtain infomation from the website.' + \
                             new_indention(html_link(self.href) + ' could contain the following errors: Error404, Error403, Error500, or content of site cannot be obtained.'))
-            return
+            return #TODO
 
         for unit in text_raw:
             if len(unit.findAll('a')) > 0:
@@ -259,8 +248,11 @@ class Claim:
 
         # get tokenizer values
         scores = self.set_cand(ref2text)
+
+        # Raise error if there are no matches on the root page
         if self.parent == None:
             if scores[0] <= config['model']['similarity_cutoff']:
                 raise error.ClaimNotInLink('Unable to find \"' + self.text + '\" in ' + html_link(self.href))
+
         # creates leaf node or children
         self.create_children(ref2text, scores)
