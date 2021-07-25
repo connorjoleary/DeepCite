@@ -112,7 +112,21 @@ $(document).ready(() => {
 		disableCiteActions();
 
 		event.preventDefault();
-		sendToServer(claimValue, linkValue); //perform some operations
+
+		chrome.storage.sync.get('userid', function(items) {
+			var userid = items.userid;
+			if (userid) {
+				useToken(userid);
+			} else {
+				userid = getRandomToken();
+				chrome.storage.sync.set({userid: userid}, function() {
+					useToken(userid);
+				});
+			}
+			function useToken(userid) {
+				sendToServer(claimValue, linkValue, userid); //perform some operations
+			}
+		});
 
 		var delay = 1440000; //180000 is a 3 minute timeout
 		timeout = this.setTimeout(function () {
@@ -155,13 +169,12 @@ function serverOffline() {
 	});
 }
 
-async function sendToServer(claimValue, linkValue) {
-	var ipValue = await grab_ip();
+function sendToServer(claimValue, linkValue, idValue) {
 
 	var data = {
 		claim: claimValue,
 		link: linkValue,
-		ip: ipValue,
+		ip: idValue,
 		stage: stageValue
 	};
 	console.log(JSON.stringify(data));
