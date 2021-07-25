@@ -39,7 +39,6 @@ class Tree:
         while self.queue.not_empty:
             cand_path = self.queue.get()
             if root in cand_path.claims:
-                self.best_queue.put(cand_path)
                 curr_score = cand_path.totscore
                 for onechild in root.child:
                     temp_path = cand_path.claims.copy()

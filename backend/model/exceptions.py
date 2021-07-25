@@ -12,3 +12,4 @@ class ClaimNotInLink(Exception):
 
 class InvalidInput(Exception):
     pass
+

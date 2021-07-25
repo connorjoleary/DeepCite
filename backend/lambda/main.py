@@ -19,6 +19,8 @@ def call_deepcite(claim, link, **kwargs):
     # private ip address of ec2
     response = requests.post(url=config['CLOUDRUN']['url']+'/api/v1/deep_cite', json={"claim": claim, "link": link})
     print(response)
+    if response.status_code != 200:
+        raise Exception('Unable to connect to Deepcite')
     return json.loads(response.text)
 
 def grab_response(database_calls, claim, link, **kwargs):
@@ -59,6 +61,7 @@ def lambda_handler(event):
     if event.get('test', False):
         database_calls = mock.Mock()
         database_calls.grab_deepcite_entry = lambda id: []
+        database_calls.check_repeat = lambda *x: []
         database_calls.record_call = lambda *x: None
         database_calls.record_source = lambda *x: None
     else:

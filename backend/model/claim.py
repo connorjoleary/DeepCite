@@ -57,36 +57,16 @@ class Claim:
 
         # If there was some issue with the website
         if parse_result:
-            self.text = parse_result
-            self.score = 0
+            self.child.append(Claim('', parse_result, -1, (self.height +1), self))
         self.jumps = []
         
         # Add field cand and score to the parent so that children can work correctly
         # self.branch = order
         # default value of score is 0
 
-
-    # sets values based on previous jups, handles exceptions
-    def to_claim_link_dict(self):
-        cl_dict = {}
-        cl_dict['source'] = self.text
-        cl_dict['link'] = self.href
-        cl_dict['score'] = self.score
-        return cl_dict
-
-    # # this changes what link is associated with what claim,
-    # # making the frontend look nicer
-    # def to_claim_parent_link_dict(self):
-    #     cl_dict = {}
-    #     cl_dict['source'] = self.text
-    #     if (self.parent != None):
-    #         cl_dict['link'] = self.parent.href
-    #     else:
-    #         cl_dict['link'] = ""
-    #     cl_dict['score'] = self.score
-    #     return cl_dict
-    
     def excep_handle(self):
+        """ Handle common expections with a url
+        """
         if self.parent != None:
             self.visited = self.parent.visited
         
@@ -158,16 +138,18 @@ class Claim:
 
 
     def parse_child(self):
-        # Do nothing if there is a cycle
+        """ Checks the validity of the link (cyles, malformed) and creates the children 
+        """
         ref2text = {}
         if self.href == "":
-            return #TODO
+            return
         elif self.height >= Claim.maxheight:
-            return #TODO
+            return
 
-        try:
+        # Check if root node
+        if self.parent:
             parent_host = urlparse(self.parent.href).hostname
-        except AttributeError as error:
+        else:
             parent_host = ''
 
         # is wikipedia link then change score and href
@@ -176,16 +158,15 @@ class Claim:
             if citation == None:
                 self.href = self.parent.href + self.href
                 self.score = self.parent.score
-                return #TODO
+                return 'Unable to work with wiki link' #TODO figure out a better comment
             else:
                 self.href = citation
         # not wikipedia link
         else:
-            # no errors
+            # Check common errors
             if not self.excep_handle(): # why does this only run if not in wikipedia?
                 self.score = self.parent.score
-                return #TODO
-        
+                return 'URL is repeated or is malformed'
 
         host = urlparse(self.href).hostname
 
@@ -199,8 +180,10 @@ class Claim:
             if self.parent == None:
                 raise error.URLError('Unable to reach URL: ' + html_link(self.href))
             # create leaf
-            return #TODO
+            return 'Unable to reach the url'
         
+        if response.status_code != 200:
+            return f'URL status code: {response.status_code}'
 
         # marked site as visited
         self.visited.append(self.href)
@@ -214,7 +197,7 @@ class Claim:
             if self.parent == None and not host.endswith(".reddit.com"):
                 raise error.EmptyWebsite('Unable to obtain infomation from the website.' + \
                             new_indention(html_link(self.href) + ' could contain the following errors: Error404, Error403, Error500, or content of site cannot be obtained.'))
-            return #TODO
+            return 'Website does not have enough text'
 
         for unit in text_raw:
             if len(unit.findAll('a')) > 0:
@@ -250,9 +233,11 @@ class Claim:
         scores = self.set_cand(ref2text)
 
         # Raise error if there are no matches on the root page
-        if self.parent == None:
-            if scores[0] <= config['model']['similarity_cutoff']:
+        if scores[0] <= config['model']['similarity_cutoff']:
+            if self.parent == None:
                 raise error.ClaimNotInLink('Unable to find \"' + self.text + '\" in ' + html_link(self.href))
+            else:
+                return 'No similar texts were found'
 
         # creates leaf node or children
         self.create_children(ref2text, scores)
