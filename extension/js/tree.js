@@ -99,15 +99,30 @@ function donateButtonClicked() {
 	chrome.tabs.create({ url: "https://github.com/connorjoleary/DeepCite#donate" });
 }
 
-async function upvoteButtonClicked(event) {
-	var ipValue = await grab_ip();
+function upvoteButtonClicked(event) {
+	chrome.storage.sync.get('userid', function(items) {
+		var userid = items.userid;
+		if (userid) {
+			useToken(userid);
+		} else {
+			userid = getRandomToken();
+			chrome.storage.sync.set({userid: userid}, function() {
+				useToken(userid);
+			});
+		}
+		function useToken(userid) {
+			sendToServer(event, userid); //perform some operations
+		}
+	});
+}
 
+function sendToServer(event, userid) {
 	var element = event.srcElement
 	var citeID = findClosestCiteID(element);
 
 	data = {
 		type: "source",
-		ip: ipValue,
+		ip: userid,
 		sourceId: citeID,
 		baseId: baseId,
 		stage: stageValue
