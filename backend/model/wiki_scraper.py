@@ -7,12 +7,11 @@ import re
 def wiki(url, parent):
     """ If the url is a cite_note and the parent is wikipedia, then link to where the citenote links to
     """
-    session = requests.Session()
     if url[:10] =="#cite_note":
         url = url.replace("note","ref")
 
         #Request wiki page and parse it
-        html = session.post(parent)
+        html = requests.get(parent)
         bsObj = BeautifulSoup(html.text, "html.parser")
         findReferences = bsObj.find('ol', {'class': 'references'})
         href = BeautifulSoup(str(findReferences), "html.parser")
@@ -35,4 +34,10 @@ def wiki(url, parent):
             if '#cite' not in target_link:
                 if target_link[:6] == "/wiki/":
                     target_link = "https://en.wikipedia.org" + target_link
-                return target_link
+
+    elif url[:6] == "/wiki/":
+        target_link = "https://en.wikipedia.org" + url
+    
+    else:
+        target_link=url
+    return target_link

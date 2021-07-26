@@ -109,14 +109,14 @@ class Claim:
     def create_children(self, ref2text, scores):
         # iterates through texts to check if there is a link associtated with text
         for i, words in enumerate(self.cand):
-            try:
+            if words in ref2text:
                 if ref2text[words] != "":  # if there is a link
                     self.child.append(Claim(ref2text[words], words, scores[i], (self.height +1), self)) # does ref2text allow for multiple links
                 else:
                     self.child.append(Claim("", words, scores[i], (self.height +1), self))
 
             # tokenizer returned a sentence
-            except KeyError:
+            else:
                 ref_key = ""
                 # looks for paragraph that the sentence is in 
                 for key in ref2text.keys():
@@ -152,7 +152,7 @@ class Claim:
         else:
             parent_host = ''
 
-        # is wikipedia link then change score and href
+        # is wikipedia link then correct href
         if self.parent != None and parent_host.endswith(".wikipedia.org"):
             citation = wiki(self.href, self.parent.href)
             if citation == None:
@@ -161,12 +161,11 @@ class Claim:
                 return 'Unable to work with wiki link' #TODO figure out a better comment
             else:
                 self.href = citation
-        # not wikipedia link
-        else:
-            # Check common errors
-            if not self.excep_handle(): # why does this only run if not in wikipedia?
-                self.score = self.parent.score
-                return 'URL is repeated or is malformed'
+
+        # Check common errors
+        if not self.excep_handle():
+            self.score = self.parent.score
+            return 'URL is repeated or is malformed'
 
         host = urlparse(self.href).hostname
 
@@ -183,6 +182,8 @@ class Claim:
             return 'Unable to reach the url'
         
         if response.status_code != 200:
+            if self.parent == None:
+                raise error.EmptyWebsite(f'Website returned statue_code: {response.status_code}')
             return f'URL status code: {response.status_code}'
 
         # marked site as visited
@@ -191,13 +192,12 @@ class Claim:
         text_raw = self.get_page_text(response)
         
         # Exception that the child of one claim has no valid sentences, then add its parent to the leaf list.
-        if len(text_raw) < 6:
+        if len(text_raw) == 0:
             # Terminate the scraper and parse the parent node to the leaf list
             # unable to obtain infomation from website
             if self.parent == None and not host.endswith(".reddit.com"):
-                raise error.EmptyWebsite('Unable to obtain infomation from the website.' + \
-                            new_indention(html_link(self.href) + ' could contain the following errors: Error404, Error403, Error500, or content of site cannot be obtained.'))
-            return 'Website does not have enough text'
+                raise error.EmptyWebsite('Website does not have any readable text')
+            return 'Website does not have any readable text'
 
         for unit in text_raw:
             if len(unit.findAll('a')) > 0:
