@@ -16,15 +16,6 @@ from urllib.parse import urlparse
 
 CWD_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
-regex = re.compile(
-    r'^(?:http|ftp)s?://' # http:// or https://
-    r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|' #domain...
-    r'localhost|' #localhost...
-    r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # ...or ip
-    r'(?::\d+)?' # optional port
-    r'(?:/?|[/?]\S+)$', re.IGNORECASE)
-
-
 def new_indention(text):
     style =  'style = \"color:#8b0000; font-style: italic; font-weight: bold;\">'
     return "<div><p " + style + text + "</p></div>" 
@@ -64,26 +55,20 @@ class Claim:
         # self.branch = order
         # default value of score is 0
 
-    def excep_handle(self):
-        """ Handle common expections with a url
+    def check_repeats(self):
+        """ Checks for cycles and adds visited urls to list
         """
         if self.parent != None:
             self.visited = self.parent.visited
-        
-        # malformed link
-        if re.match(regex, self.href) is None:
-            if self.parent == None:
-                raise error.MalformedLink(self.href +' is malformed\n.' + new_indention("Make sure to include, \'https\\\\\', and \'.com/.org/.edu/...\'"))
-            return False
 
         # Cycle Detection
         if self.href in self.visited and self.parent != None:
             # Terminate the scraper and parse the parent node to the leaf list
             return False
-        
+
         return True
-     
-     
+
+
     # returns the p tags found in link
     def get_page_text(self, response):
 
@@ -158,16 +143,20 @@ class Claim:
             if citation == None:
                 self.href = self.parent.href + self.href
                 self.score = self.parent.score
-                return 'Unable to work with wiki link' #TODO figure out a better comment
+                return 'Unable to handle wiki link'
             else:
                 self.href = citation
 
         # Check common errors
-        if not self.excep_handle():
+        if not self.check_repeats():
             self.score = self.parent.score
-            return 'URL is repeated or is malformed'
-
-        host = urlparse(self.href).hostname
+            return 'URL is repeated'
+        try:
+            host = urlparse(self.href).hostname
+        except ValueError:
+            if self.parent == None:
+                raise error.MalformedLink('URL cannot be parsed')
+            return 'URL is malformed'
 
         # gets url
         user_agent = {'User-agent': 'Mozilla/5.0'}
@@ -197,7 +186,7 @@ class Claim:
             # unable to obtain infomation from website
             if self.parent == None and not host.endswith(".reddit.com"):
                 raise error.EmptyWebsite('Website does not have any readable text')
-            return 'Website does not have any readable text'
+            return 'Website doesn\'t have any readable text'
 
         for unit in text_raw:
             if len(unit.findAll('a')) > 0:
