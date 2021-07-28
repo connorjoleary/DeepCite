@@ -3,12 +3,12 @@ from bs4 import BeautifulSoup
 import requests
 import re
 
-#TODO This could be better, but right now it isn't broken so...
+#TODO This should handle multiple links in one citation, right now it sends the first link
 def wiki(url, parent):
     """ If the url is a cite_note and the parent is wikipedia, then link to where the citenote links to
     """
-    if url[:10] =="#cite_note":
-        url = url.replace("note","ref")
+    url = url.replace("note","ref")
+    if url.startswith("#cite_ref"):
 
         #Request wiki page and parse it
         html = requests.get(parent)
@@ -34,10 +34,9 @@ def wiki(url, parent):
             if '#cite' not in target_link:
                 if target_link[:6] == "/wiki/":
                     target_link = "https://en.wikipedia.org" + target_link
+                return target_link
 
     elif url[:6] == "/wiki/":
-        target_link = "https://en.wikipedia.org" + url
+        return "https://en.wikipedia.org" + url
     
-    else:
-        target_link=url
-    return target_link
+    return url
