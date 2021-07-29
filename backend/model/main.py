@@ -3,12 +3,11 @@ from flask import request
 from config import config
 import json
 from tree import Tree
-from claim import Claim, html_link, new_indention
+from claim import html_link, new_indention
 import exceptions as errors
 import uuid
 import traceback
 app = Flask(__name__)
-
 
 exceptions = [errors.MalformedLink, errors.URLError, errors.EmptyWebsite, errors.ClaimNotInLink, errors.InvalidInput]
 
@@ -69,5 +68,6 @@ def sanitize_link(link):
     return sanitized.strip()
 
 if __name__ == "__main__":
-    # deep_cite(**{"claim":"6 years after resigning, Nixon testified on behalf of former FBI assistant director Mark Felt at Felts own trial, and gave money to Felts defense fund. In 2005 Felt revealed he had been Deep Throat, Bob Woodwards source while breaking the Watergate scandal that led to Nixons resignation", "link":"https://www.reddit.com/r/todayilearned/comments/gzwlp6/til_6_years_after_resigning_nixon_testified_on/"})
+    # with app.app_context():
+    #     deep_cite(**{"claim":"rapper Too Short managed to sell 50,000 copies of his album \"Born to Mack\" from the trunk of his car.", "link":"https://www.reddit.com/r/todayilearned/comments/or9u42/til_rapper_too_short_managed_to_sell_50000_copies/"})
     app.run(host=config['server']['host'], port=config['server']['port'])

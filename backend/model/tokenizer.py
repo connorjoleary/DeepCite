@@ -69,9 +69,14 @@ def sentence_parsing(text):
                 sentences.append(sentence)
     return sentences
 
-# claim - the claim for comparison
-# text - the text of the article, preferably paragraph by paragraph
 def predict(claim, text) : #TODO: this doesn't take into account the original claim, this happens in beam_search in Tree, but it might be better here
+    """ Finds the best matches to a given claim
+
+    claim - the claim for comparison
+    text - the text of the article, preferably paragraph by paragraph
+    predict - list of sentences and similarities sorted by most similar
+    """
+
     paragraph_queue = q.PriorityQueue()
 
     clean_claim = preprocessing(nlp(claim))
@@ -104,7 +109,7 @@ def predict(claim, text) : #TODO: this doesn't take into account the original cl
                 i = i-1
             else:
                 predict.append((text[best_paragraph.index], best_paragraph.similarity))
-            if paragraph_queue.not_empty:
+            if not paragraph_queue.empty():
                 best_paragraph = paragraph_queue.get()
             else:
                 best_paragraph = Paragraph(0, -10)
@@ -114,7 +119,7 @@ def predict(claim, text) : #TODO: this doesn't take into account the original cl
             else:
                 predict.append((sentences[best_sentence.index], best_sentence.similarity))
 
-            if paragraph_queue.not_empty:
+            if not sentence_queue.empty():
                 best_sentence = sentence_queue.get()
             else:
                 best_sentence = Paragraph(0, -10)

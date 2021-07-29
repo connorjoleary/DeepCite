@@ -16,15 +16,6 @@ from urllib.parse import urlparse
 
 CWD_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
-regex = re.compile(
-    r'^(?:http|ftp)s?://' # http:// or https://
-    r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|' #domain...
-    r'localhost|' #localhost...
-    r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # ...or ip
-    r'(?::\d+)?' # optional port
-    r'(?:/?|[/?]\S+)$', re.IGNORECASE)
-
-
 def new_indention(text):
     style =  'style = \"color:#8b0000; font-style: italic; font-weight: bold;\">'
     return "<div><p " + style + text + "</p></div>" 
@@ -38,10 +29,9 @@ class Claim:
     def __init__(self, href, text, score=1, height=0, parent=None):
         super(Claim, self).__init__()
         self.id = str(uuid.uuid4())
-        # hrefs : several reference links, which is a list of str
         # text : the text of the claim
         # child: a list of claims
-        # score: matching score computed by nlp algorithm.
+        # score: matching score computed by nlp algorithm
         # parent: a instance of Claim class.
         # visited: a list to store all the hrefs for cycle detection.
         if href == '' or text == '':
@@ -54,74 +44,37 @@ class Claim:
         self.score = score
         self.height = height
         self.visited = []
-        self.parse_child()
-        self.realscore = 0
+        parse_result = self.parse_child()
+
+        # If there was some issue with the website
+        if parse_result:
+            self.child.append(Claim('', parse_result, -1, (self.height +1), self))
         self.jumps = []
         
         # Add field cand and score to the parent so that children can work correctly
         # self.branch = order
         # default value of score is 0
 
-
-    # sets values based on previous jups, handles exceptions
-    def to_claim_link_dict(self):
-        cl_dict = {}
-        cl_dict['source'] = self.text
-        cl_dict['link'] = self.href
-        cl_dict['score'] = self.score
-        return cl_dict
-
-    # # this changes what link is associated with what claim,
-    # # making the frontend look nicer
-    # def to_claim_parent_link_dict(self):
-    #     cl_dict = {}
-    #     cl_dict['source'] = self.text
-    #     if (self.parent != None):
-    #         cl_dict['link'] = self.parent.href
-    #     else:
-    #         cl_dict['link'] = ""
-    #     cl_dict['score'] = self.score
-    #     return cl_dict
-    
-    def excep_handle(self):
+    def check_repeats(self):
+        """ Checks for cycles and adds visited urls to list
+        """
         if self.parent != None:
             self.visited = self.parent.visited
-            self.realscore = self.parent.score
-        
-        # malformed link
-        if re.match(regex, self.href) is None:
-            if self.parent == None:
-                raise error.MalformedLink(self.href +' is malformed\n.' + new_indention("Make sure to include, \'https\\\\\', and \'.com/.org/.edu/...\'"))
-            return False
 
         # Cycle Detection
         if self.href in self.visited and self.parent != None:
             # Terminate the scraper and parse the parent node to the leaf list
             return False
-        
-        return True
-     
-     
-     # returns the p tags found in link
-     # accounts for dynamically loaded html
-    def get_page_text(self, response):
 
-        # dynamic html
-        # commented out for testing
-        # op = webdriver.ChromeOptions()
-        # op.add_argument('headless')
-        # driver = webdriver.Chrome(executable_path= CWD_FOLDER + '/chromedriver.exe',options=op)
-        # driver.get(self.href)  
-        # js_soup = BeautifulSoup(driver.page_source, "html.parser")
-        # dynamic = js_soup.findAll('p')
+        return True
+
+
+    # returns the p tags found in link
+    def get_page_text(self, response):
 
         # static html
         soup = BeautifulSoup(response.text, 'html.parser')
         static = soup.findAll('p')
-
-        # commented out for testing
-        # if len(static) < len(dynamic):
-        #     return dynamic
 
         return static
 
@@ -141,14 +94,14 @@ class Claim:
     def create_children(self, ref2text, scores):
         # iterates through texts to check if there is a link associtated with text
         for i, words in enumerate(self.cand):
-            try:
+            if words in ref2text:
                 if ref2text[words] != "":  # if there is a link
                     self.child.append(Claim(ref2text[words], words, scores[i], (self.height +1), self)) # does ref2text allow for multiple links
                 else:
                     self.child.append(Claim("", words, scores[i], (self.height +1), self))
 
             # tokenizer returned a sentence
-            except KeyError:
+            else:
                 ref_key = ""
                 # looks for paragraph that the sentence is in 
                 for key in ref2text.keys():
@@ -170,35 +123,40 @@ class Claim:
 
 
     def parse_child(self):
-        # Do nothing if there is a cycle
+        """ Checks the validity of the link (cyles, malformed) and creates the children 
+        """
         ref2text = {}
         if self.href == "":
             return
         elif self.height >= Claim.maxheight:
             return
 
-        try:
+        # Check if root node
+        if self.parent:
             parent_host = urlparse(self.parent.href).hostname
-        except AttributeError as error:
+        else:
             parent_host = ''
 
-        # is wikipedia link then change score and href
+        # is wikipedia link then correct href
         if self.parent != None and parent_host.endswith(".wikipedia.org"):
             citation = wiki(self.href, self.parent.href)
             if citation == None:
                 self.href = self.parent.href + self.href
                 self.score = self.parent.score
-                return
+                return 'Unable to handle wiki link'
             else:
                 self.href = citation
-        # not wikipedia link
-        else:
-            # no errors
-            if not self.excep_handle(): # why does this only run if not in wikipedia?
-                self.score = self.parent.score
-                return 
-        
-        host = urlparse(self.href).hostname
+
+        # Check common errors
+        if not self.check_repeats():
+            self.score = self.parent.score
+            return 'URL is repeated'
+        try:
+            host = urlparse(self.href).hostname
+        except ValueError:
+            if self.parent == None:
+                raise error.MalformedLink('URL cannot be parsed')
+            return 'URL is malformed'
 
         # gets url
         user_agent = {'User-agent': 'Mozilla/5.0'}
@@ -210,8 +168,12 @@ class Claim:
             if self.parent == None:
                 raise error.URLError('Unable to reach URL: ' + html_link(self.href))
             # create leaf
-            return
+            return 'Unable to reach the url'
         
+        if response.status_code != 200:
+            if self.parent == None:
+                raise error.EmptyWebsite(f'Website returned statue_code: {response.status_code}')
+            return f'URL status code: {response.status_code}'
 
         # marked site as visited
         self.visited.append(self.href)
@@ -219,13 +181,12 @@ class Claim:
         text_raw = self.get_page_text(response)
         
         # Exception that the child of one claim has no valid sentences, then add its parent to the leaf list.
-        if len(text_raw) < 6:
+        if len(text_raw) == 0:
             # Terminate the scraper and parse the parent node to the leaf list
             # unable to obtain infomation from website
             if self.parent == None and not host.endswith(".reddit.com"):
-                raise error.EmptyWebsite('Unable to obtain infomation from the website.' + \
-                            new_indention(html_link(self.href) + ' could contain the following errors: Error404, Error403, Error500, or content of site cannot be obtained.'))
-            return
+                raise error.EmptyWebsite('Website does not have any readable text')
+            return 'Website doesn\'t have any readable text'
 
         for unit in text_raw:
             if len(unit.findAll('a')) > 0:
@@ -259,8 +220,13 @@ class Claim:
 
         # get tokenizer values
         scores = self.set_cand(ref2text)
-        if self.parent == None:
-            if scores[0] <= config['model']['similarity_cutoff']:
+
+        # Raise error if there are no matches on the root page
+        if scores[0] <= config['model']['similarity_cutoff']:
+            if self.parent == None:
                 raise error.ClaimNotInLink('Unable to find \"' + self.text + '\" in ' + html_link(self.href))
+            else:
+                return 'No similar texts were found'
+
         # creates leaf node or children
         self.create_children(ref2text, scores)
