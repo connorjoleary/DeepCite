@@ -29,4 +29,4 @@ gcloud functions deploy deepcite --source=gs://deepcite-function/function.zip
 
 # update cloud run code
 gcloud builds submit --tag gcr.io/deepcite-306405/deepcite-model
-gcloud run deploy deepcite-model --image gcr.io/deepcite-306405/deepcite-model:latest --platform managed
+gcloud run deploy deepcite-model --image gcr.io/deepcite-306405/deepcite-model:latest --platform managed --region us-central1
