@@ -12,9 +12,9 @@
     "NAME": "rds_deepcite_sample"
   },
   "VERSIONS": {
-    "MODEL": "0.7.0",
-    "LAMBDA": "0.7.0",
+    "MODEL": "0.8.0",
+    "LAMBDA": "0.7.1",
     "API": "0.4.0",
-    "EXTENSION": "1.4.1"
+    "EXTENSION": "1.5.0"
   }
 }

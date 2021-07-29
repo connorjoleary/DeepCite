@@ -1,4 +1,4 @@
-# DeepCite ![extension](https://img.shields.io/badge/extension-1.4.1-blue)
+# DeepCite ![extension](https://img.shields.io/badge/extension-1.5.0-blue)
 
 <p> In a world filled with fake news and alternative facts, get the real deep sources for your information. </p>
 
@@ -100,8 +100,6 @@ gunicorn -c gunicorn_config.py wsgi
 
 * Local testing:
 `curl -d '{"claim":"the death of Sherlock Holmes almost destroyed the magazine that had originally published the stories. When Arthur Conan Doyle killed him off in 1893, 20,000 people cancelled their subscriptions. The magazine barely survived. Its staff referred to Holmes’ death as “the dreadful event”.", "link":"http://www.bbc.com/culture/story/20160106-how-sherlock-holmes-changed-the-world"}' -H "Content-Type: application/json" -X POST http://127.0.0.1:8000/api/v1/deep_cite`
-* Server Testing:
-`curl -d '{"claim":"the death of Sherlock Holmes almost destroyed the magazine that had originally published the stories. When Arthur Conan Doyle killed him off in 1893, 20,000 people cancelled their subscriptions. The magazine barely survived. Its staff referred to Holmes’ death as “the dreadful event”.", "link":"http://www.bbc.com/culture/story/20160106-how-sherlock-holmes-changed-the-world"}' -H "Content-Type: application/json" -X POST https://deepcite-model-mt56qhm4pa-uc.a.run.app/api/v1/deep_cite`
 
 ## Reporting Bugs
 
@@ -162,10 +160,10 @@ There are a couple ways to configure both the backend and the aws lambda service
   "aws": {
     "env": "development",
     "versions": {
-      "model": "0.7.0",
-      "lambda": "0.7.0",
+      "model": "0.8.0",
+      "lambda": "0.7.1",
       "api": "0.4.0",
-      "extension": "1.4.1"
+      "extension": "1.5.0"
     },
     "secret": {
       "region": "us-east-2",
@@ -199,10 +197,10 @@ There are a couple ways to configure both the backend and the aws lambda service
  EC2_PORT=8000
  SECRET_REGION=us-east-2
  SECRET_NAME=rds_deepcite_sample
- VERSIONS_MODEL=0.7.0
- VERSIONS_LAMBDA=0.7.0
+ VERSIONS_MODEL=0.8.0
+ VERSIONS_LAMBDA=0.7.1
  VERSIONS_API=0.4.0
- VERSIONS_EXTENSION=1.4.1
+ VERSIONS_EXTENSION=1.5.0
  ```
 
 ## For Maintainers eyes only :eyes:
