@@ -19,6 +19,7 @@ format json
 shift+alt+f
 
 # update chrome extension
+rm deepcite_extension.zip
 zip -r deepcite_extension.zip extension
 
 # update cloud functions code
