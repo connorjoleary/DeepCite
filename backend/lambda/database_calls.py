@@ -52,20 +52,6 @@ class DatabaseCalls():
 
         self.deepcite_call_table = sqlalchemy.Table('deepcite_call', metadata, autoload=True, autoload_with=pool)
 
-    def grab_deepcite_entry(self, id):
-        cols = self.deepcite_call_table.c
-        try:
-            with self.conn.connect() as cur:
-                query = select([cols.response]).where(cols.id.astext == id)
-                responses = cur.execute(query).fetchall()
-                responses = [res[0] for res in responses]
-        except Exception as e:
-            print("ERROR: Unexpected error: Could not select from database instance.")
-            print(e)
-            responses = []
-        print("Deepcite entry responses:", responses)
-        return responses
-
     def record_call(self, existing_id, base_id, user_id, stage, status_code, response, time_elapsed, versions):
         try:
             with self.conn.connect() as cur:
