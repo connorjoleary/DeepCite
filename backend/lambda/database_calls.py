@@ -53,10 +53,11 @@ class DatabaseCalls():
         self.deepcite_call_table = sqlalchemy.Table('deepcite_call', metadata, autoload=True, autoload_with=pool)
 
     def grab_deepcite_entry(self, id):
+        cols = self.deepcite_call_table.c
         try:
             with self.conn.connect() as cur:
-
-                responses = cur.execute(f"SELECT response FROM deepcite_call where id = '{id}'").fetchall() #potentially this could just be a search by source claim and link and run for everything
+                query = select([cols.response]).where(cols.id.astext == id)
+                responses = cur.execute(query).fetchall()
                 responses = [res[0] for res in responses]
         except Exception as e:
             print("ERROR: Unexpected error: Could not select from database instance.")
@@ -88,10 +89,6 @@ class DatabaseCalls():
                         cols.response[('results', 0, 'source')].astext.ilike(claim)
                     )
                 ).limit(1)
-                # responses = cur.execute(f"""SELECT id, response FROM deepcite_call WHERE
-                # current_versions @> '{json.dumps(versions)}'::jsonb AND
-                # response->'results'->0->>'link'~~'%{link}%' AND
-                # response->'results'->0->>'source'~*'{claim}' limit 1""")
                 responses = cur.execute(query)
                 responses = [res for res in responses]
         except pg8000.exceptions.ProgrammingError as e:
@@ -109,6 +106,11 @@ class DatabaseCalls():
             print("ERROR: Unexpected error: Could not commit to database instance.")
             print(e)
 
-
-if __name__ == "__main__":
-    DatabaseCalls().check_repeat('')
+# For testing
+# if __name__ == "__main__":
+#     versions = {a: str(b) for a,b in config['versions'].items()}
+#     res = DatabaseCalls().check_repeat(
+#         'According to the convention of Geneva an ejected pilot in the air is not a combatant and therefore attacking him is a war crime.',
+#         'https://www.reddit.com/r/todayilearned/comments/p4j7da/til_according_to_the_convention_of_geneva_an/',
+#         versions)
+#     print(res)
