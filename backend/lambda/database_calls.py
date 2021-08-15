@@ -3,7 +3,7 @@ import base64
 import json
 import os
 import sqlalchemy
-from sqlalchemy.sql import select, and_
+from sqlalchemy.sql import select, and_, insert
 from google.cloud import secretmanager
 import pg8000
 
@@ -51,14 +51,35 @@ class DatabaseCalls():
         self.conn = pool.connect()
 
         self.deepcite_call_table = sqlalchemy.Table('deepcite_call', metadata, autoload=True, autoload_with=pool)
+        self.deepcite_retrieval_table = sqlalchemy.Table('deepcite_retrieval', metadata, autoload=True, autoload_with=pool)
+        self.source_label_table = sqlalchemy.Table('source_label', metadata, autoload=True, autoload_with=pool)
+
 
     def record_call(self, existing_id, base_id, user_id, stage, status_code, response, time_elapsed, versions):
         try:
             with self.conn.connect() as cur:
                 if existing_id is None: # This is a new entry
-                    cur.execute("INSERT INTO deepcite_call (id,user_id,stage,status_code,response,response_time_elapsed,current_versions) VALUES (%s, %s, %s, %s, %s, %s, %s)", (base_id, user_id, stage, status_code, json.dumps(response), time_elapsed, json.dumps(versions)))
+                    query = insert(self.deepcite_call_table).values(
+                        id = base_id,
+                        user_id = user_id,
+                        stage = stage,
+                        status_code = status_code,
+                        response = json.dumps(response),
+                        response_time_elapsed = time_elapsed,
+                        current_versions = json.dumps(versions)
+                    )
+                    cur.execute(query)
                 else:
-                    cur.execute("INSERT INTO deepcite_retrieval (id,user_id,deepcite_call_id,stage,status_code,response_time_elapsed,current_versions) VALUES (%s, %s, %s, %s, %s, %s, %s)", (base_id, user_id, existing_id, stage, status_code, time_elapsed, json.dumps(versions)))
+                    query = insert(self.deepcite_retrieval_table).values(
+                        id = base_id,
+                        user_id = user_id,
+                        deepcite_call_id = existing_id,
+                        stage = stage,
+                        status_code = status_code,
+                        response_time_elapsed = time_elapsed,
+                        current_versions = json.dumps(versions)
+                    )
+                    cur.execute(query)
         except Exception as e:
             print("ERROR: Unexpected error: Could not commit to database instance.")
             print(e)
@@ -86,17 +107,26 @@ class DatabaseCalls():
     def record_source(self, base_id, source_id, user_id, stage, versions):
         try:
             with self.conn.connect() as cur:
-                cur.execute("INSERT INTO source_label (base_id, source_id, user_id, stage, current_versions) VALUES (%s, %s, %s, %s, %s)", (base_id, source_id, user_id, stage, json.dumps(versions)))
+                query = insert(self.source_label_table).values(
+                        base_id = base_id,
+                        source_id = source_id,
+                        user_id = user_id,
+                        stage = stage,
+                        current_versions = json.dumps(versions)
+                    )
+                cur.execute(query)
 
         except Exception as e:
             print("ERROR: Unexpected error: Could not commit to database instance.")
             print(e)
 
-# For testing
+# # For testing
 # if __name__ == "__main__":
+#     import uuid
 #     versions = {a: str(b) for a,b in config['versions'].items()}
-#     res = DatabaseCalls().check_repeat(
-#         'According to the convention of Geneva an ejected pilot in the air is not a combatant and therefore attacking him is a war crime.',
-#         'https://www.reddit.com/r/todayilearned/comments/p4j7da/til_according_to_the_convention_of_geneva_an/',
-#         versions)
+#     res = DatabaseCalls().record_call(None, str(uuid.uuid4()), 'not_real', 'dev', 200, {}, 1, versions)
+#     # (
+#     #     'According to the convention of Geneva an ejected pilot in the air is not a combatant and therefore attacking him is a war crime.',
+#     #     'https://www.reddit.com/r/todayilearned/comments/p4j7da/til_according_to_the_convention_of_geneva_an/',
+#     #     versions)
 #     print(res)
