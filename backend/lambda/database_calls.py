@@ -3,6 +3,7 @@ import base64
 import json
 import os
 import sqlalchemy
+from sqlalchemy.sql import select, and_
 from google.cloud import secretmanager
 import pg8000
 
@@ -24,6 +25,7 @@ class DatabaseCalls():
     def __init__(self):
         secret = self.get_secret()
         self.conn = None
+        metadata = sqlalchemy.MetaData()
 
         db_config = {
             "pool_size": 1,
@@ -31,9 +33,6 @@ class DatabaseCalls():
             "pool_timeout": 30,  # 30 seconds
             "pool_recycle": 540,  # 30 minutes
         }
-
-        db_socket_dir = os.environ.get("DB_SOCKET_DIR", "/cloudsql")
-        cloud_sql_connection_name = 'deepcite-306405:us-central1:deepcite'#os.environ["CLOUD_SQL_CONNECTION_NAME"]
 
         pool = sqlalchemy.create_engine(
             # Equivalent URL:
@@ -50,6 +49,8 @@ class DatabaseCalls():
         )
 
         self.conn = pool.connect()
+
+        self.deepcite_call_table = sqlalchemy.Table('deepcite_call', metadata, autoload=True, autoload_with=pool)
 
     def grab_deepcite_entry(self, id):
         try:
@@ -77,12 +78,21 @@ class DatabaseCalls():
 
     def check_repeat(self, claim, link, versions):
         responses = []
+        cols = self.deepcite_call_table.c
         try:
             with self.conn.connect() as cur:
-                responses = cur.execute(f"""SELECT id, response FROM deepcite_call WHERE
-                current_versions @> '{json.dumps(versions)}'::jsonb AND
-                response->'results'->0->>'link'~~'%{link}%' AND
-                response->'results'->0->>'source'~*'{claim}' limit 1""")
+                query = select([cols.id, cols.response]).where(
+                    and_(
+                        cols.current_versions == versions, 
+                        cols.response[('results', 0, 'link')].astext.ilike(link),
+                        cols.response[('results', 0, 'source')].astext.ilike(claim)
+                    )
+                ).limit(1)
+                # responses = cur.execute(f"""SELECT id, response FROM deepcite_call WHERE
+                # current_versions @> '{json.dumps(versions)}'::jsonb AND
+                # response->'results'->0->>'link'~~'%{link}%' AND
+                # response->'results'->0->>'source'~*'{claim}' limit 1""")
+                responses = cur.execute(query)
                 responses = [res for res in responses]
         except pg8000.exceptions.ProgrammingError as e:
             print("Exception has occurred: ProgrammingError: Could not select from database")
@@ -98,3 +108,7 @@ class DatabaseCalls():
         except Exception as e:
             print("ERROR: Unexpected error: Could not commit to database instance.")
             print(e)
+
+
+if __name__ == "__main__":
+    DatabaseCalls().check_repeat('')
