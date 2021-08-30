@@ -20,9 +20,9 @@ deepCite.donateButton.addEventListener("click", donateButtonClicked);
 
 // initialization function
 function init() {
-	// var data = generateTestData();
-	var data = gatherData();
-	// populateDataIntoTree(data);
+	var data = generateTestData();
+	// var data = gatherData();
+	populateDataIntoTree(data);
 }
 
 function gatherData() {
@@ -68,7 +68,7 @@ function generateTestData() {
 					return createdCite.parentCiteID === parentRecordID;
 				}).length;
 				// if we're trying to create a fourth children to a parent cite, we need to pick a different parent
-				if (maximumChildrenCount < 3) {
+				if (maximumChildrenCount < 5) {
 					enforcedMaximumChildrenBool = true;
 				}
 			}
@@ -181,6 +181,12 @@ function populateDataIntoTree(data) {
 	groupedData = groupCiteData(data);
 	// next, we want to sort our data so the flow chart is clean after drawing lines
 	sortedGroupedData = sortCiteData(groupedData);
+
+	var lengths = sortedGroupedData.map(function(dataGroup){
+		return dataGroup.length;
+	});
+	document.body.style.width = Math.max(...lengths)*400 + 'px';
+
 	// then, we need to create cite/claim boxes for each item and put them in the correct row
 	sortedGroupedData.forEach(function (dataGroup) {
 		rowCiteCount = dataGroup.length;
@@ -214,6 +220,7 @@ function populateDataIntoTree(data) {
 
 function forceScrollToTop() {
 	$(this).scrollTop(0);
+	$(this).scrollLeft(0);
 }
 
 function groupCiteData(data) {
