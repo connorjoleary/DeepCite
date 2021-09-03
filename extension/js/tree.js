@@ -20,9 +20,9 @@ deepCite.donateButton.addEventListener("click", donateButtonClicked);
 
 // initialization function
 function init() {
-	var data = generateTestData();
-	// var data = gatherData();
-	populateDataIntoTree(data);
+	// var data = generate ,.TestData();
+	var data = gatherData();
+	// populateDataIntoTree(data);
 }
 
 function gatherData() {
@@ -185,7 +185,14 @@ function populateDataIntoTree(data) {
 	var lengths = sortedGroupedData.map(function(dataGroup){
 		return dataGroup.length;
 	});
-	document.body.style.width = Math.max(...lengths)*400 + 'px';
+
+	// Dynamically adjust document width
+	cite_box_width = 28 // This should be taken from citeComponent but my js skills are not up to it
+	window_width = $(window).width()/parseFloat($("body").css("font-size"));
+	needed_width = Math.max(...lengths)*cite_box_width
+	if (needed_width > window_width) {
+		document.body.style.width = needed_width + 'em';
+	}
 
 	// then, we need to create cite/claim boxes for each item and put them in the correct row
 	sortedGroupedData.forEach(function (dataGroup) {
