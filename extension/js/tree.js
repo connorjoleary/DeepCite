@@ -20,7 +20,7 @@ deepCite.donateButton.addEventListener("click", donateButtonClicked);
 
 // initialization function
 function init() {
-	// var data = generate ,.TestData();
+	// var data = generateTestData();
 	var data = gatherData();
 	// populateDataIntoTree(data);
 }
