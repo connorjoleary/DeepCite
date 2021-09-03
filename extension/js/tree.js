@@ -187,7 +187,7 @@ function populateDataIntoTree(data) {
 	});
 
 	// Dynamically adjust document width
-	cite_box_width = 28 // This should be taken from citeComponent but my js skills are not up to it
+	cite_box_width = 26 // This should be taken from citeComponent but my js skills are not up to it
 	window_width = $(window).width()/parseFloat($("body").css("font-size"));
 	needed_width = Math.max(...lengths)*cite_box_width
 	if (needed_width > window_width) {
