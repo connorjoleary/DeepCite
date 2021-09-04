@@ -24,7 +24,7 @@ def call_deepcite(claim, link, **kwargs):
     return json.loads(response.text)
 
 def grab_response(database_calls, claim, link, **kwargs):
-    responses = database_calls.grab_deepcite_entry(id) if 'id' in kwargs else database_calls.check_repeat(claim, link, versions)
+    responses = database_calls.check_repeat(claim, link, versions)
 
     print(f'There were {len(responses)} responses returned')
     if len(responses) == 0:
@@ -60,7 +60,6 @@ def lambda_handler(event):
 
     if event.get('test', False):
         database_calls = mock.Mock()
-        database_calls.grab_deepcite_entry = lambda id: []
         database_calls.check_repeat = lambda *x: []
         database_calls.record_call = lambda *x: None
         database_calls.record_source = lambda *x: None
