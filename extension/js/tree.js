@@ -68,7 +68,7 @@ function generateTestData() {
 					return createdCite.parentCiteID === parentRecordID;
 				}).length;
 				// if we're trying to create a fourth children to a parent cite, we need to pick a different parent
-				if (maximumChildrenCount < 3) {
+				if (maximumChildrenCount < 5) {
 					enforcedMaximumChildrenBool = true;
 				}
 			}
@@ -181,6 +181,19 @@ function populateDataIntoTree(data) {
 	groupedData = groupCiteData(data);
 	// next, we want to sort our data so the flow chart is clean after drawing lines
 	sortedGroupedData = sortCiteData(groupedData);
+
+	var lengths = sortedGroupedData.map(function(dataGroup){
+		return dataGroup.length;
+	});
+
+	// Dynamically adjust document width
+	cite_box_width = 26 // This should be taken from citeComponent but my js skills are not up to it
+	window_width = $(window).width()/parseFloat($("body").css("font-size"));
+	needed_width = Math.max(...lengths)*cite_box_width
+	if (needed_width > window_width) {
+		document.body.style.width = needed_width + 'em';
+	}
+
 	// then, we need to create cite/claim boxes for each item and put them in the correct row
 	sortedGroupedData.forEach(function (dataGroup) {
 		rowCiteCount = dataGroup.length;
@@ -214,6 +227,7 @@ function populateDataIntoTree(data) {
 
 function forceScrollToTop() {
 	$(this).scrollTop(0);
+	$(this).scrollLeft(0);
 }
 
 function groupCiteData(data) {
