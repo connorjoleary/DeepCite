@@ -44,12 +44,9 @@ class DatabaseCalls():
                 drivername="postgresql+pg8000",
                 username=secret['username'],  # e.g. "my-database-user"
                 password=secret['password'],  # e.g. "my-database-password"
-                database=secret['dbInstanceIdentifier'],  # e.g. "my-database-name"
-                query={
-                    "unix_sock": "{}/{}/.s.PGSQL.5432".format(
-                        db_socket_dir,  # e.g. "/cloudsql"
-                        cloud_sql_connection_name)  # i.e "<PROJECT-NAME>:<INSTANCE-REGION>:<INSTANCE-NAME>"
-                }
+                host=secret['host'],  # e.g. "127.0.0.1"
+                port=secret['port'],  # e.g. 5432
+                database=secret['dbInstanceIdentifier']  # e.g. "my-database-name"
             ),
             **db_config
         )
