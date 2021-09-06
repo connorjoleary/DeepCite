@@ -84,7 +84,14 @@ class DatabaseCalls():
                     )
                     cur.execute(query)
         except Exception as e:
-            print("ERROR: Unexpected error: Could not commit to database instance.")
+            error = dict(
+                severity="ERROR",
+                message='Could not commit to database instance.',
+                # Log viewer accesses 'component' as jsonPayload.component'.
+                component="db-insert",
+            )
+
+            print(json.dumps(error))
             print(e)
 
     def check_repeat(self, claim, link, versions):
@@ -102,7 +109,14 @@ class DatabaseCalls():
                 responses = cur.execute(query)
                 responses = [res for res in responses]
         except pg8000.exceptions.ProgrammingError as e:
-            print("Exception has occurred: ProgrammingError: Could not select from database")
+            error = dict(
+                severity="ERROR",
+                message='Could not select from database instance.',
+                # Log viewer accesses 'component' as jsonPayload.component'.
+                component="db-select",
+            )
+
+            print(json.dumps(error))
             print(e)
 
         return responses
@@ -120,7 +134,14 @@ class DatabaseCalls():
                 cur.execute(query)
 
         except Exception as e:
-            print("ERROR: Unexpected error: Could not commit to database instance.")
+            error = dict(
+                severity="ERROR",
+                message='Could not commit to database instance.',
+                # Log viewer accesses 'component' as jsonPayload.component'.
+                component="db-insert",
+            )
+
+            print(json.dumps(error))
             print(e)
 
 # # For testing
