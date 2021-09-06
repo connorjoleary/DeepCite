@@ -34,6 +34,9 @@ class DatabaseCalls():
             "pool_recycle": 540,  # 30 minutes
         }
 
+        db_socket_dir = os.environ.get("DB_SOCKET_DIR", "/cloudsql")
+        cloud_sql_connection_name = 'deepcite-306405:us-central1:deepcite'#os.environ["CLOUD_SQL_CONNECTION_NAME"]
+
         pool = sqlalchemy.create_engine(
             # Equivalent URL:
             # postgresql+pg8000://<db_user>:<db_pass>@<db_host>:<db_port>/<db_name>
