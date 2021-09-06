@@ -23,6 +23,7 @@ rm deepcite_extension.zip
 zip -r deepcite_extension.zip extension
 
 # update cloud functions code
+cd backend/lambda/
 rm function.zip
 zip -g function.zip main.py create_response.py lambda_config.py database_calls.py defaults.json requirements.txt
 gsutil cp function.zip gs://deepcite-function
