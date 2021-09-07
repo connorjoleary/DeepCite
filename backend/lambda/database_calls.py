@@ -64,9 +64,9 @@ class DatabaseCalls():
                         user_id = user_id,
                         stage = stage,
                         status_code = status_code,
-                        response = json.dumps(response),
+                        response = response,
                         response_time_elapsed = time_elapsed,
-                        current_versions = json.dumps(versions)
+                        current_versions = versions
                     )
                     cur.execute(query)
                 else:
@@ -77,11 +77,18 @@ class DatabaseCalls():
                         stage = stage,
                         status_code = status_code,
                         response_time_elapsed = time_elapsed,
-                        current_versions = json.dumps(versions)
+                        current_versions = versions
                     )
                     cur.execute(query)
         except Exception as e:
-            print("ERROR: Unexpected error: Could not commit to database instance.")
+            error = dict(
+                severity="ERROR",
+                message='Could not commit to database instance.',
+                # Log viewer accesses 'component' as jsonPayload.component'.
+                component="db-insert",
+            )
+
+            print(json.dumps(error))
             print(e)
 
     def check_repeat(self, claim, link, versions):
@@ -99,7 +106,14 @@ class DatabaseCalls():
                 responses = cur.execute(query)
                 responses = [res for res in responses]
         except pg8000.exceptions.ProgrammingError as e:
-            print("Exception has occurred: ProgrammingError: Could not select from database")
+            error = dict(
+                severity="ERROR",
+                message='Could not select from database instance.',
+                # Log viewer accesses 'component' as jsonPayload.component'.
+                component="db-select",
+            )
+
+            print(json.dumps(error))
             print(e)
 
         return responses
@@ -117,13 +131,21 @@ class DatabaseCalls():
                 cur.execute(query)
 
         except Exception as e:
-            print("ERROR: Unexpected error: Could not commit to database instance.")
+            error = dict(
+                severity="ERROR",
+                message='Could not commit to database instance.',
+                # Log viewer accesses 'component' as jsonPayload.component'.
+                component="db-insert",
+            )
+
+            print(json.dumps(error))
             print(e)
 
 # # For testing
 # if __name__ == "__main__":
 #     import uuid
 #     versions = {a: str(b) for a,b in config['versions'].items()}
+#     # res = DatabaseCalls().check_repeat(claim, link, versions)
 #     res = DatabaseCalls().record_call(None, str(uuid.uuid4()), 'not_real', 'dev', 200, {}, 1, versions)
 #     # (
 #     #     'According to the convention of Geneva an ejected pilot in the air is not a combatant and therefore attacking him is a war crime.',
