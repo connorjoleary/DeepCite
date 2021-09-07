@@ -64,9 +64,9 @@ class DatabaseCalls():
                         user_id = user_id,
                         stage = stage,
                         status_code = status_code,
-                        response = json.dumps(response),
+                        response = response,
                         response_time_elapsed = time_elapsed,
-                        current_versions = json.dumps(versions)
+                        current_versions = versions
                     )
                     cur.execute(query)
                 else:
@@ -77,7 +77,7 @@ class DatabaseCalls():
                         stage = stage,
                         status_code = status_code,
                         response_time_elapsed = time_elapsed,
-                        current_versions = json.dumps(versions)
+                        current_versions = versions
                     )
                     cur.execute(query)
         except Exception as e:
@@ -142,12 +142,15 @@ class DatabaseCalls():
             print(e)
 
 # # For testing
-# if __name__ == "__main__":
-#     import uuid
-#     versions = {a: str(b) for a,b in config['versions'].items()}
-#     res = DatabaseCalls().record_call(None, str(uuid.uuid4()), 'not_real', 'dev', 200, {}, 1, versions)
-#     # (
-#     #     'According to the convention of Geneva an ejected pilot in the air is not a combatant and therefore attacking him is a war crime.',
-#     #     'https://www.reddit.com/r/todayilearned/comments/p4j7da/til_according_to_the_convention_of_geneva_an/',
-#     #     versions)
-#     print(res)
+if __name__ == "__main__":
+    import uuid
+    versions = {a: str(b) for a,b in config['versions'].items()}
+    claim = 'that Jews were blamed for The Black Death.'
+    link = 'https://www.reddit.com/r/todayilearned/comments/piandl/today_i_learned_that_jews_were_blamed_for_the/'
+    # res = DatabaseCalls().check_repeat(claim, link, versions)
+    res = DatabaseCalls().record_call(None, str(uuid.uuid4()), 'not_real', 'dev', 200, {}, 1, versions)
+    # (
+    #     'According to the convention of Geneva an ejected pilot in the air is not a combatant and therefore attacking him is a war crime.',
+    #     'https://www.reddit.com/r/todayilearned/comments/p4j7da/til_according_to_the_convention_of_geneva_an/',
+    #     versions)
+    print(res)
