@@ -15,10 +15,10 @@ exceptions = [errors.MalformedLink, errors.URLError, errors.EmptyWebsite, errors
 def deep_cite():
     content = request.get_json()
     try:
-        claim = sanitize_claim(content['claim'])
-        link = sanitize_link(content['link'])
+        claim = content['claim']
+        link = content['link']
     except Exception as e:
-        return jsonify({'error': 'Error 505: claim or link cannot be sanitized' })
+        return jsonify({'error': 'Error 505: claim or link cannot be gathered' })
 
 # def deep_cite(claim, link):
     full_pre_json = {'error': 'none', 'results': [{'citeID': str(uuid.uuid4()), 'parentCiteID': 0, 'link': link, 'score': 1, 'source': claim}]}
@@ -37,7 +37,10 @@ def deep_cite():
             full_pre_json['error'] = str('Error 500: Internal Server Error ' + str(e) + "."  + \
                         new_indention("Please add your error to " + link + " with the corresponding claim and link."))
 
-    return jsonify(full_pre_json)
+    response = jsonify(full_pre_json)
+    response.headers["Content-Type"] = "application/json; charset=utf-8"
+
+    return response
 
 def check_instance(e):
     for error in exceptions:
@@ -45,29 +48,7 @@ def check_instance(e):
             return True
     return False
 
-# sanitization and stripping of claim
-def sanitize_claim(claim):
-    sanitized = claim
-    badstrings = [';','$','&&','../','<','>','%3C','%3E','\'','--','1,2','\x00','`','(',')','file://','input://', '\n', '\t']
-    
-    for bad in badstrings:
-        if bad in sanitized:
-            sanitized = sanitized.replace(bad, '')
-
-    return sanitized.strip()
-
-# sanitization of link
-def sanitize_link(link):
-    sanitized = link
-    badstrings = [';','&&','../','<','>','--','1,2','`','(',')','input://', 'file://']
-    
-    for bad in badstrings:
-        if bad in sanitized:
-            sanitized = sanitized.replace(bad, '')
-
-    return sanitized.strip()
-
-if __name__ == "__main__":
-    # with app.app_context():
-    #     deep_cite(**{"claim":"rapper Too Short managed to sell 50,000 copies of his album \"Born to Mack\" from the trunk of his car.", "link":"https://www.reddit.com/r/todayilearned/comments/or9u42/til_rapper_too_short_managed_to_sell_50000_copies/"})
-    app.run(host=config['server']['host'], port=config['server']['port'])
+# if __name__ == "__main__":
+#     with app.app_context():
+#         print(deep_cite(**{"claim":"when not neutered, male cats develop large cheeks or jowls, triggered by testosterone. It's thought these jowls signal their virility and protect their neck during fights.", "link":"https://www.red"}))
+#     # app.run(host=config['server']['host'], port=config['server']['port'])
