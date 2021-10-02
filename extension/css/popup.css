@@ -4,7 +4,7 @@ body {
 }
 
 .popup-window {
-	font-family: 'Alfa Slab One', 'Anton', sans-serif;
+	font-family: 'Libre Franklin', sans-serif;
 	width: 40em;
 	margin: 0px;
 	background-color: #292a2d;
@@ -25,7 +25,7 @@ body {
 
 .title-text {
 	font-size: xx-large;
-	font-family: Book Antiqua;
+	font-family: 'Merriweather', serif;
 	margin: auto;
 	margin-left: 0.3em;
 }

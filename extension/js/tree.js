@@ -20,9 +20,9 @@ deepCite.donateButton.addEventListener("click", donateButtonClicked);
 
 // initialization function
 function init() {
-	// var data = generateTestData();
-	var data = gatherData();
-	// populateDataIntoTree(data);
+	var data = generateTestData();
+	// var data = gatherData();
+	populateDataIntoTree(data);
 }
 
 function gatherData() {
@@ -320,12 +320,16 @@ function sortCiteData(data) {
 
 function populateDataIntoCiteBox(citeBox, data) {
 	var sourceNode = citeBox.getElementsByClassName("section-content source")[0];
+	var titleNode = citeBox.getElementsByClassName("section-content title")[0];
 	var linkNode = citeBox.getElementsByClassName("section-content link")[0];
 	var scoreNode = citeBox.getElementsByClassName("section-content score")[0];
 
 	citeBox.style = null;
 	citeBox.id = data.citeID;
 
+	if (titleNode) {
+		titleNode.innerText = (new URL(data.link)).hostname.replace('www.','')
+	}
 	sourceNode.innerText = `"` + data.source + `"`;
 	linkNode.innerText = data.link;
 	
