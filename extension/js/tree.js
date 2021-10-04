@@ -42,7 +42,6 @@ function gatherData() {
 			})
 		}
 	});
-
 }
 
 function generateTestData() {
@@ -211,6 +210,11 @@ function populateDataIntoTree(data) {
 				// This would be better to do once when the original is created, but idk where that is
 				var voteNode = populatedCiteBox.getElementsByClassName("vote-button")[0];
 				voteNode.addEventListener("click", upvoteButtonClicked);
+
+				var linkNode = populatedCiteBox.getElementsByClassName("link-button")[0];
+				linkNode.addEventListener("click", ()=>{
+					window.open(item.link, "Deepcite Source");
+				 });
 
 				// calculate box width by checking the rowCiteCount value. 4em is 2em padding on left and right of all cite boxes
 				populatedCiteBox.style = "width: calc(" + (100 / rowCiteCount) + "% - 4em);";
