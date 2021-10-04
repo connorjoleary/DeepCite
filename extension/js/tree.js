@@ -75,7 +75,7 @@ function generateTestData() {
 		}
 		text = "";
 		// get a random amount of text
-		randomTextCount = (Math.floor(Math.random() * 10) + 1);
+		randomTextCount = (Math.floor(Math.random() * 20) + 1);
 		while (randomTextCount > 0) {
 			text = text + "" + randomText;
 			randomTextCount--;
@@ -321,7 +321,6 @@ function sortCiteData(data) {
 function populateDataIntoCiteBox(citeBox, data) {
 	var sourceNode = citeBox.getElementsByClassName("section-content source")[0];
 	var titleNode = citeBox.getElementsByClassName("section-content title")[0];
-	var linkNode = citeBox.getElementsByClassName("section-content link")[0];
 	var scoreNode = citeBox.getElementsByClassName("section-content score")[0];
 
 	citeBox.style = null;
@@ -331,11 +330,12 @@ function populateDataIntoCiteBox(citeBox, data) {
 		titleNode.innerText = (new URL(data.link)).hostname.replace('www.','')
 	}
 	sourceNode.innerText = `"` + data.source + `"`;
-	linkNode.innerText = data.link;
+
+	var linkButton = citeBox.getElementsByClassName("link-button link")[0];
 	
 	var newLink = useTextFragment(data.link, data.source)
 	console.log(`changing ${data.link} into ${newLink}`)
-	linkNode.href = newLink;
+	// linkNode.href = newLink;
 	// score node changes color depending on the score
 	scoreNode.innerText = Math.floor(data.score * 100);
 	scoreNode.style.backgroundColor = getBackgroundColorByScore(Math.floor(data.score * 100), 1);
