@@ -99,6 +99,26 @@ function donateButtonClicked() {
 }
 
 function upvoteButtonClicked(event) {
+	console.log("upvote clicked")
+	var element = event.srcElement
+
+	switch (element.innerText.fromCharCode(160)) {
+		case "\xa0?\xa0":
+			element.innerText = "Are you sure?";
+			break;
+		case "Are you sure?":
+			gatherSourceData(element);
+			element.innerText = "Recorded!";
+			break;
+		case "Recorded!":
+			gatherSourceData(element);
+			element.innerText = "\xa0?\xa0"
+		default:
+			console.log(`No option found for ${element.innerText}`)
+	};
+}
+
+function gatherSourceData(element) {
 	chrome.storage.sync.get('userid', function(items) {
 		var userid = items.userid;
 		if (userid) {
@@ -110,15 +130,12 @@ function upvoteButtonClicked(event) {
 			});
 		}
 		function useToken(userid) {
-			sendToServer(event, userid); //perform some operations
+			sendToServer(findClosestCiteID(element), userid); //perform some operations
 		}
 	});
 }
 
-function sendToServer(event, userid) {
-	var element = event.srcElement
-	var citeID = findClosestCiteID(element);
-
+function sendToServer(citeID, userid) {
 	data = {
 		type: "source",
 		ip: userid,
@@ -213,7 +230,7 @@ function populateDataIntoTree(data) {
 
 				var linkNode = populatedCiteBox.getElementsByClassName("link-button")[0];
 				linkNode.addEventListener("click", ()=>{
-					window.open(item.link, "Deepcite Source");
+					window.open(useTextFragment(item.link, item.source), "Deepcite Source");
 				 });
 
 				// calculate box width by checking the rowCiteCount value. 4em is 2em padding on left and right of all cite boxes
@@ -323,6 +340,8 @@ function sortCiteData(data) {
 }
 
 function populateDataIntoCiteBox(citeBox, data) {
+	var max_title_length = 20
+
 	var sourceNode = citeBox.getElementsByClassName("section-content source")[0];
 	var titleNode = citeBox.getElementsByClassName("section-content title")[0];
 	var scoreNode = citeBox.getElementsByClassName("section-content score")[0];
@@ -331,11 +350,14 @@ function populateDataIntoCiteBox(citeBox, data) {
 	citeBox.id = data.citeID;
 
 	if (titleNode) {
-		titleNode.innerText = (new URL(data.link)).hostname.replace('www.','')
+		try {
+			titleNode.innerText = (new URL(data.link)).hostname.replace('www.','')
+		}
+		catch (e) {
+			titleNode.innerText = data.link
+		}
 	}
 	sourceNode.innerText = `"` + data.source + `"`;
-
-	var linkButton = citeBox.getElementsByClassName("link-button link")[0];
 	
 	var newLink = useTextFragment(data.link, data.source)
 	console.log(`changing ${data.link} into ${newLink}`)

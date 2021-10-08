@@ -199,7 +199,7 @@ body {
 .vote-button {
 	cursor: pointer;
 	text-align: center;
-	width: 1.5em;
+	width: auto;
 	height: 1.5em;
 	padding: 0 0.3em;
 	position: relative;
