@@ -83,7 +83,7 @@ function generateTestData() {
 			citeID: runningRecordID,
 			parentCiteID: parentRecordID,
 			link: "https://www.google.com/search?rlz=1C1CHBF_enUS897US897&sxsrf=ALeKk00tGtiAE0FRqCZBEMQggSU9STLJBA%3A1593977105987&ei=ESkCX8ntO8e6tAaZy5ugCg&q=deepCite&oq=deepCite&gs_lcp=CgZwc3ktYWIQAzoECCMQJzoFCAAQkQI6BAgAEEM6BQgAELEDOgIIADoHCAAQsQMQQzoECAAQClC0EljjG2DLHGgAcAB4AYAB9wKIAcwHkgEHNi4xLjAuMZgBAKABAaoBB2d3cy13aXo&sclient=psy-ab&ved=0ahUKEwiJurq567bqAhVHHc0KHZnlBqQQ4dUDCAw&uact=5",
-			score: Math.floor(Math.random() * 100) + 1, // 1-100
+			score: Math.random(),
 			source: text
 		}
 		testData.push(record);
@@ -376,11 +376,11 @@ function getBackgroundColorByScore(score, multiplier) {
 	var redVal = 240, greenVal = 240, blueVal = 0;
 	var rgbString = "rgb(";
 
-	if (score < 50) {
-		greenVal = greenVal - ((50 - score) * 5);
+	if (score < 75) {
+		greenVal = greenVal - ((75 - score) * 5);
 	}
 	else {
-		redVal = redVal - ((score - 50) * 5);
+		redVal = redVal - ((score - 75) * 5);
 	}
 
 	// if multiplier has a value, apply it to the colors
@@ -396,7 +396,7 @@ function getBackgroundColorByScore(score, multiplier) {
 function getTextColorByScore(score) {
 	// text color is white < 30, and black >= 30
 	var value = 0;
-	if (score < 30) {
+	if (score < 50) {
 		value = 255;
 	}
 	return "rgb(" + value + "," + value + "," + value + ")";
