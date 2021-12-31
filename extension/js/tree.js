@@ -20,8 +20,8 @@ deepCite.donateButton.addEventListener("click", donateButtonClicked);
 
 // initialization function
 function init() {
-	var data = generateTestData();
-	// var data = gatherData();
+	// var data = generateTestData();
+	var data = gatherData();
 	populateDataIntoTree(data);
 }
 
@@ -99,26 +99,34 @@ function donateButtonClicked() {
 }
 
 function upvoteButtonClicked(event) {
+	var relevant_text = "\xa0?\xa0"
+	var confirmation_text = "Are you sure?"
+	var recorded_text = "Recorded!"
+
+
 	console.log("upvote clicked")
 	var element = event.srcElement
 
-	switch (element.innerText.fromCharCode(160)) {
-		case "\xa0?\xa0":
-			element.innerText = "Are you sure?";
+	switch (element.innerText) {
+		case relevant_text:
+			element.innerText = confirmation_text;
 			break;
-		case "Are you sure?":
-			gatherSourceData(element);
-			element.innerText = "Recorded!";
+		case confirmation_text:
+			gatherSourceData(element, false);
+			element.innerText = recorded_text;
+			element.style.color = "#45ff45";
 			break;
-		case "Recorded!":
-			gatherSourceData(element);
-			element.innerText = "\xa0?\xa0"
+		case recorded_text:
+			gatherSourceData(element, true);
+			element.innerText = relevant_text
+			element.style.color = "#ffffff";
+			break;
 		default:
-			console.log(`No option found for ${element.innerText}`)
+			console.error(`No option found for ${element.innerText}`)
 	};
 }
 
-function gatherSourceData(element) {
+function gatherSourceData(element, reset) {
 	chrome.storage.sync.get('userid', function(items) {
 		var userid = items.userid;
 		if (userid) {
@@ -130,24 +138,22 @@ function gatherSourceData(element) {
 			});
 		}
 		function useToken(userid) {
-			sendToServer(findClosestCiteID(element), userid); //perform some operations
+			sendToServer(element, userid, reset); //perform some operations
 		}
 	});
 }
 
-function sendToServer(citeID, userid) {
+function sendToServer(element, userid, reset) {
+	citeID = findClosestCiteID(element);
 	data = {
 		type: "source",
 		ip: userid,
 		sourceId: citeID,
 		baseId: baseId,
-		stage: stageValue
+		stage: stageValue,
+		reset: reset
 	}
 	console.log("upvote clicked on citeID " + citeID);
-
-	// disable button
-	element.classList.add("btn-disabled");
-	element.innerText = "Sending...";
 
 	// Submit feedback
 
@@ -177,9 +183,6 @@ function dataReceived(element, data) {
 	response = data
 
 	console.log("Returned data:", data)
-
-	element.innerText = "Recorded!";
-	element.style.color = "#45ff45";
 }
 
 function findClosestCiteID(element) {
