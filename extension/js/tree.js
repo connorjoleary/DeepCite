@@ -109,15 +109,18 @@ function upvoteButtonClicked(event) {
 
 	switch (element.innerText) {
 		case relevant_text:
+			// Confirmation check
 			element.innerText = confirmation_text;
 			element.getElementByName("source")
 			break;
 		case confirmation_text:
+			// Submit source
 			gatherSourceData(element, false);
 			element.innerText = recorded_text;
 			element.style.color = "#45ff45";
 			break;
 		case recorded_text:
+			// Redact source
 			gatherSourceData(element, true);
 			element.innerText = '';
 			element.appendChild(document.getElementsByName('source')[0].cloneNode(true));
@@ -128,7 +131,7 @@ function upvoteButtonClicked(event) {
 	};
 }
 
-function gatherSourceData(element, reset) {
+function gatherSourceData(element, redact) {
 	chrome.storage.sync.get('userid', function(items) {
 		var userid = items.userid;
 		if (userid) {
@@ -140,7 +143,7 @@ function gatherSourceData(element, reset) {
 			});
 		}
 		function useToken(userid) {
-			sendToServer(element, userid, reset); //perform some operations
+			sendToServer(element, userid, redact); //perform some operations
 		}
 	});
 }
