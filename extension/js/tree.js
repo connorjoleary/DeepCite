@@ -21,8 +21,8 @@ deepCite.donateButton.addEventListener("click", donateButtonClicked);
 // initialization function
 function init() {
 	// var data = generateTestData();
+	// populateDataIntoTree(data);
 	var data = gatherData();
-	populateDataIntoTree(data);
 }
 
 function gatherData() {
@@ -99,17 +99,18 @@ function donateButtonClicked() {
 }
 
 function upvoteButtonClicked(event) {
-	var relevant_text = "\xa0?\xa0"
-	var confirmation_text = "Are you sure?"
+	var relevant_text = "verified_user"
+	var confirmation_text = "Is this one of the sources?"
 	var recorded_text = "Recorded!"
 
 
 	console.log("upvote clicked")
-	var element = event.srcElement
+	var element = event.currentTarget
 
 	switch (element.innerText) {
 		case relevant_text:
 			element.innerText = confirmation_text;
+			element.getElementByName("source")
 			break;
 		case confirmation_text:
 			gatherSourceData(element, false);
@@ -118,7 +119,8 @@ function upvoteButtonClicked(event) {
 			break;
 		case recorded_text:
 			gatherSourceData(element, true);
-			element.innerText = relevant_text
+			element.innerText = '';
+			element.appendChild(document.getElementsByName('source')[0].cloneNode(true));
 			element.style.color = "#ffffff";
 			break;
 		default:
@@ -343,8 +345,6 @@ function sortCiteData(data) {
 }
 
 function populateDataIntoCiteBox(citeBox, data) {
-	var max_title_length = 20
-
 	var sourceNode = citeBox.getElementsByClassName("section-content source")[0];
 	var titleNode = citeBox.getElementsByClassName("section-content title")[0];
 	var scoreNode = citeBox.getElementsByClassName("section-content score")[0];
@@ -372,7 +372,7 @@ function populateDataIntoCiteBox(citeBox, data) {
 		scoreNode.innerText = '';
 		scoreNode.appendChild(document.getElementsByName('frown')[0].cloneNode(true));
 	}
-	
+
 	scoreNode.style.backgroundColor = getBackgroundColorByScore(Math.floor(data.score * 100), 1);
 	scoreNode.style.color = getTextColorByScore(Math.floor(data.score * 100));
 	scoreNode.style.borderColor = getBackgroundColorByScore(Math.floor(data.score * 100), /* multiplier */ 0.7);

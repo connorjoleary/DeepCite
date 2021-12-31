@@ -154,7 +154,7 @@ body {
 	margin: calc(-1em - 3px) 0 0 calc(1em + 3px);
 	width: 2.2em;
 	height: 2.2em;
-	padding-top: 0.35em;
+	padding-top: 0.3em;
 	border-radius: 2em;
 	border-color: #7b7b7b;
 	border-width: 2px;
@@ -200,10 +200,11 @@ body {
 	cursor: pointer;
 	text-align: center;
 	width: auto;
-	height: 1.5em;
-	padding: 0 0.3em;
+	height: 2em;
+	padding: 0.3em 0.3em;
 	position: relative;
 	left: calc(-.8em);
+	top: -.3em;
 }
 
 .vote-button.btn-disabled {
