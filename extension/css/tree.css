@@ -172,8 +172,8 @@ body {
 
 .section-content.source {
 	font-family: 'Libre Franklin', sans-serif;
-	height: calc(100% - 1.5em);
-	overflow-y: auto;
+	height: calc(100% - 1.5em - 1.5em);
+	overflow-y: scroll;
 }
 
 .section-content.link {
@@ -234,7 +234,7 @@ body {
 
 .cite-content {
 	width: 23em;
-	height: 15em;
+	height: 18em;
 	border-color: #7b7b7b;
 	margin: auto;
 	border-style: solid;
