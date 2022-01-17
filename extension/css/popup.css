@@ -31,20 +31,61 @@ body {
 }
 
 .popup-button {
-	background-color: #1a73e8;
-	color: white;
-	font-weight: 500;
+    position: relative;
+    background: #1a73e8;
+    border: none;
+    outline: none;
+    cursor: pointer;
 	width: 100%;
 	display: block;
 	margin: auto;
 	padding: 0.5em;
-	border-bottom: 0.5em solid #292a2d;
+	margin-bottom: 0.5em;
 	border-radius: 5px;
-	font-size: medium;
 }
 
-.popup-button.btn-disabled {
-	background-color: #5a8dd0;
+.popup-button:active {
+    background: #5a8dd0;
+}
+
+.popup-button__text {
+    color: white;
+	font-weight: 500;
+	width: 100%;
+	font-size: medium;
+    transition: all 0.2s;
+}
+
+.popup-button--loading .popup-button__text {
+	visibility: hidden;
+	opacity: 0;
+}
+
+.popup-button--loading::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    border: 4px solid transparent;
+	animation: spin 1s linear infinite;
+    border-radius: 50%;
+    border-top-color: #5ec9f6;
+	border-bottom-color: #5ec9f6;
+}
+
+@keyframes button-loading-spinner {
+    from {
+        transform: rotate(0turn);
+    }
+
+    to {
+        transform: rotate(1turn);
+    }
 }
 
 .form-section {
