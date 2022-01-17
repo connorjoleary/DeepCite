@@ -111,7 +111,6 @@ function upvoteButtonClicked(event) {
 		case relevant_text:
 			// Confirmation check
 			element.innerText = confirmation_text;
-			element.getElementByName("source")
 			break;
 		case confirmation_text:
 			// Submit source
