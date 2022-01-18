@@ -147,7 +147,7 @@ function gatherSourceData(element, redact) {
 	});
 }
 
-function sendToServer(element, userid, reset) {
+function sendToServer(element, userid, redact) {
 	citeID = findClosestCiteID(element);
 	data = {
 		type: "source",
@@ -155,7 +155,7 @@ function sendToServer(element, userid, reset) {
 		sourceId: citeID,
 		baseId: baseId,
 		stage: stageValue,
-		reset: reset
+		redact: redact
 	}
 	console.log("upvote clicked on citeID " + citeID);
 

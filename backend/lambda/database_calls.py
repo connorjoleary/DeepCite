@@ -132,7 +132,7 @@ class DatabaseCalls():
                         source_id = source_id,
                         user_id = user_id,
                         stage = stage,
-                        current_versions = json.dumps(versions),
+                        current_versions = versions,
                         redact = redact
                     )
                 cur.execute(query)
