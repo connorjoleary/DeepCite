@@ -1,78 +1,119 @@
 /* popup.css - this contains css for the popup modal. */
+
 body {
-  font-size: 100%;
+    font-size: 100%;
 }
 
 .popup-window {
-	font-family: 'Alfa Slab One', 'Anton', sans-serif;
-	width: 40em;
-	margin: 0px;
-	background-color: #292a2d;
-	color: #e8eaed;
-	padding: 1em;
-	box-shadow: 0 0 5px black;
+    font-family: 'Libre Franklin', sans-serif;
+    width: 40em;
+    margin: 0px;
+    background-color: #292a2d;
+    color: #e8eaed;
+    padding: 1em;
+    box-shadow: 0 0 5px black;
 }
 
 .popup-title-wrapper {
-	display: inline-flex;
+    display: inline-flex;
 }
 
 .popup-image {
-	width: 50px;
-	height: 50px;
-	margin: 1em;
+    width: 50px;
+    height: 50px;
+    margin: 1em;
 }
 
 .title-text {
-	font-size: xx-large;
-	font-family: Book Antiqua;
-	margin: auto;
-	margin-left: 0.3em;
+    font-size: xx-large;
+    font-family: 'Merriweather', serif;
+    margin: auto;
+    margin-left: 0.3em;
 }
 
 .popup-button {
-	background-color: #1a73e8;
-	color: white;
-	font-weight: 500;
-	width: 100%;
-	display: block;
-	margin: auto;
-	padding: 0.5em;
-	border-bottom: 0.5em solid #292a2d;
-	border-radius: 5px;
-	font-size: medium;
+    position: relative;
+    background: #1a73e8;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    width: 100%;
+    display: block;
+    margin: auto;
+    padding: 0.5em;
+    margin-bottom: 0.5em;
+    border-radius: 5px;
 }
 
-.popup-button.btn-disabled {
-	background-color: #5a8dd0;
+.popup-button:active {
+    background: #5a8dd0;
+}
+
+.popup-button__text {
+    color: white;
+    font-weight: 500;
+    width: 100%;
+    font-size: medium;
+    transition: all 0.2s;
+}
+
+.popup-button--loading .popup-button__text {
+    visibility: hidden;
+    opacity: 0;
+}
+
+.popup-button--loading::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    border: 4px solid transparent;
+    animation: button-loading-spinner 1s linear infinite;
+    border-radius: 50%;
+    border-top-color: #5ec9f6;
+    border-bottom-color: #5ec9f6;
+}
+
+@keyframes button-loading-spinner {
+    from {
+        transform: rotate(0turn);
+    }
+    to {
+        transform: rotate(1turn);
+    }
 }
 
 .form-section {
-	margin: 2em 0;
+    margin: 2em 0;
 }
 
 .form-group-title {
-	margin: 0.5em;
-	font-size: medium;
+    margin: 0.5em;
+    font-size: medium;
 }
 
 .form-field {
-	display: block;
-	width: 100%;
-	padding: 0.5em 0.7em;
-	font-size: 14px;
-	background-color: #e8eaed;
-	border: none;
-	color: black;
+    display: block;
+    width: 100%;
+    padding: 0.5em 0.7em;
+    font-size: 14px;
+    background-color: #e8eaed;
+    border: none;
+    color: black;
 }
 
 .result-text {
-	font-style: italic;
-	font-weight: bold;
-	color: #395060;
+    font-style: italic;
+    font-weight: bold;
+    color: #395060;
 }
 
 .result-link {
-	font-weight: bold;
-	text-overflow: ellipsis;
+    font-weight: bold;
+    text-overflow: ellipsis;
 }

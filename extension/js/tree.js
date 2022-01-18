@@ -21,8 +21,8 @@ deepCite.donateButton.addEventListener("click", donateButtonClicked);
 // initialization function
 function init() {
 	// var data = generateTestData();
-	var data = gatherData();
 	// populateDataIntoTree(data);
+	var data = gatherData();
 }
 
 function gatherData() {
@@ -42,7 +42,6 @@ function gatherData() {
 			})
 		}
 	});
-
 }
 
 function generateTestData() {
@@ -75,7 +74,7 @@ function generateTestData() {
 		}
 		text = "";
 		// get a random amount of text
-		randomTextCount = (Math.floor(Math.random() * 10) + 1);
+		randomTextCount = (Math.floor(Math.random() * 20) + 1);
 		while (randomTextCount > 0) {
 			text = text + "" + randomText;
 			randomTextCount--;
@@ -84,7 +83,7 @@ function generateTestData() {
 			citeID: runningRecordID,
 			parentCiteID: parentRecordID,
 			link: "https://www.google.com/search?rlz=1C1CHBF_enUS897US897&sxsrf=ALeKk00tGtiAE0FRqCZBEMQggSU9STLJBA%3A1593977105987&ei=ESkCX8ntO8e6tAaZy5ugCg&q=deepCite&oq=deepCite&gs_lcp=CgZwc3ktYWIQAzoECCMQJzoFCAAQkQI6BAgAEEM6BQgAELEDOgIIADoHCAAQsQMQQzoECAAQClC0EljjG2DLHGgAcAB4AYAB9wKIAcwHkgEHNi4xLjAuMZgBAKABAaoBB2d3cy13aXo&sclient=psy-ab&ved=0ahUKEwiJurq567bqAhVHHc0KHZnlBqQQ4dUDCAw&uact=5",
-			score: Math.floor(Math.random() * 100) + 1, // 1-100
+			score: Math.random(),
 			source: text
 		}
 		testData.push(record);
@@ -100,6 +99,38 @@ function donateButtonClicked() {
 }
 
 function upvoteButtonClicked(event) {
+	var relevant_text = "verified_user"
+	var confirmation_text = "Is this one of the sources?"
+	var recorded_text = "Recorded!"
+
+
+	console.log("upvote clicked")
+	var element = event.currentTarget
+
+	switch (element.innerText) {
+		case relevant_text:
+			// Confirmation check
+			element.innerText = confirmation_text;
+			break;
+		case confirmation_text:
+			// Submit source
+			gatherSourceData(element, false);
+			element.innerText = recorded_text;
+			element.style.color = "#45ff45";
+			break;
+		case recorded_text:
+			// Redact source
+			gatherSourceData(element, true);
+			element.innerText = '';
+			element.appendChild(document.getElementsByName('source')[0].cloneNode(true));
+			element.style.color = "#ffffff";
+			break;
+		default:
+			console.error(`No option found for ${element.innerText}`)
+	};
+}
+
+function gatherSourceData(element, redact) {
 	chrome.storage.sync.get('userid', function(items) {
 		var userid = items.userid;
 		if (userid) {
@@ -111,27 +142,22 @@ function upvoteButtonClicked(event) {
 			});
 		}
 		function useToken(userid) {
-			sendToServer(event, userid); //perform some operations
+			sendToServer(element, userid, redact); //perform some operations
 		}
 	});
 }
 
-function sendToServer(event, userid) {
-	var element = event.srcElement
-	var citeID = findClosestCiteID(element);
-
+function sendToServer(element, userid, reset) {
+	citeID = findClosestCiteID(element);
 	data = {
 		type: "source",
 		ip: userid,
 		sourceId: citeID,
 		baseId: baseId,
-		stage: stageValue
+		stage: stageValue,
+		reset: reset
 	}
 	console.log("upvote clicked on citeID " + citeID);
-
-	// disable button
-	element.classList.add("btn-disabled");
-	element.innerText = "Sending...";
 
 	// Submit feedback
 
@@ -161,9 +187,6 @@ function dataReceived(element, data) {
 	response = data
 
 	console.log("Returned data:", data)
-
-	element.innerText = "Recorded!";
-	element.style.color = "#45ff45";
 }
 
 function findClosestCiteID(element) {
@@ -187,7 +210,7 @@ function populateDataIntoTree(data) {
 	});
 
 	// Dynamically adjust document width
-	cite_box_width = 26 // This should be taken from citeComponent but my js skills are not up to it
+	cite_box_width = 28 // This should be taken from citeComponent but my js skills are not up to it
 	window_width = $(window).width()/parseFloat($("body").css("font-size"));
 	needed_width = Math.max(...lengths)*cite_box_width
 	if (needed_width > window_width) {
@@ -211,6 +234,11 @@ function populateDataIntoTree(data) {
 				// This would be better to do once when the original is created, but idk where that is
 				var voteNode = populatedCiteBox.getElementsByClassName("vote-button")[0];
 				voteNode.addEventListener("click", upvoteButtonClicked);
+
+				var linkNode = populatedCiteBox.getElementsByClassName("link-button")[0];
+				linkNode.addEventListener("click", ()=>{
+					window.open(useTextFragment(item.link, item.source), "Deepcite Source");
+				 });
 
 				// calculate box width by checking the rowCiteCount value. 4em is 2em padding on left and right of all cite boxes
 				populatedCiteBox.style = "width: calc(" + (100 / rowCiteCount) + "% - 4em);";
@@ -320,20 +348,33 @@ function sortCiteData(data) {
 
 function populateDataIntoCiteBox(citeBox, data) {
 	var sourceNode = citeBox.getElementsByClassName("section-content source")[0];
-	var linkNode = citeBox.getElementsByClassName("section-content link")[0];
+	var titleNode = citeBox.getElementsByClassName("section-content title")[0];
 	var scoreNode = citeBox.getElementsByClassName("section-content score")[0];
 
 	citeBox.style = null;
 	citeBox.id = data.citeID;
 
+	if (titleNode) {
+		try {
+			titleNode.innerText = (new URL(data.link)).hostname.replace('www.','')
+		}
+		catch (e) {
+			titleNode.innerText = data.link
+		}
+	}
 	sourceNode.innerText = `"` + data.source + `"`;
-	linkNode.innerText = data.link;
 	
 	var newLink = useTextFragment(data.link, data.source)
 	console.log(`changing ${data.link} into ${newLink}`)
-	linkNode.href = newLink;
+	// linkNode.href = newLink;
 	// score node changes color depending on the score
-	scoreNode.innerText = Math.floor(data.score * 100);
+	if (data.score > 0){
+		scoreNode.innerText = Math.floor(data.score * 100)
+	} else {
+		scoreNode.innerText = '';
+		scoreNode.appendChild(document.getElementsByName('frown')[0].cloneNode(true));
+	}
+
 	scoreNode.style.backgroundColor = getBackgroundColorByScore(Math.floor(data.score * 100), 1);
 	scoreNode.style.color = getTextColorByScore(Math.floor(data.score * 100));
 	scoreNode.style.borderColor = getBackgroundColorByScore(Math.floor(data.score * 100), /* multiplier */ 0.7);
@@ -346,11 +387,11 @@ function getBackgroundColorByScore(score, multiplier) {
 	var redVal = 240, greenVal = 240, blueVal = 0;
 	var rgbString = "rgb(";
 
-	if (score < 50) {
-		greenVal = greenVal - ((50 - score) * 5);
+	if (score < 75) {
+		greenVal = greenVal - ((75 - score) * 5);
 	}
 	else {
-		redVal = redVal - ((score - 50) * 5);
+		redVal = redVal - ((score - 75) * 5);
 	}
 
 	// if multiplier has a value, apply it to the colors
@@ -366,7 +407,7 @@ function getBackgroundColorByScore(score, multiplier) {
 function getTextColorByScore(score) {
 	// text color is white < 30, and black >= 30
 	var value = 0;
-	if (score < 30) {
+	if (score < 50) {
 		value = 255;
 	}
 	return "rgb(" + value + "," + value + "," + value + ")";

@@ -124,7 +124,7 @@ class DatabaseCalls():
 
         return responses
 
-    def record_source(self, base_id, source_id, user_id, stage, versions):
+    def record_source(self, base_id, source_id, user_id, stage, redact, versions):
         try:
             with self.conn.connect() as cur:
                 query = insert(self.source_label_table).values(
@@ -132,7 +132,8 @@ class DatabaseCalls():
                         source_id = source_id,
                         user_id = user_id,
                         stage = stage,
-                        current_versions = json.dumps(versions)
+                        current_versions = json.dumps(versions),
+                        redact = redact
                     )
                 cur.execute(query)
 
