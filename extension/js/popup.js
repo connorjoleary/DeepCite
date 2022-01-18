@@ -143,8 +143,7 @@ function disableCiteActions() {
 	deepCite.formLinkInput.readOnly = true;
 
 	deepCite.submitButton.disabled = true;
-	deepCite.submitButton.classList.add("btn-disabled");
-	deepCite.submitButton.innerText = "loading...";
+	deepCite.submitButton.classList.add("popup-button--loading");
 }
 
 function enableCiteActions() {

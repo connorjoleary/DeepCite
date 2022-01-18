@@ -34,7 +34,7 @@ body {
 }
 
 .nav-bar-deep {
-	font-family: Book Antiqua;
+	font-family: 'Libre Franklin', sans-serif;
 }
 
 .nav-bar-cite {
@@ -56,6 +56,15 @@ body {
 }
 
 .vote-button {
+	border-radius: 5px;
+	background-color: #1a73e8;
+	color: white;
+	padding: 0.5em 1em;
+	font-size: large;
+	cursor: pointer;
+}
+
+.link-button {
 	border-radius: 5px;
 	background-color: #1a73e8;
 	color: white;
@@ -94,7 +103,6 @@ body {
 	border-radius: 15em;
 	padding-top: 2.5em;
 	width: 100%;
-	box-shadow: 0.5em 0.5em 10px #7b7b7b;
 }
 
 .claim-content {
@@ -122,6 +130,7 @@ body {
 	width: 100%;
 	text-align: center;
 	font-size: large;
+	font-family: 'Merriweather', serif;
 	padding-bottom: 0.4em;
 }
 
@@ -131,13 +140,21 @@ body {
 	display: block;
 }
 
+.section-content.title {
+	width: 100%;
+	text-align: left;
+	font-size: x-large;
+	font-family: 'Merriweather', serif;
+	padding-bottom: 0.4em;
+}
+
 .section-content.score {
 	font-size: 17px;
 	text-align: center;
-	margin: calc(-1em - 3px) 0 0 calc(-1em - 3px);
+	margin: calc(-1em - 3px) 0 0 calc(1em + 3px);
 	width: 2.2em;
 	height: 2.2em;
-	padding-top: 0.35em;
+	padding-top: 0.3em;
 	border-radius: 2em;
 	border-color: #7b7b7b;
 	border-width: 2px;
@@ -154,9 +171,9 @@ body {
 }
 
 .section-content.source {
-	font-style: italic;
-	height: calc(100% - 1.5em);
-	overflow-y: auto;
+	font-family: 'Libre Franklin', sans-serif;
+	height: calc(100% - 1.5em - 1.5em);
+	overflow-y: scroll;
 }
 
 .section-content.link {
@@ -172,17 +189,22 @@ body {
 }
 
 .section-content.vote-wrapper {
-	width: 40%;
+	width: 100%;
 	display: flex;
-	margin-top: 1.5em;
+	overflow: visible;
+	position: relative;
+    top: .5em;
 }
 
 .vote-button {
 	cursor: pointer;
 	text-align: center;
-	padding: 0 0.3em;
-	margin: 0.3em;
+	width: auto;
+	height: 2em;
+	padding: 0.3em 0.3em;
 	position: relative;
+	left: calc(-.8em);
+	top: -.3em;
 }
 
 .vote-button.btn-disabled {
@@ -194,9 +216,26 @@ body {
 	height: 1.5em;
 }
 
+.link-button {
+	cursor: pointer;
+	text-align: center;
+	width: 2.5em;
+	height: 1.5em;
+	padding: 0.3em 0;
+	position: relative;
+	margin-left: auto;
+	transform: scale(-1, 1);
+	right: calc(-1em - 3px);
+}
+
+.link-button-image {
+	width: 1.5em;
+	height: 1.5em;
+}
+
 .cite-content {
 	width: 23em;
-	height: 15em;
+	height: 18em;
 	border-color: #7b7b7b;
 	margin: auto;
 	border-style: solid;
@@ -209,6 +248,7 @@ body {
 	height: 2.5em;
 	position: relative;
 	z-index: 1;
+	margin-left: auto;
 }
 
 .cite-middle-box {
@@ -225,5 +265,4 @@ body {
 	padding: 0.8em;
 	color: white;
 	background-color: #09586b;
-	box-shadow: 0.5em 0.5em 10px #7b7b7b;
 }

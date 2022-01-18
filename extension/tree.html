@@ -6,6 +6,7 @@
 	<title>DeepCite Source Tree</title>
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/tree.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
 	<script src="js/jquery-3.2.1.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
@@ -59,17 +60,27 @@
 			</div>
 			<div class="cite-middle-box">
 				<div class="cite-middle-box-content">
+					<div class="section-content title"></div>
 					<div class="section-content source"></div>
-					<a class="section-content link"></a>
 				</div>
 			</div>
 			<div class="section-content vote-wrapper">
 				<div class="vote-button upvote" id="vote-button">
-					Source?
+					<i class="material-icons" name='source'>verified_user</i>
 				</div>
+				<div class="link-button link" id="link-button">
+					<i class="material-icons">keyboard_return</i>
+				</div>
+			</div>
+			<div class="section-content vote-wrapper">
 			</div>
 		</div>
 	</div>
+
+	<!-- Icons -->
+	<i class="material-icons" name='frown'>sentiment_dissatisfied</i>
+	<i class="material-icons" name='source'>verified_user</i>
+
 
 	<!-- UI-Dependent Code -->
 	<script src="js/helper_funcs.js"></script>

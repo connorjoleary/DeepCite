@@ -33,7 +33,10 @@
 				</div>
 				<input class="form-field" type="text" id="formLinkInput" placeholder="Enter Url">
 			</div>
-			<button class="popup-button" id="btnsubmit" type="submit">Cite</button>
+			<button type="submit" class="popup-button" id="btnsubmit">
+				<span class="popup-button__text">Cite</span>
+			</button>
+
 		</form>
 	</div>
 
@@ -47,8 +50,12 @@
 		<div id="results">
 			<!--This information is dynamically populated-->
 		</div>
-		<button class="popup-button" id="btnview-source-tree">View Source Tree</button>
-		<button class="popup-button" id="btnback-citation">New Citation</button>
+		<button type="submit" class="popup-button" id="btnview-source-tree">
+			<span class="popup-button__text">View Source Tree</span>
+		</button>
+		<button type="submit" class="popup-button" id="btnback-citation">
+			<span class="popup-button__text">New Citation</span>
+		</button>
 	</div>
 
 	<div class="popup-window" id="error-modal" style="display: none;">

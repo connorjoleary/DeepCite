@@ -74,11 +74,12 @@ def lambda_handler(event):
     if event.get('type') == "source":
         source_id = event.get('sourceId')
         base_id = event.get('baseId')
+        redact = event.get('redact', False)
         
         results = f"The source: {source_id} for base id: {base_id} has been noted"
         error = None
         try:
-            database_calls.record_source(base_id, source_id, user_id, stage, versions)
+            database_calls.record_source(base_id, source_id, user_id, stage, redact, versions)
         except Exception as e:
             print("Unable to store source")
             traceback.print_tb(e.__traceback__)
