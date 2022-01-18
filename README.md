@@ -163,7 +163,7 @@ There are a couple ways to configure both the backend and the aws lambda service
       "model": "0.8.1",
       "lambda": "0.8.2",
       "api": "0.5.0",
-      "extension": "1.7.0"
+      "extension": "1.7.1"
     },
     "secret": {
       "region": "us-east-2",
@@ -200,7 +200,7 @@ There are a couple ways to configure both the backend and the aws lambda service
  VERSIONS_MODEL=0.8.1
  VERSIONS_LAMBDA=0.8.2
  VERSIONS_API=0.5.0
- VERSIONS_EXTENSION=1.7.0
+ VERSIONS_EXTENSION=1.7.1
  ```
 
 ## For Maintainers eyes only :eyes:
