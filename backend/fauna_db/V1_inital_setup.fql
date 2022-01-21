@@ -1,0 +1,29 @@
+// TODO: maybe values can be used to bypass the need for a lambda, but I can't get it to work
+client.query(
+    q.create_index({
+        'name': "deepcite_by_source_claim_and_versions",
+        'source': {
+            'collection': q.collection("deepcite_call"),
+            'fields': {
+                'source_claim_and_versions': q.query(
+                    q.lambda_(
+                        "call",
+                        q.concat(
+                            [
+                                q.select(['data', 'results', 0, 'source'], q.var("call"), ''),
+                                q.select(['data', 'results', 0, 'link'], q.var("call"), ''),
+                                q.select(['data', 'current_versions', 'api'], q.var("call"), ''),
+                                q.select(['data', 'current_versions', 'model'], q.var("call"), ''),
+                                q.select(['data', 'current_versions', 'lambda'], q.var("call"), ''),
+                                q.select(['data', 'current_versions', 'extension'], q.var("call"), '')
+                            ]
+                        )
+                    )
+                )
+            }
+        },
+        'terms': [
+            { 'binding': "source_claim_and_versions"}
+        ]
+    })
+)
