@@ -13,7 +13,7 @@
   },
   "VERSIONS": {
     "MODEL": "0.8.1",
-    "LAMBDA": "0.8.3",
+    "LAMBDA": "0.8.4",
     "API": "0.5.0",
     "EXTENSION": "1.7.1"
   }
