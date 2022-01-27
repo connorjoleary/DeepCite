@@ -1,0 +1,33 @@
+CreateCollection({name: "deepcite_call"});
+
+// TODO: maybe values can be used to bypass the need for a lambda, but I can't get it to work
+CreateIndex({
+    name: 'deepcite_by_source_claim_and_versions',
+    source: {
+        collection: Collection('deepcite_call'),
+        fields: {
+            source_claim_and_versions: Query(
+                Lambda(
+                    'call',
+                    Concat(
+                        [
+                            Select(['data', 'results', 0, 'source'], Var('call'), ''),
+                            Select(['data', 'results', 0, 'link'], Var('call'), ''),
+                            Select(['data', 'current_versions', 'api'], Var('call'), ''),
+                            Select(['data', 'current_versions', 'model'], Var('call'), ''),
+                            Select(['data', 'current_versions', 'lambda'], Var('call'), ''),
+                            Select(['data', 'current_versions', 'extension'], Var('call'), '')
+                        ]
+                    )
+                )
+            )
+        }
+    },
+    terms: [
+        { binding: 'source_claim_and_versions'}
+    ]
+});
+
+CreateCollection({name: "deepcite_retrieval"});
+
+CreateCollection({name: "deepcite_source"});
