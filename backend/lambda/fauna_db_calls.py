@@ -21,9 +21,12 @@ class DatabaseCalls():
         response = client.access_secret_version(request)
         secret_string = response.payload.data.decode("UTF-8")
 
+        print('connecting to fauna client')
+        print()
+
         return FaunaClient(secret=secret_string, domain='db.us.fauna.com')
 
-    def __init__(self, local_password):
+    def __init__(self):
         self.client = self.get_client()
         
 
