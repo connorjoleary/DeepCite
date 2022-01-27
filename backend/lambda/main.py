@@ -23,8 +23,9 @@ def call_deepcite(claim, link, **kwargs):
         raise Exception('Unable to connect to Deepcite')
     return json.loads(response.text)
 
-def grab_response(database_calls, claim, link, **kwargs):
+def grab_response(database_calls, fauna_calls, claim, link, **kwargs):
     responses = database_calls.check_repeat(claim, link, versions)
+    print(fauna_calls.check_repeat(claim, link, versions))
 
     print(f'There were {len(responses)} responses returned')
     if len(responses) == 0:
@@ -34,7 +35,7 @@ def grab_response(database_calls, claim, link, **kwargs):
         existing_response = responses[0][1]
         return (existing_response, existing_id) #not sure if I need json loads
 
-def record_call(response, start, database_calls, user_id, stage, existing_id):
+def record_call(response, start, database_calls, fauna_calls, user_id, stage, existing_id):
 
     print('Deepcite response:', response)
 
@@ -48,6 +49,7 @@ def record_call(response, start, database_calls, user_id, stage, existing_id):
     lambda_response = respond(response)
     try:
         database_calls.record_call(existing_id, base_id, user_id, stage, 200, response, time_elapsed, versions) # TODO:figure out status code
+        fauna_calls.record_call(existing_id, base_id, user_id, stage, 200, response, time_elapsed, versions)
     except Exception as e:
         print("unable to store call")
         traceback.print_tb(e.__traceback__)
@@ -63,9 +65,16 @@ def lambda_handler(event):
         database_calls.check_repeat = lambda *x: []
         database_calls.record_call = lambda *x: None
         database_calls.record_source = lambda *x: None
+
+        fauna_calls = mock.Mock()
+        fauna_calls.check_repeat = lambda *x: []
+        fauna_calls.record_call = lambda *x: None
+        fauna_calls.record_source = lambda *x: None
     else:
         from database_calls import DatabaseCalls
         database_calls = DatabaseCalls()
+        from fauna_db_calls import DatabaseCalls as FaunaCalls
+        fauna_calls = FaunaCalls()
     
     print(event)
     stage = event['stage']
@@ -80,6 +89,7 @@ def lambda_handler(event):
         error = None
         try:
             database_calls.record_source(base_id, source_id, user_id, stage, redact, versions)
+            fauna_calls.record_source(base_id, source_id, user_id, stage, redact, versions)
         except Exception as e:
             print("Unable to store source")
             traceback.print_tb(e.__traceback__)
@@ -89,9 +99,9 @@ def lambda_handler(event):
 
         return {'error': error, 'results': results}
 
-    response, existing_id = grab_response(database_calls, **event)
+    response, existing_id = grab_response(database_calls, fauna_calls, **event)
 
-    return record_call(response, start, database_calls, user_id, stage, existing_id)
+    return record_call(response, start, database_calls, fauna_calls, user_id, stage, existing_id)
 
 # body = "{\"ip\": \"127.0.0.1\", \"test\": false, \"stage\": \"dev\", \"resonse_size\": \"small\", \"claim\":\"That the first novel featuring time travel was written in 1733. It is set 1997 and tells of a future where the world becomes dominated by the Jesuits. Because it was written before the industrial revolution, there is no depicted technological advancement between the authors time and the future\", \"link\":\"https://www.reddit.com/r/todayilearned/comments/nz68d1/til_that_the_first_novel_featuring_time_travel\"}"
 # body = "{\"ip\": \"127.0.0.1\", \"test\": true, \"stage\": \"dev\", \"id\": \""+str(uuid.uuid4())+"\", \"resonse_size\": \"small\", \"claim\":\"the death of Sherlock Holmes almost destroyed the magazine thries. When Arthur Conan Doyle killed him off in 1893, 20,000 people cancelled their subscriptions. The magazine barely survived. Its staff referred to Holmes’ death as “the dreadful event”.\", \"link\":\"http://www.bbc.com/culture/story/20160106-how-sherlock-holmes-changed-the-world\"}"

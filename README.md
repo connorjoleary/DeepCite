@@ -33,8 +33,6 @@ Unfortunatly running code is not cheap and I would really appreciate any support
 
 ### Extension
 
-Before it can connect to your local running lambda, update the call to talk to local host
-
 ##### Chrome
 
 1. Install Google Chrome
@@ -43,17 +41,7 @@ Before it can connect to your local running lambda, update the call to talk to l
 4. Then click `Load unpacked` 
 5. Select DeepCite/extension folder
 
-##### Firefox
-
-1. Install Firefox
-2. Navigate to `about:debugging`
-3. Then select `This FireFox`
-4. Next click on the button `Load Temporary Add-on...`
-5. Select `DeepCite/extension/manifest.json`
-
-### Lambda
-
-Before if can connect to your local running model, update the env var `EC2_IP` to be `0.0.0.0`
+### Lambda (Now run on GCP Cloud Functions)
 
 ##### Run
 ```
@@ -64,7 +52,7 @@ pip3 install -r requirements.txt -r test_requirements.txt
 gunicorn -c gunicorn_config.py wsgi:app
 ```
 
-### Model
+### Model (Now run on GCP Cloud Run)
 
 Run `python -m spacy download en_core_web_lg` once to download the model
 
@@ -100,34 +88,6 @@ gunicorn -c gunicorn_config.py wsgi
 
 * Local testing:
 `curl -d '{"claim":"the death of Sherlock Holmes almost destroyed the magazine that had originally published the stories. When Arthur Conan Doyle killed him off in 1893, 20,000 people cancelled their subscriptions. The magazine barely survived. Its staff referred to Holmes’ death as “the dreadful event”.", "link":"http://www.bbc.com/culture/story/20160106-how-sherlock-holmes-changed-the-world"}' -H "Content-Type: application/json" -X POST http://127.0.0.1:8000/api/v1/deep_cite`
-
-## Reporting Bugs
-
-If you happen upon any bugs please feel free to submit an official issue. When submitting bugs please try to follow these guidlines:
-
-```
-### Issue description: 
-
-...
-
-### Steps to reproduce:
-
-...
-
-### Expected result:
-
-...
-
-### Actual result:
-
-...
-
-### Details:
-
- * Browser version:
- * OS:
- * ( any additional relevant information and/or screenshots )
-```
 
 ## Configuration
 
