@@ -121,7 +121,7 @@ There are a couple ways to configure both the backend and the aws lambda service
     "env": "development",
     "versions": {
       "model": "0.8.1",
-      "lambda": "0.8.3",
+      "lambda": "0.8.4",
       "api": "0.5.0",
       "extension": "1.7.1"
     },
@@ -158,7 +158,7 @@ There are a couple ways to configure both the backend and the aws lambda service
  SECRET_REGION=us-east-2
  SECRET_NAME=rds_deepcite_sample
  VERSIONS_MODEL=0.8.1
- VERSIONS_LAMBDA=0.8.3
+ VERSIONS_LAMBDA=0.8.4
  VERSIONS_API=0.5.0
  VERSIONS_EXTENSION=1.7.1
  ```

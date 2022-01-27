@@ -110,7 +110,7 @@ class DatabaseCalls():
 
         return responses
 
-    def record_source(self, base_id, source_id, user_id, stage: str, versions: dict):
+    def record_source(self, base_id, source_id, user_id, stage: str, redact: bool, versions: dict):
         """ Record the source of a deepcite call in the db.
         Triggered from users pressing the source buttons on the tree page.
         """
@@ -125,7 +125,8 @@ class DatabaseCalls():
                             'source_id': source_id,
                             'user_id': user_id,
                             'stage': stage,
-                            'current_versions': versions
+                            'current_versions': versions,
+                            'redact': redact
                         }
                     }
                 )

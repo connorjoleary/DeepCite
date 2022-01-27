@@ -179,7 +179,7 @@ function sendToServer(claimValue, linkValue, idValue) {
 	console.log(JSON.stringify(data));
 
 	// Code used to run locally
-	// data['test'] = true
+	data['test'] = Test
 
 	ajax = $.ajax({
 		type: "POST",
