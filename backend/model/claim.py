@@ -1,8 +1,7 @@
 from bs4 import BeautifulSoup
-# from selenium import webdriver
 import exceptions as error
 import requests
-import tokenizer
+from tokenizer import Tokenizer
 from wiki_scraper import wiki
 import sys
 import io
@@ -26,7 +25,7 @@ def html_link(link):
 
 class Claim:
     maxheight = config['model']['max_height']
-    def __init__(self, href, text, score=1, height=0, parent=None):
+    def __init__(self, href, text: str, tokenizer: Tokenizer, score = 1, height = 0, parent = None):
         super(Claim, self).__init__()
         self.id = str(uuid.uuid4())
         # text : the text of the claim
@@ -39,6 +38,7 @@ class Claim:
                 raise error.InvalidInput('Input is invalid.')
         self.href = href
         self.text = text
+        self.tokenizer = tokenizer
         self.parent = parent
         self.child = []
         self.score = score
@@ -48,7 +48,7 @@ class Claim:
 
         # If there was some issue with the website
         if parse_result:
-            self.child.append(Claim('', parse_result, -1, (self.height +1), self))
+            self.child.append(Claim('', parse_result, self.tokenizer, score=-1, height=(self.height +1), parent=self))
         self.jumps = []
         
         # Add field cand and score to the parent so that children can work correctly
@@ -81,8 +81,8 @@ class Claim:
 
     # calls tokenizer and gets potential sources to claim
     def set_cand(self, ref2text):
-        cand = tokenizer.predict(self.text, list(ref2text.keys()))
-        texts = [] 
+        cand = self.tokenizer.predict(self.text, list(ref2text.keys()))
+        texts = []
         scores = []
         for text in cand:
             texts.append(text[0])
@@ -96,9 +96,9 @@ class Claim:
         for i, words in enumerate(self.cand):
             if words in ref2text:
                 if ref2text[words] != "":  # if there is a link
-                    self.child.append(Claim(ref2text[words], words, scores[i], (self.height +1), self)) # does ref2text allow for multiple links
+                    self.child.append(Claim(ref2text[words], words, self.tokenizer, scores[i], (self.height +1), self)) # does ref2text allow for multiple links
                 else:
-                    self.child.append(Claim("", words, scores[i], (self.height +1), self))
+                    self.child.append(Claim("", words, self.tokenizer, scores[i], (self.height +1), self))
 
             # tokenizer returned a sentence
             else:
@@ -111,14 +111,14 @@ class Claim:
 
                 # sentence was not found - creates a leaf node - should not be reached but okay
                 if ref_key == "":
-                    self.child.append(Claim("", words, scores[i], (self.height +1), self))
+                    self.child.append(Claim("", words, self.tokenizer, scores[i], (self.height +1), self))
                     continue
                 # has a link - creates new jump
                 if ref2text[ref_key] != "" and self.height < Claim.maxheight:
-                    self.child.append(Claim(ref2text[ref_key], words, scores[i], (self.height +1), self))
+                    self.child.append(Claim(ref2text[ref_key], words, self.tokenizer, scores[i], (self.height +1), self))
                 # creates leaf node
                 elif self.height < Claim.maxheight:
-                    self.child.append(Claim("", words, scores[i], (self.height +1), self))
+                    self.child.append(Claim("", words, self.tokenizer, scores[i], (self.height +1), self))
 
 
 

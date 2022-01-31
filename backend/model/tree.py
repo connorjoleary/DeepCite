@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 import os
 from claim import Claim
+from tokenizer import Tokenizer
 import queue as q
 
 # Call the Claim constructor to create the instance root. Parse the root into constructor Tree to initialize instance 
@@ -21,7 +22,7 @@ class ClaimPath(object):
 class Tree:
     def __init__(self, url, claim):
         # root: Claim
-        self.tree_root = Claim(url, claim)
+        self.tree_root = Claim(url, claim, Tokenizer(claim))
         self.response_object = [{'citeID': self.tree_root.id, 'parentCiteID': 0, 'link': self.tree_root.href, 'score': self.tree_root.score, 'source': self.tree_root.text}]
         self.queue = q.PriorityQueue()
         inilist = []
