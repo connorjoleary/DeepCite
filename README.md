@@ -114,7 +114,8 @@ There are a couple ways to configure both the backend and the aws lambda service
     "model": {
         "similarity_cutoff": 0.67,
         "num_claims_returned": 15,
-        "max_height": 5
+        "max_height": 5,
+        "request_timeout": 20
     }
   },
   "aws": {
@@ -153,6 +154,7 @@ There are a couple ways to configure both the backend and the aws lambda service
  MODEL_SIMILARITY_CUTOFF=.67
  MODEL_NUM_CLAIMS_RETURNED=15
  MODEL_MAX_HEIGHT=5
+ MODEL_REQUEST_TIMEOUT=20
  EC2_IP=172.31.35.42
  EC2_PORT=8000
  SECRET_REGION=us-east-2
