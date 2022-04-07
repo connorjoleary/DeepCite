@@ -161,9 +161,10 @@ class Claim:
         # gets url
         user_agent = {'User-agent': 'Mozilla/5.0'}
         try:
-            response = requests.get(self.href, headers=user_agent)
+            response = requests.get(self.href, headers=user_agent, timeout=config['model']['request_timeout'])
         # url is trash
         except Exception as e:
+            print(f"Request timed out after {config['model']['request_timeout']} seconds for {self.href}")
             # faulty input
             if self.parent == None:
                 raise error.URLError('Unable to reach URL: ' + html_link(self.href))
