@@ -5,6 +5,38 @@ Map(
     Lambda(x => q.Get(x))
 )
 ```
+
+### Grab most recent
+```
+CreateIndex({
+  name: "all_school_queries",
+  source: Collection('<yourcollection>'),
+  values:   values: [
+     {
+       field: ["ts"]
+     },
+     {
+       field: ["ref"]
+     }
+  ]
+})
+
+client.query(
+    q.Map(
+        q.Paginate(
+    q.Match(q.Index("all_school_queries_by_ts")),
+
+            {size:1000}
+        ),
+        q.Lambda(
+            ["ts", "ref"],       // we now have two parameters
+            q.Get(q.Var("ref"))  // and only use the ref, but the result will be automatically sorted by ts
+        )
+    )
+)
+
+```
+
 ### Count values by field
 ```
 CreateIndex({
