@@ -96,7 +96,7 @@ class DatabaseCalls():
                     q.paginate(q.match(q.index("deepcite_by_source_claim_and_versions_v2"), claim+link+versions_to_string(versions)))
                 )
             )
-            responses = [(result['data']['id'],result['data']['results']) for result in results['data']]
+            responses = [(result['data']['id'],result['data']['response']['results']) for result in results['data']]
         except Exception as e:
             error = dict(
                 severity="ERROR",
@@ -146,7 +146,6 @@ class DatabaseCalls():
 if __name__ == "__main__":
     import uuid
     versions = {a: str(b) for a,b in config['versions'].items()}
-    # res = DatabaseCalls().check_repeat(claim, link, versions)
     # res = DatabaseCalls().record_call(None, str(uuid.uuid4()), 'not_real', 'dev', 200, {}, 1, versions)
     res = DatabaseCalls().check_repeat(
         'I made a tool for finding the original sources of information on the web called Deepcite! Please let me know what you think',

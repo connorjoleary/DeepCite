@@ -9,11 +9,11 @@ Map(
 ### Grab most recent
 ```
 CreateIndex({
-  name: "all_school_queries",
-  source: Collection('<yourcollection>'),
-  values:   values: [
+  name: "most_recent_calls",
+  source: Collection('deepcite_call'),
+  values: [
      {
-       field: ["ts"]
+       field: ["ts"], reverse: true
      },
      {
        field: ["ref"]
