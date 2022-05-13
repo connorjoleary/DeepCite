@@ -22,15 +22,13 @@ CreateIndex({
 })
 
 client.query(
-    q.Map(
-        q.Paginate(
-    q.Match(q.Index("all_school_queries_by_ts")),
-
-            {size:1000}
+    q.map_(
+        q.lambda_(
+            ["ts", "ref"],       
+            q.get(q.var("ref")) 
         ),
-        q.Lambda(
-            ["ts", "ref"],       // we now have two parameters
-            q.Get(q.Var("ref"))  // and only use the ref, but the result will be automatically sorted by ts
+        q.paginate(
+            q.match(q.index("most_recent_calls"))
         )
     )
 )
@@ -68,6 +66,27 @@ Let(
           total: Count(Var("refs"))
         }
       )
+    )
+  )
+)
+```
+
+### Create string of source, link, and versions from all entries
+`CreateIndex({ name: "all_deepcite_call", source: Collection("deepcite_call") })`
+
+```
+Map(Paginate(Match(Index('all_deepcite_call')), { size: 30 }),
+  Lambda(
+    'call',
+    Concat(
+        [
+            Select(['data', 'response', 'results', 0, 'source'], Get(Var('call')), ''),
+            Select(['data', 'response', 'results', 0, 'link'], Get(Var('call')), ''),
+            Select(['data', 'current_versions', 'api'], Get(Var('call')), ''),
+            Select(['data', 'current_versions', 'model'], Get(Var('call')), ''),
+            Select(['data', 'current_versions', 'lambda'], Get(Var('call')), ''),
+            Select(['data', 'current_versions', 'extension'], Get(Var('call')), '')
+        ]
     )
   )
 )

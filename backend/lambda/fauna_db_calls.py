@@ -77,7 +77,6 @@ class DatabaseCalls():
             print(json.dumps(error))
             print(e)
 
-
     def check_repeat(self, claim: str, link: str, versions: dict) -> list:
         """ Checks if this claim and link at this version is already stored in the db.
         If it is, then we can assume the same result should be returned.
@@ -94,7 +93,7 @@ class DatabaseCalls():
         try:
             results = self.client.query(
                 q.map_(lambda x: q.get(x),
-                    q.paginate(q.match(q.index("deepcite_by_source_claim_and_versions"), claim+link+versions_to_string(versions)))
+                    q.paginate(q.match(q.index("deepcite_by_source_claim_and_versions_v2"), claim+link+versions_to_string(versions)))
                 )
             )
             responses = [(result['data']['id'],result['data']['results']) for result in results['data']]
@@ -143,14 +142,14 @@ class DatabaseCalls():
             print(json.dumps(error))
             print(e)
 
-# # For testing
-# if __name__ == "__main__":
-#     import uuid
-#     versions = {a: str(b) for a,b in config['versions'].items()}
-#     # res = DatabaseCalls().check_repeat(claim, link, versions)
-#     res = DatabaseCalls().record_call(None, str(uuid.uuid4()), 'not_real', 'dev', 200, {}, 1, versions)
-#     # (
-#     #     'According to the convention of Geneva an ejected pilot in the air is not a combatant and therefore attacking him is a war crime.',
-#     #     'https://www.reddit.com/r/todayilearned/comments/p4j7da/til_according_to_the_convention_of_geneva_an/',
-#     #     versions)
-#     print(res)
+# For testing
+if __name__ == "__main__":
+    import uuid
+    versions = {a: str(b) for a,b in config['versions'].items()}
+    # res = DatabaseCalls().check_repeat(claim, link, versions)
+    # res = DatabaseCalls().record_call(None, str(uuid.uuid4()), 'not_real', 'dev', 200, {}, 1, versions)
+    res = DatabaseCalls().check_repeat(
+        'I made a tool for finding the original sources of information on the web called Deepcite! Please let me know what you think',
+        'https://www.reddit.com/r/webdev/comments/slecyw/i_made_a_tool_for_finding_the_original_sources_of/',
+        versions)
+    print(res)
