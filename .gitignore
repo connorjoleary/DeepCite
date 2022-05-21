@@ -49,4 +49,7 @@ _ReSharper*/
 .vs/
 #Nuget packages folder
 packages/
+
 extension/js/format.json
+.DS_Store
+backend/rds/*.json
