@@ -16,7 +16,7 @@ class Tokenizer():
 
         suffix_re = spacy.util.compile_suffix_regex(nlp.Defaults.suffixes)   
 
-        return Spacy_Tokenizer(nlp.vocab, nlp.Defaults.tokenizer_exceptions,
+        return Spacy_Tokenizer(vocab = nlp.vocab, rules = nlp.Defaults.tokenizer_exceptions,
                         prefix_search = prefixes_re.search, 
                         infix_finditer = infix_re.finditer, suffix_search = suffix_re.search,
                         token_match=None)
@@ -24,7 +24,7 @@ class Tokenizer():
     def __init__(self, original_claim) -> None:
         self.nlp = spacy.load('en_core_web_lg')
         self.nlp.tokenizer = self.custom_tokenizer(self.nlp)
-        self.nlp.add_pipe(self.nlp.create_pipe('sentencizer'))
+        self.nlp.add_pipe('sentencizer')
 
         clean_claim = self.preprocessing(self.nlp(original_claim))
         self.original_claim = self.nlp(clean_claim)
