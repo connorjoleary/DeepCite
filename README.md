@@ -114,14 +114,15 @@ There are a couple ways to configure both the backend and the aws lambda service
     "model": {
         "similarity_cutoff": 0.67,
         "num_claims_returned": 15,
-        "max_height": 5
+        "max_height": 5,
+        "request_timeout": 20
     }
   },
   "aws": {
     "env": "development",
     "versions": {
-      "model": "0.8.1",
-      "lambda": "0.8.4",
+      "model": "0.9.0",
+      "lambda": "0.9.0",
       "api": "0.5.0",
       "extension": "1.7.1"
     },
@@ -153,12 +154,13 @@ There are a couple ways to configure both the backend and the aws lambda service
  MODEL_SIMILARITY_CUTOFF=.67
  MODEL_NUM_CLAIMS_RETURNED=15
  MODEL_MAX_HEIGHT=5
+ MODEL_REQUEST_TIMEOUT=20
  EC2_IP=172.31.35.42
  EC2_PORT=8000
  SECRET_REGION=us-east-2
  SECRET_NAME=rds_deepcite_sample
- VERSIONS_MODEL=0.8.1
- VERSIONS_LAMBDA=0.8.4
+ VERSIONS_MODEL=0.9.0
+ VERSIONS_LAMBDA=0.9.0
  VERSIONS_API=0.5.0
  VERSIONS_EXTENSION=1.7.1
  ```
