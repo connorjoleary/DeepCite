@@ -14,6 +14,7 @@
     "MODEL": {
         "SIMILARITY_CUTOFF": 0.67,
         "NUM_CLAIMS_RETURNED": 5,
-        "MAX_HEIGHT": 5
+        "MAX_HEIGHT": 5,
+        "REQUEST_TIMEOUT": 20
     }
 }
