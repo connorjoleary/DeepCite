@@ -143,12 +143,12 @@ class DatabaseCalls():
             print(e)
 
 # For testing
-if __name__ == "__main__":
-    import uuid
-    versions = {a: str(b) for a,b in config['versions'].items()}
-    # res = DatabaseCalls().record_call(None, str(uuid.uuid4()), 'not_real', 'dev', 200, {}, 1, versions)
-    res = DatabaseCalls().check_repeat(
-        'I made a tool for finding the original sources of information on the web called Deepcite! Please let me know what you think',
-        'https://www.reddit.com/r/webdev/comments/slecyw/i_made_a_tool_for_finding_the_original_sources_of/',
-        versions)
-    print(res)
+# if __name__ == "__main__":
+#     import uuid
+#     versions = {a: str(b) for a,b in config['versions'].items()}
+#     # res = DatabaseCalls().record_call(None, str(uuid.uuid4()), 'not_real', 'dev', 200, {}, 1, versions)
+#     res = DatabaseCalls().check_repeat(
+#         'I made a tool for finding the original sources of information on the web called Deepcite! Please let me know what you think',
+#         'https://www.reddit.com/r/webdev/comments/slecyw/i_made_a_tool_for_finding_the_original_sources_of/',
+#         versions)
+#     print(res)
