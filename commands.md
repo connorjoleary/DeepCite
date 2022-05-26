@@ -27,8 +27,9 @@ cd backend/lambda/
 rm function.zip
 zip -g function.zip main.py create_response.py lambda_config.py database_calls.py defaults.json requirements.txt fauna_db_calls.py
 gsutil cp function.zip gs://deepcite-function
-gcloud functions deploy deepcite --source=gs://deepcite-function/function.zip
+gcloud functions deploy deepcite --source=gs://deepcite-function/function.zip --project deepcite-306405
 
 # update cloud run code
-gcloud builds submit --tag gcr.io/deepcite-306405/deepcite-model
-gcloud run deploy deepcite-model --image gcr.io/deepcite-306405/deepcite-model:latest --platform managed --region us-central1
+cd backend/model
+gcloud builds submit --tag gcr.io/deepcite-306405/deepcite-model --project deepcite-306405
+gcloud run deploy deepcite-model --image gcr.io/deepcite-306405/deepcite-model:latest --platform managed --region us-central1 --project deepcite-306405
