@@ -1,4 +1,4 @@
-# DeepCite ![extension](https://img.shields.io/badge/extension-1.6.0-blue)
+# DeepCite ![extension](https://img.shields.io/badge/extension-1.7.2-blue)
 
 <p> In a world filled with fake news and alternative facts, get the real deep sources for your information. </p>
 
@@ -124,7 +124,7 @@ There are a couple ways to configure both the backend and the aws lambda service
       "model": "0.9.0",
       "lambda": "0.9.0",
       "api": "0.5.0",
-      "extension": "1.7.1"
+      "extension": "1.7.2"
     },
     "secret": {
       "region": "us-east-2",
@@ -162,7 +162,7 @@ There are a couple ways to configure both the backend and the aws lambda service
  VERSIONS_MODEL=0.9.0
  VERSIONS_LAMBDA=0.9.0
  VERSIONS_API=0.5.0
- VERSIONS_EXTENSION=1.7.1
+ VERSIONS_EXTENSION=1.7.2
  ```
 
 ## For Maintainers eyes only :eyes:
