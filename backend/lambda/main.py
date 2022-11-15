@@ -31,7 +31,7 @@ def grab_response(fauna_calls, claim, link, **kwargs):
         return (call_deepcite(claim, link), None)
     else:
         existing_id = responses[0][0]
-        existing_response = responses[0][1]
+        existing_response = {'results': responses[0][1]}
         return (existing_response, existing_id) #not sure if I need json loads
 
 def record_call(response, start, fauna_calls, user_id, stage, existing_id):
