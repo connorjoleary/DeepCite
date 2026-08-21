@@ -204,3 +204,6 @@ Connor O'Leary, Joe Pagani, and Jake Heaser
 
 With great help from the University of Wisconsin, Madison CS506 team
 Shourya Goel, Jiayi Hu, Vinay Janardhanam, Dillon O'Leary, Noah SickLick, and Catherine Yan
+
+To do this, a user provides a claim and a link, optionally by right-clicking a claim in the browser to autofill the extension.
+DeepCite sends that information to its API, uses natural language processing to find similar text on the linked page, follows links to related pages, and returns a tree of related claims, source links, and similarity scores.
